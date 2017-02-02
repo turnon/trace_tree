@@ -33,7 +33,7 @@ class TraceTreeTest < Minitest::Test
   def setup
     test = Test.new
     test.a
-    @stack = test.stack
+    @stack = test.stack.map{|e| TraceTree::Node.new e}
   end
 
   def test_that_it_has_a_version_number
@@ -41,16 +41,15 @@ class TraceTreeTest < Minitest::Test
   end
 
   def test_a_calls_b
-    assert_equal TraceTree::Node.location(@stack[0][0]), TraceTree::Node.location(@stack[1][1])
+    assert @stack[0].parent_of? @stack[1]
   end
 
   def test_b_calls_c_and_d
-    assert_equal TraceTree::Node.location(@stack[1][0]), TraceTree::Node.location(@stack[2][1])
-    assert_equal TraceTree::Node.location(@stack[1][0]), TraceTree::Node.location(@stack[3][1])
+    assert @stack[1].parent_of? @stack[2]
+    assert @stack[1].parent_of? @stack[3]
   end
 
-  def test_a_indirectly_calls_c_and_d
-    assert_equal TraceTree::Node.location(@stack[0][0]), TraceTree::Node.location(@stack[2][2])
-    assert_equal TraceTree::Node.location(@stack[0][0]), TraceTree::Node.location(@stack[3][2])
+  def test_c_is_sibling_of_d
+    assert @stack[2].sibling_of? @stack[3]
   end
 end
