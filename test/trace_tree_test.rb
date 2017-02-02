@@ -34,6 +34,7 @@ class TraceTreeTest < Minitest::Test
     test = Test.new
     test.a
     @stack = test.stack.map{|e| TraceTree::Node.new e}
+    @root = TraceTree.sort @stack
   end
 
   def test_that_it_has_a_version_number
@@ -42,14 +43,21 @@ class TraceTreeTest < Minitest::Test
 
   def test_a_calls_b
     assert @stack[0].parent_of? @stack[1]
+    assert @stack[0].callees.include? @stack[1]
   end
 
   def test_b_calls_c_and_d
     assert @stack[1].parent_of? @stack[2]
     assert @stack[1].parent_of? @stack[3]
+    assert @stack[1].callees.include? @stack[2]
+    assert @stack[1].callees.include? @stack[2]
   end
 
   def test_c_is_sibling_of_d
     assert @stack[2].sibling_of? @stack[3]
+  end
+
+  def test_a_is_root
+    assert_equal @stack[0], @root
   end
 end
