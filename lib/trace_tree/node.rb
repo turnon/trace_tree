@@ -29,14 +29,12 @@ class TraceTree
       @bindings = bindings
     end
 
-    def parent_of? node
-      location(bindings[0]) == location(node.bindings[1]) and
-        bindings.count == (node.bindings.count - 1)
+    def parent_of? another
+      self.whole_stack == another.whole_stack[1..-1]
     end
 
-    def sibling_of? node
-      location(bindings[1]) == location(node.bindings[1]) and
-        bindings.count == node.bindings.count
+    def sibling_of? another
+      self.whole_stack[1..-1] == another.whole_stack[1..-1]
     end
 
     def << node
@@ -52,6 +50,10 @@ class TraceTree
 
     def location bi
       bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
+    end
+
+    def whole_stack
+      bindings.map{|b| location b}
     end
 
   end
