@@ -1,11 +1,42 @@
 require 'test_helper'
 
-class TraceTreeTest < Minitest::Test
+class NormalTest < Minitest::Test
 
-  require 'trace_tree_test/test'
+  class Normal
+
+    attr_reader :stack
+
+    def initialize
+      @stack = []
+    end
+
+    def a
+      @stack << binding.of_callers!
+      b
+      e
+    end
+
+    def b
+      @stack << binding.of_callers!
+      c
+      d
+    end
+
+    def c
+      @stack << binding.of_callers!
+    end
+
+    def d
+      @stack << binding.of_callers!
+    end
+
+    def e
+      @stack << binding.of_callers!
+    end
+  end
 
   def setup
-    test = Test.new
+    test = Normal.new
     test.a
     @stack = test.stack.map{|e| TraceTree::Node.new e}
     @root = TraceTree.sort @stack
@@ -46,11 +77,11 @@ class TraceTreeTest < Minitest::Test
 
   def test_call_tree
     tree = <<EOS
-TraceTreeTest::Test#a /home/z/trace_tree/test/trace_tree_test/test.rb
-├─TraceTreeTest::Test#b /home/z/trace_tree/test/trace_tree_test/test.rb
-│ ├─TraceTreeTest::Test#c /home/z/trace_tree/test/trace_tree_test/test.rb
-│ └─TraceTreeTest::Test#d /home/z/trace_tree/test/trace_tree_test/test.rb
-└─TraceTreeTest::Test#e /home/z/trace_tree/test/trace_tree_test/test.rb
+NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb
+├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb
+│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb
+│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb
+└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb
 EOS
     assert_equal tree.chomp, @root.tree_graph
   end

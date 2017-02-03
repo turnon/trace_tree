@@ -30,11 +30,13 @@ class TraceTree
     end
 
     def parent_of? node
-      location(bindings[0]) == location(node.bindings[1])
+      location(bindings[0]) == location(node.bindings[1]) and
+        bindings.count == (node.bindings.count - 1)
     end
 
     def sibling_of? node
-      location(bindings[1]) == location(node.bindings[1])
+      location(bindings[1]) == location(node.bindings[1]) and
+        bindings.count == node.bindings.count
     end
 
     def << node
