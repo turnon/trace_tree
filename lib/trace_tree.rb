@@ -29,7 +29,7 @@ class TraceTree
 end
 
 class Binding
-  def trace_tree log=StringIO.new, &to_do
+  def trace_tree log=STDOUT, &to_do
     stack = []
     tp = TracePoint.trace(:call, :b_call) do |tp|
       stack << tp.binding.of_callers![1..-1] # ignore this trace block
