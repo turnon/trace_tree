@@ -60,7 +60,7 @@ class RecurseTest < Minitest::Test
 RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
 ├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
 │ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
-│  └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
+│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
 └─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb
 EOS
     assert_equal tree.chomp, @root.tree_graph
