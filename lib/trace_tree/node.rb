@@ -30,14 +30,6 @@ class TraceTree
       @bindings = after_binding_trace_tree(bindings)
     end
 
-    def parent_of? another
-      self.whole_stack == another.whole_stack[1..-1]
-    end
-
-    def sibling_of? another
-      self.whole_stack[1..-1] == another.whole_stack[1..-1]
-    end
-
     def << node
       callees << node
       node.parent = self
@@ -47,16 +39,20 @@ class TraceTree
       @callees ||= []
     end
 
+    def whole_stack
+      bindings.map{|b| location b}
+    end
+
+    def parent_stack
+      bindings[1..-1].map{|b| location b}
+    end
+
     protected
 
     def location bi
       l = bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
       GemPaths.each{|name, path| l.gsub! path, "$#{name}"}
       l
-    end
-
-    def whole_stack
-      bindings.map{|b| location b}
     end
 
     private

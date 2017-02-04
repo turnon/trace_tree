@@ -5,25 +5,15 @@ require 'trace_tree/node'
 class TraceTree
 
   def self.sort stack
-    tr = stack.reduce([]) do |trace, node|
-      while true
-        if trace.empty?
-          break
-        elsif trace.last.parent_of? node
-          trace.last << node
-          break
-        elsif trace.last.sibling_of? node
-          trace.last.parent << node
-          trace.pop
-          break
-        else
-          trace.pop
-        end
+    hash = {}
+    stack.each do |call|
+      unless hash.empty?
+        parent = hash[call.parent_stack]
+        parent << call if parent
       end
-      trace << node
-      trace
+      hash[call.whole_stack] = call
     end
-    tr[0]
+    stack[0]
   end
 
 end
