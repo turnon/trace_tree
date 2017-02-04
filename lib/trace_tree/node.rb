@@ -26,7 +26,7 @@ class TraceTree
     attr_accessor :parent
 
     def initialize bindings
-      @bindings = bindings
+      @bindings = after_binding_trace_tree(bindings)
     end
 
     def parent_of? another
@@ -54,6 +54,17 @@ class TraceTree
 
     def whole_stack
       bindings.map{|b| location b}
+    end
+
+    private
+
+    def after_binding_trace_tree bindings
+      bs = []
+      bindings.each do |b|
+        break if "#{b.klass}#{b.call_symbol}#{b.frame_env}" == "Binding#trace_tree"
+        bs << b
+      end
+      bs
     end
 
   end

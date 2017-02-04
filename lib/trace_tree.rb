@@ -25,27 +25,32 @@ class TraceTree
     end
     tr[0]
   end
+
 end
 
 class Binding
-  def trace_tree log=StringIO.new, &b
+  def trace_tree log=StringIO.new, &to_do
     stack = []
-    tp = TracePoint.trace(:call)do |tp|
-      stack << tp.binding.of_callers![1..-1]
+    tp = TracePoint.trace(:call, :b_call) do |tp|
+      stack << tp.binding.of_callers![1..-1] # ignore this trace block
     end
-    eval('self').instance_eval &b
+    eval('self').instance_eval &to_do
   ensure
     tp.disable
-    _dump_trace_tree log, stack
+    _dump_trace_tree log, stack[1..-1] # ignore to_do block
   end
 
   private
 
   def _dump_trace_tree log, stack
-    stack.map!{|calling| TraceTree::Node.new calling}
+    stack = stack.map do |calling|
+      TraceTree::Node.new calling
+    end
+
     tree = TraceTree.
       sort(stack).
       tree_graph
+
     log.write tree
   end
 end
