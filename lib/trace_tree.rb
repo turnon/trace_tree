@@ -28,13 +28,24 @@ class TraceTree
 end
 
 class Binding
-  def trace_tree &b
+  def trace_tree log=StringIO.new, &b
+    stack = []
     tp = TracePoint.trace(:call)do |tp|
-      p tp
-      #tp.binding.pry
+      stack << tp.binding.of_callers![1..-1]
     end
     eval('self').instance_eval &b
   ensure
     tp.disable
+    _dump_trace_tree log, stack
+  end
+
+  private
+
+  def _dump_trace_tree log, stack
+    stack.map!{|calling| TraceTree::Node.new calling}
+    tree = TraceTree.
+      sort(stack).
+      tree_graph
+    log.write tree
   end
 end

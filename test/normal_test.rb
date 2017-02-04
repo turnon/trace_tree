@@ -2,48 +2,55 @@ require 'test_helper'
 
 class NormalTest < Minitest::Test
 
+  Tree = <<EOS
+NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb
+├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb
+│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb
+│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb
+└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb
+EOS
+
+  ReturnValue = '1234567'
+
   class Normal
 
     attr_reader :stack
 
-    def initialize
-      @stack = []
+    def initialize stack=nil
+      @stack = stack
     end
 
     def a
-      @stack << binding.of_callers!
+      @stack << binding.of_callers! if @stack
       b
       e
     end
 
     def b
-      @stack << binding.of_callers!
+      @stack << binding.of_callers! if @stack
       c
       d
     end
 
     def c
-      @stack << binding.of_callers!
+      @stack << binding.of_callers! if @stack
     end
 
     def d
-      @stack << binding.of_callers!
+      @stack << binding.of_callers! if @stack
     end
 
     def e
-      @stack << binding.of_callers!
+      @stack << binding.of_callers! if @stack
+      ReturnValue
     end
   end
 
   def setup
-    test = Normal.new
+    test = Normal.new []
     test.a
     @stack = test.stack.map{|e| TraceTree::Node.new e}
     @root = TraceTree.sort @stack
-  end
-
-  def test_that_it_has_a_version_number
-    refute_nil ::TraceTree::VERSION
   end
 
   def test_stack_length
@@ -76,13 +83,20 @@ class NormalTest < Minitest::Test
   end
 
   def test_call_tree
-    tree = <<EOS
-NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb
-├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb
-│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb
-│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb
-└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb
-EOS
-    assert_equal tree.chomp, @root.tree_graph
+    assert_equal Tree.chomp, @root.tree_graph
+  end
+
+  def test_trace_tree
+    test = Normal.new
+    sio = StringIO.new
+
+    rt = binding.trace_tree(sio) do
+      test.a
+    end
+
+    assert_equal ReturnValue, rt
+
+    sio.rewind
+    assert_equal Tree.chomp, sio.read
   end
 end
