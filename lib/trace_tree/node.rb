@@ -1,4 +1,5 @@
 require 'tree_graph'
+require 'trace_tree/gem_paths'
 
 class TraceTree
   class Node
@@ -49,7 +50,9 @@ class TraceTree
     protected
 
     def location bi
-      bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
+      l = bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
+      GemPaths.each{|name, path| l.gsub! path, "$#{name}"}
+      l
     end
 
     def whole_stack
