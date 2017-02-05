@@ -69,9 +69,8 @@ class TraceTree
     end
 
     def shorten_gem_path loc
-      new_loc = nil
-      GemPaths.each{|name, path| new_loc = loc.gsub(path, "$#{name}")}
-      new_loc
+      GemPaths.each{|name, path| loc = loc.gsub(path, "$#{name}")}
+      loc
     end
 
   end
