@@ -3,19 +3,19 @@ require 'test_helper'
 class BlockTest < Minitest::Test
 
   Tree = <<EOS
-BlockTest::Block#a /home/z/trace_tree/test/block_test.rb
-├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb
-├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb
-├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb
-├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-│ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb
-├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-│ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb
-└─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb
-  └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb
+BlockTest::Block#a /home/z/trace_tree/test/block_test.rb:31
+├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:32
+│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:37
+├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:32
+│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:37
+├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:32
+│ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:37
+├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:33
+│ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:38
+├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:33
+│ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:38
+└─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:33
+  └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:38
 EOS
 
   ReturnValue = '1234567'

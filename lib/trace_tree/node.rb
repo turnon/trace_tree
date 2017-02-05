@@ -16,7 +16,7 @@ class TraceTree
     end
 
     def label_for_tree_graph
-      location bindings[0]
+      shorten_gem_path location bindings[0]
     end
 
     def children_for_tree_graph
@@ -40,19 +40,21 @@ class TraceTree
     end
 
     def whole_stack
-      bindings.map{|b| location b}
+      bindings.map{|b| location_without_lineno b}
     end
 
     def parent_stack
-      bindings[1..-1].map{|b| location b}
+      bindings[1..-1].map{|b| location_without_lineno b}
     end
 
     protected
 
+    def location_without_lineno bi
+      bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
+    end
+
     def location bi
-      l = bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
-      GemPaths.each{|name, path| l.gsub! path, "$#{name}"}
-      l
+      bi.inspect.gsub(/#<Binding:\d+\s(.*)>/, '\1')
     end
 
     private
@@ -64,6 +66,12 @@ class TraceTree
         bs << b
       end
       bs
+    end
+
+    def shorten_gem_path loc
+      new_loc = nil
+      GemPaths.each{|name, path| new_loc = loc.gsub(path, "$#{name}")}
+      new_loc
     end
 
   end

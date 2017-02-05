@@ -3,11 +3,11 @@ require 'test_helper'
 class NormalTest < Minitest::Test
 
   Tree = <<EOS
-NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb
-├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb
-│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb
-│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb
-└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb
+NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb:23
+├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb:28
+│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb:33
+│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb:36
+└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb:39
 EOS
 
   ReturnValue = '1234567'
@@ -20,28 +20,23 @@ EOS
       @stack = stack
     end
 
-    def a
-      @stack << binding.of_callers! if @stack
+    def a;@stack << binding.of_callers! if @stack
       b
       e
     end
 
-    def b
-      @stack << binding.of_callers! if @stack
+    def b;@stack << binding.of_callers! if @stack
       c
       d
     end
 
-    def c
-      @stack << binding.of_callers! if @stack
+    def c;@stack << binding.of_callers! if @stack
     end
 
-    def d
-      @stack << binding.of_callers! if @stack
+    def d;@stack << binding.of_callers! if @stack
     end
 
-    def e
-      @stack << binding.of_callers! if @stack
+    def e;@stack << binding.of_callers! if @stack
       ReturnValue
     end
   end

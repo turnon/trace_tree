@@ -3,11 +3,11 @@ require 'test_helper'
 class RecurseTest < Minitest::Test
 
   Tree = <<EOS
-RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
-├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
-│ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
-│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb
-└─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb
+RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
+├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
+│ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
+│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
+└─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:29
 EOS
 
   ReturnValue = 'asdfg'
@@ -21,14 +21,12 @@ EOS
       @level = level
     end
 
-    def a level=1
-      @stack << binding.of_callers! if @stack
+    def a level=1;@stack << binding.of_callers! if @stack
       a(level + 1) if level < @level
       b if level == 1
     end
 
-    def b
-      @stack << binding.of_callers! if @stack
+    def b;@stack << binding.of_callers! if @stack
       ReturnValue
     end
 
