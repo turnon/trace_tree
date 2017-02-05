@@ -50,11 +50,11 @@ class TraceTree
     protected
 
     def location_without_lineno bi
-      bi.inspect.gsub(/#<Binding:\d+\s(.*):\d+>/, '\1')
+      [bi.klass, bi.call_symbol, bi.frame_env, bi.file]
     end
 
     def location bi
-      bi.inspect.gsub(/#<Binding:\d+\s(.*)>/, '\1')
+      "#{bi.klass}#{bi.call_symbol}#{bi.frame_env} #{bi.file}:#{bi.line}"
     end
 
     private
