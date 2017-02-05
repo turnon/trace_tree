@@ -75,6 +75,6 @@ EOS
     assert_equal ReturnValue, rt
 
     sio.rewind
-    assert_equal Tree.chomp, sio.read
+    assert_equal Tree, sio.read
   end
 end

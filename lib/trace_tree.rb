@@ -41,6 +41,6 @@ class Binding
       sort(stack).
       tree_graph
 
-    log.write tree
+    log.puts tree
   end
 end
