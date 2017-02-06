@@ -2,6 +2,7 @@ require "trace_tree/version"
 require 'binding_of_callers/pry'
 require 'trace_tree/node'
 require 'trace_tree/short_gem_path'
+require 'trace_tree/color'
 
 class TraceTree
 
@@ -40,6 +41,7 @@ class Binding
   def optional_node opt
     Class.new TraceTree::Node do
       prepend TraceTree::ShortGemPath unless opt[:gem] == false
+      prepend TraceTree::Color unless opt[:color] == false
     end
   end
 

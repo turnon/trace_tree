@@ -42,7 +42,7 @@ EOS
   end
 
   def test_trace_tree
-    rt = binding.trace_tree(@sio) do
+    rt = binding.trace_tree(@sio, color: false) do
       @test.a
     end
 
