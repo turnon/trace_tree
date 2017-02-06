@@ -2,16 +2,6 @@ require 'test_helper'
 
 class RecurseTest < Minitest::Test
 
-  Tree = <<EOS
-RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
-├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
-│ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
-│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:24
-└─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:29
-EOS
-
-  ReturnValue = 'asdfg'
-
   class Recurse
 
     attr_reader :stack
@@ -31,6 +21,25 @@ EOS
     end
 
   end
+
+  Tree = <<EOS
+RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+│ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+└─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:19
+EOS
+
+  Tracetree = <<EOS
+RecurseTest#block in test_trace_tree /home/z/trace_tree/test/recurse_test.rb:80
+└─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+  ├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+  │ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+  │   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
+  └─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:19
+EOS
+
+  ReturnValue = 'asdfg'
 
   def setup
     test = Recurse.new 4, []
@@ -75,6 +84,6 @@ EOS
     assert_equal ReturnValue, rt
 
     sio.rewind
-    assert_equal Tree, sio.read
+    assert_equal Tracetree, sio.read
   end
 end

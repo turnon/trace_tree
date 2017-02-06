@@ -27,7 +27,7 @@ class Binding
     eval('self').instance_eval &to_do
   ensure
     tp.disable
-    _dump_trace_tree log, stack[1..-1] # ignore to_do block
+    _dump_trace_tree log, stack
   end
 
   private

@@ -2,16 +2,6 @@ require 'test_helper'
 
 class NormalTest < Minitest::Test
 
-  Tree = <<EOS
-NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb:23
-├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb:28
-│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb:33
-│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb:36
-└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb:39
-EOS
-
-  ReturnValue = '1234567'
-
   class Normal
 
     attr_reader :stack
@@ -40,6 +30,25 @@ EOS
       ReturnValue
     end
   end
+
+  Tree = <<EOS
+NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb:13
+├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb:18
+│ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb:23
+│ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb:26
+└─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb:29
+EOS
+
+  Tracetree = <<EOS
+NormalTest#block in test_trace_tree /home/z/trace_tree/test/normal_test.rb:97
+└─NormalTest::Normal#a /home/z/trace_tree/test/normal_test.rb:13
+  ├─NormalTest::Normal#b /home/z/trace_tree/test/normal_test.rb:18
+  │ ├─NormalTest::Normal#c /home/z/trace_tree/test/normal_test.rb:23
+  │ └─NormalTest::Normal#d /home/z/trace_tree/test/normal_test.rb:26
+  └─NormalTest::Normal#e /home/z/trace_tree/test/normal_test.rb:29
+EOS
+
+  ReturnValue = '1234567'
 
   def setup
     test = Normal.new []
@@ -92,6 +101,6 @@ EOS
     assert_equal ReturnValue, rt
 
     sio.rewind
-    assert_equal Tree, sio.read
+    assert_equal Tracetree, sio.read
   end
 end
