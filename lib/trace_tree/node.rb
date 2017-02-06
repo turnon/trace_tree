@@ -26,8 +26,9 @@ class TraceTree
     attr_reader :bindings
     attr_accessor :parent
 
-    def initialize bindings
-      @bindings = after_binding_trace_tree(bindings)
+    def initialize trace_point
+      @event = trace_point.event
+      @bindings = after_binding_trace_tree(trace_point.binding.of_callers![2..-1])
     end
 
     def << node

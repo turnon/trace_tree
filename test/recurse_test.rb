@@ -22,16 +22,8 @@ class RecurseTest < Minitest::Test
 
   end
 
-  Tree = <<EOS
-RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-│ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-│   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-└─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:19
-EOS
-
   Tracetree = <<EOS
-RecurseTest#block in test_trace_tree /home/z/trace_tree/test/recurse_test.rb:80
+RecurseTest#block in test_trace_tree /home/z/trace_tree/test/recurse_test.rb:42
 └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
   ├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
   │ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
@@ -42,48 +34,18 @@ EOS
   ReturnValue = 'asdfg'
 
   def setup
-    test = Recurse.new 4, []
-    test.a
-    @stack = test.stack.map{|e| TraceTree::Node.new e}
-    @root = TraceTree.sort @stack
-  end
-
-  def test_stack_length
-    assert_equal 5, @stack.length
-  end
-
-  def test_callees
-    assert_equal @stack[0].whole_stack, @stack[1].parent_stack
-    assert_equal @stack[1].whole_stack, @stack[2].parent_stack
-    assert_equal @stack[2].whole_stack, @stack[3].parent_stack
-    assert_equal @stack[0].whole_stack, @stack[4].parent_stack
-    assert @stack[0].callees.include? @stack[1]
-    assert @stack[0].callees.include? @stack[4]
-  end
-
-  def test_sibling
-    assert_equal @stack[1].parent_stack, @stack[4].parent_stack
-  end
-
-  def test_bottom_of_stack_is_root
-    assert_equal @stack[0], @root
-  end
-
-  def test_call_tree
-    assert_equal Tree.chomp, @root.tree_graph
+    @test = Recurse.new 4
+    @sio = StringIO.new
   end
 
   def test_trace_tree
-    test = Recurse.new 4
-    sio = StringIO.new
-
-    rt = binding.trace_tree(sio) do
-      test.a
+    rt = binding.trace_tree(@sio) do
+      @test.a
     end
 
     assert_equal ReturnValue, rt
 
-    sio.rewind
-    assert_equal Tracetree, sio.read
+    @sio.rewind
+    assert_equal Tracetree, @sio.read
   end
 end

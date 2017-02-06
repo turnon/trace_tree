@@ -20,25 +20,21 @@ end
 
 class Binding
   def trace_tree log=STDOUT, &to_do
-    stack = []
-    tp = TracePoint.trace(:call, :b_call) do |tp|
-      stack << tp.binding.of_callers![1..-1] # ignore this trace block
+    trace_points = []
+    tp = TracePoint.trace(:call, :b_call) do |p|
+      trace_points << TraceTree::Node.new(p)
     end
     eval('self').instance_eval &to_do
   ensure
     tp.disable
-    _dump_trace_tree log, stack
+    _dump_trace_tree log, trace_points
   end
 
   private
 
-  def _dump_trace_tree log, stack
-    stack = stack.map do |calling|
-      TraceTree::Node.new calling
-    end
-
+  def _dump_trace_tree log, trace_points
     tree = TraceTree.
-      sort(stack).
+      sort(trace_points).
       tree_graph
 
     log.puts tree
