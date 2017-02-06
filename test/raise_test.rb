@@ -66,7 +66,7 @@ EOS
   end
 
   def test_rescue
-    rt = binding.trace_tree(@sio) do
+    rt = binding.trace_tree(@sio, color: false) do
       @test.entry
     end
 
@@ -78,7 +78,7 @@ EOS
 
   def test_no_rescue
     assert_raises(Boom) do
-      binding.trace_tree(@sio) do
+      binding.trace_tree(@sio, color: false) do
         @test.entry!
       end
     end
