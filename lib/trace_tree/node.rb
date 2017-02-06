@@ -28,7 +28,7 @@ class TraceTree
 
     def initialize trace_point
       @event = trace_point.event
-      @bindings = after_binding_trace_tree(trace_point.binding.of_callers![2..-1])
+      @bindings = filter_call_stack trace_point.binding.of_callers!
     end
 
     def << node
@@ -45,7 +45,8 @@ class TraceTree
     end
 
     def parent_stack
-      bindings[1..-1].map{|b| location_without_lineno b}
+      range = (@event == :raise ? bindings : bindings[1..-1])
+      range.map{|b| location_without_lineno b}
     end
 
     protected
@@ -60,7 +61,13 @@ class TraceTree
 
     private
 
-    def after_binding_trace_tree bindings
+    def filter_call_stack bindings
+      bindings = bindings[2..-1]
+      bindings = callees_of_binding_trace_tree bindings
+      bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
+    end
+
+    def callees_of_binding_trace_tree bindings
       bs = []
       bindings.each do |b|
         break if "#{b.klass}#{b.call_symbol}#{b.frame_env}" == "Binding#trace_tree"

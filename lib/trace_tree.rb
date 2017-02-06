@@ -21,7 +21,7 @@ end
 class Binding
   def trace_tree log=STDOUT, &to_do
     trace_points = []
-    tp = TracePoint.trace(:call, :b_call) do |p|
+    tp = TracePoint.trace(:call, :b_call, :raise) do |p|
       trace_points << TraceTree::Node.new(p)
     end
     eval('self').instance_eval &to_do
