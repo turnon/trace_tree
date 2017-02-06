@@ -10,7 +10,7 @@ class RaiseTest < Minitest::Test
     end
 
     def entry!
-      result exe!
+      result = exe!
       out result
     end
 
