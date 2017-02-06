@@ -16,7 +16,7 @@ class TraceTree
     end
 
     def label_for_tree_graph
-      shorten_gem_path location bindings[0]
+      "#{class_and_method} #{source_location}"
     end
 
     def children_for_tree_graph
@@ -45,21 +45,15 @@ class TraceTree
     end
 
     def parent_stack
-      range = (@event == :raise ? bindings : bindings[1..-1])
+      range = (raise_event? ? bindings : bindings[1..-1])
       range.map{|b| location_without_lineno b}
     end
 
-    protected
+    private
 
     def location_without_lineno bi
       [bi.klass, bi.call_symbol, bi.frame_env, bi.file]
     end
-
-    def location bi
-      "#{bi.klass}#{bi.call_symbol}#{bi.frame_env} #{bi.file}:#{bi.line}"
-    end
-
-    private
 
     def filter_call_stack bindings
       bindings = bindings[2..-1]
@@ -74,6 +68,22 @@ class TraceTree
         bs << b
       end
       bs
+    end
+
+    def class_and_method
+      "#{raise_event? ? 'raise in ' : ''}#{current.klass}#{current.call_symbol}#{current.frame_env}"
+    end
+
+    def source_location
+      "#{shorten_gem_path current.file}:#{current.line}"
+    end
+
+    def current
+      bindings[0]
+    end
+
+    def raise_event?
+      @event == :raise
     end
 
     def shorten_gem_path loc

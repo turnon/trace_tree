@@ -45,7 +45,7 @@ RaiseTest#block in test_rescue /home/z/trace_tree/test/raise_test.rb:69
 └─RaiseTest::Raise#entry /home/z/trace_tree/test/raise_test.rb:7
   ├─RaiseTest::Raise#exe /home/z/trace_tree/test/raise_test.rb:17
   │ ├─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:27
-  │ │ └─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:28
+  │ │ └─raise in RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:28
   │ └─RaiseTest::Raise#save /home/z/trace_tree/test/raise_test.rb:31
   └─RaiseTest::Raise#out /home/z/trace_tree/test/raise_test.rb:35
 EOS
@@ -55,7 +55,7 @@ RaiseTest#block (2 levels) in test_no_rescue /home/z/trace_tree/test/raise_test.
 └─RaiseTest::Raise#entry! /home/z/trace_tree/test/raise_test.rb:12
   └─RaiseTest::Raise#exe! /home/z/trace_tree/test/raise_test.rb:23
     └─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:27
-      └─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:28
+      └─raise in RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:28
 EOS
 
   ReturnValue = false
