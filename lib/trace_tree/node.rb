@@ -1,5 +1,4 @@
 require 'tree_graph'
-require 'trace_tree/gem_paths'
 
 class TraceTree
   class Node
@@ -75,7 +74,7 @@ class TraceTree
     end
 
     def source_location
-      "#{shorten_gem_path current.file}:#{current.line}"
+      "#{current.file}:#{current.line}"
     end
 
     def current
@@ -84,11 +83,6 @@ class TraceTree
 
     def raise_event?
       @event == :raise
-    end
-
-    def shorten_gem_path loc
-      GemPaths.each{|name, path| loc = loc.gsub(path, "$#{name}")}
-      loc
     end
 
   end

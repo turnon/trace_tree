@@ -1,6 +1,7 @@
 require "trace_tree/version"
-require 'binding_of_callers'
+require 'binding_of_callers/pry'
 require 'trace_tree/node'
+require 'trace_tree/short_gem_path'
 
 class TraceTree
 
@@ -19,11 +20,15 @@ class TraceTree
 end
 
 class Binding
-  def trace_tree log=STDOUT, &to_do
+  def trace_tree *log, **opt, &to_do
+    log = log.empty? ? STDOUT : log[0]
+    node_class = optional_node opt
+
     trace_points = []
-    tp = TracePoint.trace(:call, :b_call, :raise) do |p|
-      trace_points << TraceTree::Node.new(p)
+    tp = TracePoint.trace(:call, :b_call, :raise) do |point|
+      trace_points << node_class.new(point)
     end
+
     eval('self').instance_eval &to_do
   ensure
     tp.disable
@@ -31,6 +36,12 @@ class Binding
   end
 
   private
+
+  def optional_node opt
+    Class.new TraceTree::Node do
+      prepend TraceTree::ShortGemPath unless opt[:gem] == false
+    end
+  end
 
   def _dump_trace_tree log, trace_points
     tree = TraceTree.
