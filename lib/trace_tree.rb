@@ -26,8 +26,8 @@ class Binding
     node_class = optional_node opt
 
     trace_points = []
-    tp = TracePoint.trace(:call, :b_call, :raise) do |point|
-      trace_points << node_class.new(point)
+    tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
+      trace_points << node_class.new(point) if wanted? point
     end
 
     eval('self').instance_eval &to_do
@@ -51,5 +51,9 @@ class Binding
       tree_graph
 
     log.puts tree
+  end
+
+  def wanted? trace_point
+    trace_point.event != :c_call or trace_point.method_id == :throw
   end
 end

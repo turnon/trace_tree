@@ -27,6 +27,7 @@ class TraceTree
 
     def initialize trace_point
       @event = trace_point.event
+      @method_id = trace_point.method_id
       @bindings = filter_call_stack trace_point.binding.of_callers!
     end
 
@@ -58,6 +59,8 @@ class TraceTree
       bindings = bindings[2..-1]
       bindings = callees_of_binding_trace_tree bindings
       bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
+      bindings.unshift bindings.first if throw_event?
+      bindings
     end
 
     def callees_of_binding_trace_tree bindings
@@ -70,7 +73,7 @@ class TraceTree
     end
 
     def class_and_method
-      "#{raise_event? ? 'raise in ' : ''}#{current.klass}#{current.call_symbol}#{current.frame_env}"
+      "#{event_indicator}#{current.klass}#{current.call_symbol}#{current.frame_env}"
     end
 
     def source_location
@@ -83,6 +86,16 @@ class TraceTree
 
     def raise_event?
       @event == :raise
+    end
+
+    def throw_event?
+      @event == :c_call and :throw == @method_id
+    end
+
+    def event_indicator
+      return 'raise in ' if raise_event?
+      return 'throw in ' if throw_event?
+      return ''
     end
 
   end
