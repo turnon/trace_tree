@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["ken"]
   spec.email         = ["block24block@gmail.com"]
 
-  spec.summary       = %q{print TracePoints in tree graph}
+  spec.summary       = %q{Print TracePoint(normal ruby call, block call, raise call, throw call) in tree graph}
   spec.homepage      = "https://github.com/turnon/trace_tree"
   spec.license       = "MIT"
 
