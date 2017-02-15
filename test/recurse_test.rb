@@ -48,4 +48,11 @@ EOS
     @sio.rewind
     assert_equal Tracetree, @sio.read
   end
+
+  def test_trace_tree_html
+    f = tmp_html_for 'recurse'
+    rt = binding.trace_tree(f, html: true) do
+      @test.a
+    end
+  end
 end

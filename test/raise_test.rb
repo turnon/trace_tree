@@ -86,4 +86,20 @@ EOS
     @sio.rewind
     assert_equal NoRescue, @sio.read
   end
+
+  def test_rescue_html
+    f = tmp_html_for 'raise_rescue'
+    rt = binding.trace_tree(f, html: true) do
+      @test.entry
+    end
+  end
+
+  def test_no_rescue_html
+    f = tmp_html_for 'raise_no_rescue'
+    assert_raises(Boom) do
+      rt = binding.trace_tree(f, html: true) do
+        @test.entry!
+      end
+    end
+  end
 end
