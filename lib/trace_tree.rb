@@ -20,6 +20,7 @@ class TraceTree
   def generate *log, **opt, &to_do
     @log = log.empty? ? STDOUT : log[0]
     node_class = optional_node opt
+    @build = opt[:html] ? [:tree_html_full, '.highlight{color: blue;}'] : [:tree_graph]
 
     tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
       trace_points << node_class.new(point) if wanted? point
@@ -33,7 +34,7 @@ class TraceTree
 
   private
 
-  attr_reader :bi, :trace_points, :log
+  attr_reader :bi, :trace_points, :log, :build
 
   def optional_node opt
     Class.new TraceTree::Node do
@@ -43,7 +44,7 @@ class TraceTree
   end
 
   def dump_trace_tree
-    tree = sort(trace_points).tree_graph
+    tree = sort(trace_points).send *build
     log.puts tree
   end
 
