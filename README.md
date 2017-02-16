@@ -1,6 +1,6 @@
 # TraceTree
 
-Print TracePoint(normal ruby call, block call, raise call, throw call) in tree graph.
+Print TracePoint(normal ruby call, block call, raise call, throw call) in tree view, to console or html.
 
 ## Installation
 
@@ -30,7 +30,7 @@ end
 
 ### Parameters
 
-You may pass optional parameters while invoking `binding.trace_tree`:
+You may pass optional parameters while invoking `binding.trace_tree`, for example:
 
 ```ruby
 binding.trace_tree(file, color: false, gem: false) do
@@ -41,7 +41,8 @@ end
 * `file == STDOUT` by default. You can give it a File object or anything responds to `puts`.
 * `:color => true` by default. It makes method names have different color than source_location in output. When you print the output to file, you may want to set it false to discard those color ANSI escape sequences.
 * `:gem => true` by default. Replace the gem paths in source_location with $GemPathN, can make the lines shorter. To see what are replaced, inspect `TraceTree::GemPaths`.
-* `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`.
+* `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`. (No need to set `color`).
+* `:tmp => nil` by default. Set it true or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument)
 
 ### Example
 
@@ -52,7 +53,7 @@ require 'sinatra'
 require 'trace_tree'
 
 get '/' do
-  'wtf'
+  'welcome'
 end
 
 class Sinatra::Base

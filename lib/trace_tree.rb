@@ -3,6 +3,7 @@ require 'binding_of_callers/pry'
 require 'trace_tree/node'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
+require 'trace_tree/tmp_file'
 
 class Binding
   def trace_tree *log, **opt, &to_do
@@ -18,7 +19,7 @@ class TraceTree
   end
 
   def generate *log, **opt, &to_do
-    @log = log.empty? ? STDOUT : log[0]
+    @log = dump_location *log, **opt
     node_class = optional_node opt
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
 
@@ -35,6 +36,11 @@ class TraceTree
   private
 
   attr_reader :bi, :trace_points, :log, :build_command
+
+  def dump_location *log, **opt
+    return TmpFile.new opt[:tmp] if opt[:tmp]
+    log.empty? ? STDOUT : log[0]
+  end
 
   def optional_node opt
     Class.new TraceTree::Node do

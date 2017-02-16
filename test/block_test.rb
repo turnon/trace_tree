@@ -55,9 +55,9 @@ EOS
   end
 
   def test_trace_tree_html
-    f = tmp_html_for 'block'
-    rt = binding.trace_tree(f, html: true) do
+    rt = binding.trace_tree(html: true, tmp: 'block.html') do
       @test.a
     end
+    assert_equal ReturnValue, rt
   end
 end
