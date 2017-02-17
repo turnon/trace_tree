@@ -13,7 +13,7 @@ class TraceTree
     def initialize trace_point
       @event = trace_point.event
       @method_id = trace_point.method_id
-      @bindings = filter_call_stack trace_point.binding.of_callers!
+      @bindings = filter_call_stack trace_point.binding.of_callers
     end
 
     def << node
