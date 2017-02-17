@@ -4,6 +4,7 @@ require 'trace_tree/node'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
 require 'trace_tree/tmp_file'
+require 'trace_tree/timer'
 
 class Binding
   def trace_tree *log, **opt, &to_do
@@ -16,28 +17,39 @@ class TraceTree
   def initialize bi
     @bi = bi
     @trace_points = []
+    @timer = Timer.new
   end
 
   def generate *log, **opt, &to_do
-    @log = dump_location *log, **opt
-    node_class = optional_node opt
+    @opt = opt
+    @log = dump_location *log
+    @node_class = optional_node **opt
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-
-    tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
-      trace_points << node_class.new(point) if wanted? point
-    end
-
+    start_trace
     bi.eval('self').instance_eval &to_do
   ensure
-    tp.disable
-    dump_trace_tree
+    stop_trace
   end
 
   private
 
-  attr_reader :bi, :trace_points, :log, :build_command
+  attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt
 
-  def dump_location *log, **opt
+  def start_trace
+    timer[:to_do]
+    @tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
+      trace_points << @node_class.new(point) if wanted? point
+    end
+  end
+
+  def stop_trace
+    return unless @tp
+    @tp.disable
+    timer[:to_do]
+    dump_trace_tree
+  end
+
+  def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]
     log.empty? ? STDOUT : log[0]
   end
@@ -50,8 +62,11 @@ class TraceTree
   end
 
   def dump_trace_tree
+    timer[:tree]
     tree = sort(trace_points).send build_command
+    timer[:tree]
     log.puts tree
+    log.puts timer.to_s if opt[:timer]
   end
 
   def wanted? trace_point

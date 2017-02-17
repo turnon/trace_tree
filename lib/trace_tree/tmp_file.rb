@@ -12,7 +12,7 @@ class TraceTree
     end
 
     def puts *content
-      File.open @tmp, 'w' do |f|
+      File.open @tmp, 'a' do |f|
         f.puts *content
       end
     end
