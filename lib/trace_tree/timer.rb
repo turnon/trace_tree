@@ -14,7 +14,7 @@ class TraceTree
     end
 
     def to_s
-      record.map{|k,v| "#{k}: #{ftime v[0]} ~ #{ftime v[-1]} = #{v[-1] - v[0]}"}
+      Hash[record.map{|k,v| [k, v[-1] - v[0]]}].to_s
     end
 
     private

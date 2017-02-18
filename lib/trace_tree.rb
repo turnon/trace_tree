@@ -36,7 +36,7 @@ class TraceTree
   attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt
 
   def start_trace
-    timer[:to_do]
+    timer[:trace]
     @tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
       trace_points << @node_class.new(point) if wanted? point
     end
@@ -45,7 +45,7 @@ class TraceTree
   def stop_trace
     return unless @tp
     @tp.disable
-    timer[:to_do]
+    timer[:trace]
     dump_trace_tree
   end
 
