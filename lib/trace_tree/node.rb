@@ -8,7 +8,6 @@ class TraceTree
     include TreeHtmlable
 
     attr_reader :bindings
-    attr_accessor :parent
 
     def initialize trace_point
       @event = trace_point.event
@@ -18,7 +17,6 @@ class TraceTree
 
     def << node
       callees << node
-      node.parent = self
     end
 
     def callees
