@@ -40,7 +40,7 @@ class TraceTree
   def start_trace
     timer[:trace]
     #@tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
-    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :call, :class, :end, :raise, :return) do |point|
+    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :raise, :return) do |point|
       trace_points << @node_class.new(point) if wanted? point
     end
   end
@@ -74,11 +74,9 @@ class TraceTree
   #end
 
   def dump_trace_tree
-    #trace_points.each do |point|
-    #  #puts "#{point.path}:#{point.lineno} #{point.event} #{statement.of point}"
-    #  #puts "#{point.path}:#{point.lineno} #{point.event} #{point.defined_class} #{point.method_id}"
-    #  puts point.to_s
-    #end
+    trace_points.each do |point|
+      puts point.to_s
+    end
 
     #trace_points.pop
     #trace_points.shift
@@ -98,7 +96,7 @@ class TraceTree
     #puts st
     log.puts st[0].
       callees[0].
-      callees[0].
+      callees[1].
       callees[0].
       tree_graph
   end
