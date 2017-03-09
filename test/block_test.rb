@@ -57,10 +57,10 @@ EOS
     assert_equal Tracetree, @sio.read
   end
 
-  #def test_trace_tree_html
-  #  rt = binding.trace_tree(html: true, tmp: 'block.html') do
-  #    @test.a
-  #  end
-  #  assert_equal ReturnValue, rt
-  #end
+  def test_trace_tree_html
+    rt = binding.trace_tree(html: true, tmp: 'block.html', ignore: Ignore) do
+      @test.a
+    end
+    assert_equal ReturnValue, rt
+  end
 end

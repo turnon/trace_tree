@@ -59,11 +59,10 @@ class TraceTree
   end
 
   def optional_node opt
-    #Class.new TraceTree::Node do
-    #  prepend TraceTree::ShortGemPath unless opt[:gem] == false
-    #  prepend TraceTree::Color unless opt[:color] == false
-    #end
-    Point
+    Class.new TraceTree::Point do
+      prepend TraceTree::ShortGemPath unless opt[:gem] == false
+      prepend TraceTree::Color unless opt[:color] == false
+    end
   end
 
   #def dump_trace_tree
@@ -75,12 +74,29 @@ class TraceTree
   #end
 
   def dump_trace_tree
-    trace_points.each do |point|
-      puts point.to_s
-    end
+    #trace_points.each do |point|
+    #  puts point.to_s
+    #end
 
     #trace_points.pop
     #trace_points.shift
+    #puts
+    #puts st
+    timer[:tree]
+    tree = sort(trace_points).send build_command
+    timer[:tree]
+    log.puts tree
+    log.puts timer.to_s if opt[:timer]
+  end
+
+  def wanted? trace_point
+    @ignore.any? do |attr, pattern|
+      pattern =~ trace_point.send(attr)
+    end ? false : true
+    #trace_point.event != :c_call or trace_point.method_id == :throw
+  end
+
+  def sort trace_points
     st = trace_points.each_with_object([]) do |point, stack|
       unless stack.empty?
         if point.return_or_end? stack.last
@@ -93,33 +109,11 @@ class TraceTree
         stack << point
       end
     end
-    #puts
-    #puts st
-    log.puts st[0].
+    st[0].
       callees[0].
       callees[1].
-      callees[0].
-      tree_graph
+      callees[0]
   end
-
-  def wanted? trace_point
-    @ignore.any? do |attr, pattern|
-      pattern =~ trace_point.send(attr)
-    end ? false : true
-    #trace_point.event != :c_call or trace_point.method_id == :throw
-  end
-
-  #def sort stack
-  #  hash = {}
-  #  stack.each do |call|
-  #    unless hash.empty?
-  #      parent = hash[call.parent_stack]
-  #      parent << call if parent
-  #    end
-  #    hash[call.whole_stack] = call
-  #  end
-  #  stack[0]
-  #end
 
 end
 

@@ -94,18 +94,18 @@ EOS
     assert_equal NoRescue, @sio.read
   end
 
-  #def test_rescue_html
-  #  rt = binding.trace_tree(html: true, tmp: 'raise_rescue.html') do
-  #    @test.entry
-  #  end
-  #  assert_equal ReturnValue, rt
-  #end
+  def test_rescue_html
+    rt = binding.trace_tree(html: true, tmp: 'raise_rescue.html', ignore: Ignore) do
+      @test.entry
+    end
+    assert_equal ReturnValue, rt
+  end
 
-  #def test_no_rescue_html
-  #  assert_raises(Boom) do
-  #    rt = binding.trace_tree(html: true, tmp: 'raise_no_rescue.html') do
-  #      @test.entry!
-  #    end
-  #  end
-  #end
+  def test_no_rescue_html
+    assert_raises(Boom) do
+      rt = binding.trace_tree(html: true, tmp: 'raise_no_rescue.html', ignore: Ignore) do
+        @test.entry!
+      end
+    end
+  end
 end
