@@ -7,7 +7,7 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :bindings
+    attr_reader :current
 
     Interfaces = [:defined_class, :event, :lineno, :method_id, :path]
     attr_reader *Interfaces
@@ -16,7 +16,7 @@ class TraceTree
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
-      @bindings = filter_call_stack trace_point.binding.of_callers
+      @current = trace_point.binding.of_callers[2]
     end
 
     def to_s
@@ -34,7 +34,8 @@ class TraceTree
     def ending? point
       (event == :b_return and point.event == :b_call) or
         (event == :c_return and point.event == :c_call) or
-        (event == :return and point.event == :call)
+        (event == :return and point.event == :call) or
+        (event == :end and point.event == :class)
     end
 
     def << node
@@ -45,28 +46,28 @@ class TraceTree
       @callees ||= []
     end
 
-    def whole_stack
-      bindings.map{|b| location_without_lineno b}
-    end
+    #def whole_stack
+    #  bindings.map{|b| location_without_lineno b}
+    #end
 
-    def parent_stack
-      range = (raise_event? ? bindings : bindings[1..-1])
-      range.map{|b| location_without_lineno b}
-    end
+    #def parent_stack
+    #  range = (raise_event? ? bindings : bindings[1..-1])
+    #  range.map{|b| location_without_lineno b}
+    #end
 
     private
 
-    def location_without_lineno bi
-      [bi.klass, bi.call_symbol, bi.frame_env, bi.file]
-    end
+    #def location_without_lineno bi
+    #  [bi.klass, bi.call_symbol, bi.frame_env, bi.file]
+    #end
 
-    def filter_call_stack bindings
-      bindings = bindings[2..-1]
-      #bindings = callees_of_binding_trace_tree bindings
-      #bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
-      #bindings.unshift bindings.first if throw_event?
-      bindings
-    end
+    #def filter_call_stack bindings
+    #  bindings = bindings[2..-1]
+    #  #bindings = callees_of_binding_trace_tree bindings
+    #  #bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
+    #  #bindings.unshift bindings.first if throw_event?
+    #  bindings
+    #end
 
     #def callees_of_binding_trace_tree bindings
     #  bs = []
@@ -93,16 +94,16 @@ class TraceTree
       "#{current.file}:#{current.line}"
     end
 
-    def current
-      bindings[0]
-    end
+    #def current
+    #  bindings[0]
+    #end
 
     #def raise_event?
     #  @event == :raise
     #end
 
     def throw_event?
-      @event == :c_call and :throw == @method_id
+      event == :c_call and :throw == method_id
     end
 
     #def event_indicator
