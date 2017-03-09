@@ -18,19 +18,28 @@ class ClassTest < Minitest::Test
 
     module P
       def self.included base
+        not_base = 1
       end
     end
 
     module Q
       def self.extended base
+        not_base = 2
       end
     end
 
-    class R
+    module R
+      def self.prepended base
+        note_base = 3
+      end
     end
 
-    class S
+    class Y
+    end
+
+    class Z
       def self.inherited base
+        not_base = 4
       end
     end
 
@@ -40,11 +49,12 @@ class ClassTest < Minitest::Test
       prepend O
       include P
       extend Q
+      prepend R
 
-      class B < R
+      class B < Y
       end
 
-      class C < S
+      class C < Z
       end
 
       class << self
@@ -112,8 +122,11 @@ EOS
   def test_trace_tree
     assert_equal :d, Return
 
+    #Sio.rewind
+    #assert_equal Tracetree, Sio.read
+
     Sio.rewind
-    assert_equal Tracetree, Sio.read
+    puts Sio.read
   end
 
 end

@@ -7,7 +7,8 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current
+    attr_reader :current, :return_value
+    attr_accessor :terminal
 
     Interfaces = [:defined_class, :event, :lineno, :method_id, :path]
     attr_reader *Interfaces
@@ -16,14 +17,27 @@ class TraceTree
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
+      @return_value = trace_point.return_value if return_event?
       @current = trace_point.binding.of_callers[2]
     end
 
-    def to_s
-      "#{defined_class} #{method_id} #{event} #{path} #{lineno} #{current.frame_env}"
+    def return_event?
+      event =~ /return/
     end
 
-    def return_or_end? point
+    def return_value
+      raise RuntimeError.new('RuntimeError: not supported by this event') unless return_event?
+      @return_value
+    end
+
+    def to_s
+      #unless current.lv.empty?
+      puts "#{defined_class} #{method_id} #{event} #{path} #{lineno} #{current.frame_env}"
+      puts "#{current.lv} #{callees.empty? ? '' : 'c: ' + callees[0].current.klass.to_s}" #if defined_class == method_name
+      #end
+    end
+
+    def terminate? point
       same_method?(point) and ending?(point)
     end
 
@@ -55,7 +69,7 @@ class TraceTree
     #  range.map{|b| location_without_lineno b}
     #end
 
-    private
+    #private
 
     #def location_without_lineno bi
     #  [bi.klass, bi.call_symbol, bi.frame_env, bi.file]
@@ -79,7 +93,11 @@ class TraceTree
     #end
 
     def class_and_method
-      "#{class_name}#{current.call_symbol}#{method_name}"
+      "#{_class_and_method}#{mixin}"
+    end
+
+    def _class_and_method
+      @km ||= "#{class_name}#{current.call_symbol}#{method_name}"
     end
 
     def class_name
@@ -94,6 +112,15 @@ class TraceTree
       "#{current.file}:#{current.line}"
     end
 
+    def mixin
+      case _class_and_method
+      when 'Module.include', 'Module.prepend'
+        " #{callees[0].terminal.return_value}"
+      when 'Kernel.extend'
+        " #{callees[0].terminal.return_value.singleton_class.ancestors[1]}"
+      end
+    end
+
     #def current
     #  bindings[0]
     #end
@@ -102,9 +129,9 @@ class TraceTree
     #  @event == :raise
     #end
 
-    def throw_event?
-      event == :c_call and :throw == method_id
-    end
+    #def throw_event?
+    #  event == :c_call and :throw == method_id
+    #end
 
     #def event_indicator
     #  return 'raise in ' if raise_event?

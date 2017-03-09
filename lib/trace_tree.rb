@@ -79,7 +79,8 @@ class TraceTree
   def sort trace_points
     st = trace_points.each_with_object([]) do |point, stack|
       unless stack.empty?
-        if point.return_or_end? stack.last
+        if point.terminate? stack.last
+          stack.last.terminal = point
           stack.pop
         else
           stack.last << point
@@ -89,6 +90,7 @@ class TraceTree
         stack << point
       end
     end
+    trace_points.each{|p| puts p.to_s}
     st[0].
       callees[0].
       callees[1].
