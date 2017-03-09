@@ -40,7 +40,8 @@ class TraceTree
   def start_trace
     timer[:trace]
     #@tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
-    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :raise, :return) do |point|
+    #@tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :raise, :return) do |point|
+    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
       trace_points << @node_class.new(point) if wanted? point
     end
   end

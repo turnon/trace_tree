@@ -7,23 +7,24 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    #attr_reader :bindings
+    attr_reader :bindings
+
     Interfaces = [:defined_class, :event, :lineno, :method_id, :path]
     attr_reader *Interfaces
-    attr_reader :current
+    #attr_reader :current
 
     def initialize trace_point
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
-      @current = trace_point.binding.of_callers[0]
+      #@current = trace_point.binding.of_callers[0]
       #@event = trace_point.event
       #@method_id = trace_point.method_id
-      #@bindings = filter_call_stack trace_point.binding.of_callers
+      @bindings = filter_call_stack trace_point.binding.of_callers
     end
 
     def to_s
-      "#{defined_class} #{method_id} #{event} #{path} #{lineno}"
+      "#{defined_class} #{method_id} #{event} #{path} #{lineno} #{current.frame_env}"
     end
 
     def return_or_end? point
@@ -80,29 +81,33 @@ class TraceTree
       bs
     end
 
+    def class_and_method
+      "#{event_indicator}#{class_name}#{current.call_symbol}#{method_name}"
+    end
+
     #def class_and_method
-    #  "#{event_indicator}#{current.klass}#{current.call_symbol}#{current.frame_env}"
+    #  "#{event_indicator}#{defined_class}#{current.call_symbol}#{method_name}"
     #end
 
-    def class_and_method
-      "#{event_indicator}#{defined_class}#{current.call_symbol}#{method_name}"
+    def class_name
+      event == :c_call ? defined_class : current.klass
     end
 
     def method_name
-      "#{event == :b_call ? 'block in ' : ''}#{method_id}"
+      event == :c_call ? method_id : current.frame_env
     end
 
     def source_location
       "#{current.file}:#{current.line}"
     end
 
-    def source_location
-      "#{path}:#{lineno}"
-    end
-
-    #def current
-    #  bindings[0]
+    #def source_location
+    #  "#{path}:#{lineno}"
     #end
+
+    def current
+      bindings[0]
+    end
 
     def raise_event?
       @event == :raise
