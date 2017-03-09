@@ -28,12 +28,13 @@ class ThrowTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-ThrowTest#block in test_trace_tree /home/z/trace_tree/test/throw_test.rb:48
+ThrowTest#block in test_trace_tree /home/z/trace_tree/test/throw_test.rb:49
 └─ThrowTest::Throw#a /home/z/trace_tree/test/throw_test.rb:6
-  ├─ThrowTest::Throw#block in a /home/z/trace_tree/test/throw_test.rb:7
-  │ └─ThrowTest::Throw#b /home/z/trace_tree/test/throw_test.rb:14
-  │   └─ThrowTest::Throw#d /home/z/trace_tree/test/throw_test.rb:21
-  │     └─throw in ThrowTest::Throw#d /home/z/trace_tree/test/throw_test.rb:22
+  ├─Kernel#catch /home/z/trace_tree/test/throw_test.rb:7
+  │ └─ThrowTest::Throw#block in a /home/z/trace_tree/test/throw_test.rb:7
+  │   └─ThrowTest::Throw#b /home/z/trace_tree/test/throw_test.rb:14
+  │     └─ThrowTest::Throw#d /home/z/trace_tree/test/throw_test.rb:21
+  │       └─throw in Kernel#throw /home/z/trace_tree/test/throw_test.rb:22
   └─ThrowTest::Throw#e /home/z/trace_tree/test/throw_test.rb:25
 EOS
 
@@ -45,7 +46,7 @@ EOS
   end
 
   def test_trace_tree
-    rt = binding.trace_tree(@sio, color: false) do
+    rt = binding.trace_tree(@sio, color: false, ignore: Ignore) do
       @test.a
     end
 
