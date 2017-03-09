@@ -11,15 +11,11 @@ class TraceTree
 
     Interfaces = [:defined_class, :event, :lineno, :method_id, :path]
     attr_reader *Interfaces
-    #attr_reader :current
 
     def initialize trace_point
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
-      #@current = trace_point.binding.of_callers[0]
-      #@event = trace_point.event
-      #@method_id = trace_point.method_id
       @bindings = filter_call_stack trace_point.binding.of_callers
     end
 
@@ -66,28 +62,24 @@ class TraceTree
 
     def filter_call_stack bindings
       bindings = bindings[2..-1]
-      bindings = callees_of_binding_trace_tree bindings
-      bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
-      bindings.unshift bindings.first if throw_event?
+      #bindings = callees_of_binding_trace_tree bindings
+      #bindings = bindings.reject{|b| b.frame_env =~ /^rescue\sin\s/}
+      #bindings.unshift bindings.first if throw_event?
       bindings
     end
 
-    def callees_of_binding_trace_tree bindings
-      bs = []
-      bindings.each do |b|
-        break if "#{b.klass}#{b.call_symbol}#{b.frame_env}" == "Binding#trace_tree"
-        bs << b
-      end
-      bs
-    end
+    #def callees_of_binding_trace_tree bindings
+    #  bs = []
+    #  bindings.each do |b|
+    #    break if "#{b.klass}#{b.call_symbol}#{b.frame_env}" == "Binding#trace_tree"
+    #    bs << b
+    #  end
+    #  bs
+    #end
 
     def class_and_method
-      "#{event_indicator}#{class_name}#{current.call_symbol}#{method_name}"
+      "#{class_name}#{current.call_symbol}#{method_name}"
     end
-
-    #def class_and_method
-    #  "#{event_indicator}#{defined_class}#{current.call_symbol}#{method_name}"
-    #end
 
     def class_name
       event == :c_call ? defined_class : current.klass
@@ -101,27 +93,23 @@ class TraceTree
       "#{current.file}:#{current.line}"
     end
 
-    #def source_location
-    #  "#{path}:#{lineno}"
-    #end
-
     def current
       bindings[0]
     end
 
-    def raise_event?
-      @event == :raise
-    end
+    #def raise_event?
+    #  @event == :raise
+    #end
 
     def throw_event?
       @event == :c_call and :throw == @method_id
     end
 
-    def event_indicator
-      return 'raise in ' if raise_event?
-      return 'throw in ' if throw_event?
-      return ''
-    end
+    #def event_indicator
+    #  return 'raise in ' if raise_event?
+    #  return 'throw in ' if throw_event?
+    #  return ''
+    #end
 
   end
 end

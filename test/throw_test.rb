@@ -34,7 +34,7 @@ ThrowTest#block in test_trace_tree /home/z/trace_tree/test/throw_test.rb:49
   │ └─ThrowTest::Throw#block in a /home/z/trace_tree/test/throw_test.rb:7
   │   └─ThrowTest::Throw#b /home/z/trace_tree/test/throw_test.rb:14
   │     └─ThrowTest::Throw#d /home/z/trace_tree/test/throw_test.rb:21
-  │       └─throw in Kernel#throw /home/z/trace_tree/test/throw_test.rb:22
+  │       └─Kernel#throw /home/z/trace_tree/test/throw_test.rb:22
   └─ThrowTest::Throw#e /home/z/trace_tree/test/throw_test.rb:25
 EOS
 

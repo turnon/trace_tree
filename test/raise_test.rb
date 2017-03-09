@@ -49,7 +49,7 @@ RaiseTest#block in test_rescue /home/z/trace_tree/test/raise_test.rb:76
   │ │ │ └─#<Class:Exception>#exception /home/z/trace_tree/test/raise_test.rb:28
   │ │ │   └─Exception#initialize /home/z/trace_tree/test/raise_test.rb:28
   │ │ └─Exception#backtrace /home/z/trace_tree/test/raise_test.rb:28
-  │ ├─Module#=== /home/z/trace_tree/test/raise_test.rb:18
+  │ ├─Module#=== /home/z/trace_tree/test/raise_test.rb:19
   │ └─RaiseTest::Raise#save /home/z/trace_tree/test/raise_test.rb:31
   └─RaiseTest::Raise#out /home/z/trace_tree/test/raise_test.rb:35
 EOS

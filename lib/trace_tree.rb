@@ -1,6 +1,5 @@
 require "trace_tree/version"
 require 'binding_of_callers/pry'
-#require 'trace_tree/node'
 require 'trace_tree/point'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
@@ -39,8 +38,6 @@ class TraceTree
 
   def start_trace
     timer[:trace]
-    #@tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
-    #@tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :raise, :return) do |point|
     @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
       trace_points << @node_class.new(point) if wanted? point
     end
@@ -65,23 +62,7 @@ class TraceTree
     end
   end
 
-  #def dump_trace_tree
-  #  timer[:tree]
-  #  tree = sort(trace_points).send build_command
-  #  timer[:tree]
-  #  log.puts tree
-  #  log.puts timer.to_s if opt[:timer]
-  #end
-
   def dump_trace_tree
-    #trace_points.each do |point|
-    #  puts point.to_s
-    #end
-
-    #trace_points.pop
-    #trace_points.shift
-    #puts
-    #puts st
     timer[:tree]
     tree = sort(trace_points).send build_command
     timer[:tree]
@@ -93,7 +74,6 @@ class TraceTree
     @ignore.any? do |attr, pattern|
       pattern =~ trace_point.send(attr)
     end ? false : true
-    #trace_point.event != :c_call or trace_point.method_id == :throw
   end
 
   def sort trace_points
