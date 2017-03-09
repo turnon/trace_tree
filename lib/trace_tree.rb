@@ -1,6 +1,7 @@
 require "trace_tree/version"
 require 'binding_of_callers/pry'
-require 'trace_tree/node'
+#require 'trace_tree/node'
+require 'trace_tree/point'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
 require 'trace_tree/tmp_file'
@@ -25,6 +26,7 @@ class TraceTree
     @log = dump_location *log
     @node_class = optional_node **opt
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
+    @ignore = opt[:ignore] || {}
     start_trace
     bi.eval('self').instance_eval &to_do
   ensure
@@ -37,7 +39,8 @@ class TraceTree
 
   def start_trace
     timer[:trace]
-    @tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
+    #@tp = TracePoint.trace(:call, :b_call, :raise, :c_call) do |point|
+    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :call, :class, :end, :raise, :return) do |point|
       trace_points << @node_class.new(point) if wanted? point
     end
   end
@@ -55,35 +58,69 @@ class TraceTree
   end
 
   def optional_node opt
-    Class.new TraceTree::Node do
-      prepend TraceTree::ShortGemPath unless opt[:gem] == false
-      prepend TraceTree::Color unless opt[:color] == false
-    end
+    #Class.new TraceTree::Node do
+    #  prepend TraceTree::ShortGemPath unless opt[:gem] == false
+    #  prepend TraceTree::Color unless opt[:color] == false
+    #end
+    Point
   end
 
+  #def dump_trace_tree
+  #  timer[:tree]
+  #  tree = sort(trace_points).send build_command
+  #  timer[:tree]
+  #  log.puts tree
+  #  log.puts timer.to_s if opt[:timer]
+  #end
+
   def dump_trace_tree
-    timer[:tree]
-    tree = sort(trace_points).send build_command
-    timer[:tree]
-    log.puts tree
-    log.puts timer.to_s if opt[:timer]
+    #trace_points.each do |point|
+    #  #puts "#{point.path}:#{point.lineno} #{point.event} #{statement.of point}"
+    #  #puts "#{point.path}:#{point.lineno} #{point.event} #{point.defined_class} #{point.method_id}"
+    #  puts point.to_s
+    #end
+
+    #trace_points.pop
+    #trace_points.shift
+    st = trace_points.each_with_object([]) do |point, stack|
+      unless stack.empty?
+        if point.return_or_end? stack.last
+          stack.pop
+        else
+          stack.last << point
+          stack << point
+        end
+      else
+        stack << point
+      end
+    end
+    #puts
+    #puts st
+    log.puts st[0].
+      callees[0].
+      callees[0].
+      callees[0].
+      tree_graph
   end
 
   def wanted? trace_point
-    trace_point.event != :c_call or trace_point.method_id == :throw
+    @ignore.any? do |attr, pattern|
+      pattern =~ trace_point.send(attr)
+    end ? false : true
+    #trace_point.event != :c_call or trace_point.method_id == :throw
   end
 
-  def sort stack
-    hash = {}
-    stack.each do |call|
-      unless hash.empty?
-        parent = hash[call.parent_stack]
-        parent << call if parent
-      end
-      hash[call.whole_stack] = call
-    end
-    stack[0]
-  end
+  #def sort stack
+  #  hash = {}
+  #  stack.each do |call|
+  #    unless hash.empty?
+  #      parent = hash[call.parent_stack]
+  #      parent << call if parent
+  #    end
+  #    hash[call.whole_stack] = call
+  #  end
+  #  stack[0]
+  #end
 
 end
 
