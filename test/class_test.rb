@@ -78,50 +78,50 @@ class ClassTest < Minitest::Test
   Tracetree = <<EOS
 ClassTest.block in <class:ClassTest> /home/z/trace_tree/test/class_test.rb:7
 ├─ClassTest::M.<module:M> /home/z/trace_tree/test/class_test.rb:8
-│ └─Module.method_added /home/z/trace_tree/test/class_test.rb:9
+│ └─Module#method_added /home/z/trace_tree/test/class_test.rb:9
 ├─ClassTest::N.<module:N> /home/z/trace_tree/test/class_test.rb:13
 ├─ClassTest::O.<module:O> /home/z/trace_tree/test/class_test.rb:16
 ├─ClassTest::P.<module:P> /home/z/trace_tree/test/class_test.rb:19
-│ └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:20
+│ └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:20
 ├─ClassTest::Q.<module:Q> /home/z/trace_tree/test/class_test.rb:25
-│ └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:26
+│ └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:26
 ├─ClassTest::R.<module:R> /home/z/trace_tree/test/class_test.rb:31
-│ └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:32
-├─Class.inherited /home/z/trace_tree/test/class_test.rb:37
+│ └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:32
+├─Class#inherited /home/z/trace_tree/test/class_test.rb:37
 ├─ClassTest::Y.<class:Y> /home/z/trace_tree/test/class_test.rb:37
-├─Class.inherited /home/z/trace_tree/test/class_test.rb:40
+├─Class#inherited /home/z/trace_tree/test/class_test.rb:40
 ├─ClassTest::Z.<class:Z> /home/z/trace_tree/test/class_test.rb:40
-│ └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:41
-├─Class.inherited /home/z/trace_tree/test/class_test.rb:46
+│ └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:41
+├─Class#inherited /home/z/trace_tree/test/class_test.rb:46
 └─ClassTest::A.<class:A> /home/z/trace_tree/test/class_test.rb:46
   ├─Module#include(ClassTest::M) /home/z/trace_tree/test/class_test.rb:47
   │ ├─Module#append_features(ClassTest::M) /home/z/trace_tree/test/class_test.rb:47
-  │ └─Module.included /home/z/trace_tree/test/class_test.rb:47
-  ├─Kernel.extend(ClassTest::N) /home/z/trace_tree/test/class_test.rb:48
-  │ ├─Module.extend_object /home/z/trace_tree/test/class_test.rb:48
-  │ └─Module.extended /home/z/trace_tree/test/class_test.rb:48
+  │ └─Module#included /home/z/trace_tree/test/class_test.rb:47
+  ├─Kernel#extend(ClassTest::N) /home/z/trace_tree/test/class_test.rb:48
+  │ ├─Module#extend_object /home/z/trace_tree/test/class_test.rb:48
+  │ └─Module#extended /home/z/trace_tree/test/class_test.rb:48
   ├─Module#prepend(ClassTest::O) /home/z/trace_tree/test/class_test.rb:49
   │ ├─Module#prepend_features(ClassTest::O) /home/z/trace_tree/test/class_test.rb:49
-  │ └─Module.prepended /home/z/trace_tree/test/class_test.rb:49
+  │ └─Module#prepended /home/z/trace_tree/test/class_test.rb:49
   ├─Module#include(ClassTest::P) /home/z/trace_tree/test/class_test.rb:50
   │ ├─Module#append_features(ClassTest::P) /home/z/trace_tree/test/class_test.rb:50
   │ └─ClassTest::P.included /home/z/trace_tree/test/class_test.rb:20
-  ├─Kernel.extend(ClassTest::Q) /home/z/trace_tree/test/class_test.rb:51
-  │ ├─Module.extend_object /home/z/trace_tree/test/class_test.rb:51
+  ├─Kernel#extend(ClassTest::Q) /home/z/trace_tree/test/class_test.rb:51
+  │ ├─Module#extend_object /home/z/trace_tree/test/class_test.rb:51
   │ └─ClassTest::Q.extended /home/z/trace_tree/test/class_test.rb:26
   ├─Module#prepend(ClassTest::R) /home/z/trace_tree/test/class_test.rb:52
   │ ├─Module#prepend_features(ClassTest::R) /home/z/trace_tree/test/class_test.rb:52
   │ └─ClassTest::R.prepended /home/z/trace_tree/test/class_test.rb:32
-  ├─Class.inherited /home/z/trace_tree/test/class_test.rb:54
+  ├─Class#inherited /home/z/trace_tree/test/class_test.rb:54
   ├─ClassTest::A::B.<class:B> /home/z/trace_tree/test/class_test.rb:54
   ├─ClassTest::Z.inherited /home/z/trace_tree/test/class_test.rb:41
   ├─ClassTest::A::C.<class:C> /home/z/trace_tree/test/class_test.rb:57
   ├─#<Class:ClassTest::A>.singleton class /home/z/trace_tree/test/class_test.rb:60
-  │ └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:61
-  ├─Module.method_added /home/z/trace_tree/test/class_test.rb:65
-  ├─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:68
+  │ └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:61
+  ├─Module#method_added /home/z/trace_tree/test/class_test.rb:65
+  ├─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:68
   └─#<Class:ClassTest::A>.singleton class /home/z/trace_tree/test/class_test.rb:71
-    └─BasicObject.singleton_method_added /home/z/trace_tree/test/class_test.rb:72
+    └─BasicObject#singleton_method_added /home/z/trace_tree/test/class_test.rb:72
 EOS
 
   def test_trace_tree
