@@ -2,7 +2,7 @@ require 'trace_tree/tree_graphable'
 require 'trace_tree/tree_htmlable'
 
 class TraceTree
-  class Point
+  module Point
 
     include TreeGraphable
     include TreeHtmlable
@@ -13,12 +13,30 @@ class TraceTree
     Interfaces = [:defined_class, :event, :lineno, :method_id, :path]
     attr_reader *Interfaces
 
+    class << self
+      def save trace_point
+        point_klass = bases[[trace_point.event, trace_point.defined_class, trace_point.method_id]] || Common
+        #puts '---'
+        #puts point_klass, [trace_point.event, trace_point.defined_class, trace_point.method_id]
+        #point_klass = Common
+        point_klass.new trace_point
+      end
+
+      def included base
+        bases[base.event_class_method] = base
+      end
+
+      def bases
+        @bases ||= {}
+      end
+    end
+
     def initialize trace_point
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
       @return_value = trace_point.return_value if return_event?
-      @current = trace_point.binding.of_callers[2]
+      @current = trace_point.binding.of_callers[3]
     end
 
     def return_event?
@@ -32,8 +50,8 @@ class TraceTree
 
     def to_s
       #unless current.lv.empty?
-      puts "#{defined_class} #{method_id} #{event} #{path} #{lineno} #{current.frame_env}"
-      puts "#{current.lv} #{callees.empty? ? '' : 'c: ' + callees[0].current.klass.to_s}" #if defined_class == method_name
+      #puts "#{defined_class} #{method_id} #{event} #{path} #{lineno} #{current.frame_env}"
+      #puts "#{current.lv} #{callees.empty? ? '' : 'c: ' + callees[0].current.klass.to_s}" #if defined_class == method_name
       #end
     end
 
@@ -93,7 +111,7 @@ class TraceTree
     #end
 
     def class_and_method
-      "#{_class_and_method}#{mixin}"
+      "#{_class_and_method}#{arg}"
     end
 
     def _class_and_method
@@ -109,17 +127,21 @@ class TraceTree
     end
 
     def source_location
-      "#{current.file}:#{current.line}"
+      "#{path}:#{lineno}"
     end
 
-    def mixin
-      case _class_and_method
-      when 'Module.include', 'Module.prepend'
-        " #{callees[0].terminal.return_value}"
-      when 'Kernel.extend'
-        " #{callees[0].terminal.return_value.singleton_class.ancestors[1]}"
-      end
+    def arg
+      respond_to?(:parameters) ? "(#{parameters})" : nil
     end
+
+    #def mixin
+    #  case _class_and_method
+    #  when 'Module.include', 'Module.prepend'
+    #    " #{callees[0].terminal.return_value}"
+    #  when 'Kernel.extend'
+    #    " #{callees[0].terminal.return_value.singleton_class.ancestors[1]}"
+    #  end
+    #end
 
     #def current
     #  bindings[0]
@@ -140,4 +162,8 @@ class TraceTree
     #end
 
   end
+end
+
+Dir.glob(File.expand_path('../point/*', __FILE__)).each do |concreate_point_path|
+  load concreate_point_path
 end

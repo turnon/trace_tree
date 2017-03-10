@@ -39,7 +39,7 @@ class TraceTree
   def start_trace
     timer[:trace]
     @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
-      trace_points << @node_class.new(point) if wanted? point
+      trace_points << @node_class.save(point) if wanted? point
     end
   end
 
@@ -56,10 +56,10 @@ class TraceTree
   end
 
   def optional_node opt
-    Class.new TraceTree::Point do
-      prepend TraceTree::ShortGemPath unless opt[:gem] == false
-      prepend TraceTree::Color unless opt[:color] == false
-    end
+    mod = TraceTree::Point.clone
+    mod.include TraceTree::ShortGemPath unless opt[:gem] == false
+    mod.include TraceTree::Color unless opt[:color] == false
+    mod
   end
 
   def dump_trace_tree
@@ -90,7 +90,7 @@ class TraceTree
         stack << point
       end
     end
-    trace_points.each{|p| puts p.to_s}
+    #trace_points.each{|p| puts p.to_s}
     st[0].
       callees[0].
       callees[1].
