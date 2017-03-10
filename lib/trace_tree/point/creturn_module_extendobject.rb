@@ -1,6 +1,6 @@
 class TraceTree
-  module Point
-    class CreturnModuleExtendobject
+  class Point
+    class CreturnModuleExtendobject < Point
 
       def initialize trace_point
         super
@@ -12,8 +12,6 @@ class TraceTree
       def self.event_class_method
         [:c_return, Module, :extend_object]
       end
-
-      include Point
 
     end
   end

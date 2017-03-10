@@ -8,9 +8,10 @@ class CcallKernelExtendTest < Minitest::Test
   Co = C.new
 
   Extends = []
+  Loader = TraceTree::Point::Loader.new
 
   tp = TracePoint.trace(:c_call, :c_return) do |t|
-    Extends << TraceTree::Point.save(t) if t.defined_class == Module or t.defined_class == Kernel
+    Extends << Loader.create(t) if t.defined_class == Module or t.defined_class == Kernel
   end
 
   C.extend M

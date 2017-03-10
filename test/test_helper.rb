@@ -3,5 +3,5 @@ require 'trace_tree'
 require 'minitest/autorun'
 
 class Minitest::Test
-  Ignore = {path: /minitest\/parallel/}
+  Ignore = {path: /minitest/}
 end

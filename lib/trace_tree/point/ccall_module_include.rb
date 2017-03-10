@@ -1,16 +1,10 @@
 class TraceTree
-  module Point
-    class CcallModuleInclude
-
-      def initialize trace_point
-        super
-      end
+  class Point
+    class CcallModuleInclude < Point
 
       def self.event_class_method
         [:c_call, Module, :include]
       end
-
-      include Point
 
       def parameters
         callees[0].parameters

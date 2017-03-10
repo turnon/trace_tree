@@ -12,8 +12,9 @@ class CommonTest < Minitest::Test
   end
 
   def test_common
+    loader = TraceTree::Point::Loader.new
     tp = TracePoint.trace(:call) do |t|
-      @ttp = TraceTree::Point.save t
+      @ttp = loader.create t
     end
     A.new.a
   ensure

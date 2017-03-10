@@ -1,16 +1,10 @@
 class TraceTree
-  module Point
-    class CcallModuleAppendfeatures
-
-      def initialize trace_point
-        super
-      end
+  class Point
+    class CcallModuleAppendfeatures < Point
 
       def self.event_class_method
         [:c_call, Module, :append_features]
       end
-
-      include Point
 
       def parameters
         terminal.return_value

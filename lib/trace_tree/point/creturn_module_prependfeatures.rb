@@ -1,16 +1,10 @@
 class TraceTree
-  module Point
-    class CreturnModuleAppendfeatures
-
-      def initialize trace_point
-        super
-      end
+  class Point
+    class CreturnModulePrependfeatures < Point
 
       def self.event_class_method
-        [:c_return, Module, :append_features]
+        [:c_return, Module, :prepend_features]
       end
-
-      include Point
 
     end
   end

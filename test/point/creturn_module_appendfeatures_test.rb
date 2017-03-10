@@ -12,9 +12,10 @@ class CreturnModuleAppendfeaturesTest < Minitest::Test
   end
 
   Includes = []
+  Loader = TraceTree::Point::Loader.new
 
   tp = TracePoint.trace(:c_return) do |t|
-    Includes << TraceTree::Point.save(t) if t.method_id == :append_features
+    Includes << Loader.create(t) if t.method_id == :append_features
   end
 
   C.include M

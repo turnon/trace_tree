@@ -1,6 +1,6 @@
 class TraceTree
-  module Point
-    class CcallModuleExtendobject
+  class Point
+    class CcallModuleExtendobject < Point
 
       def mixin
         terminal.mixin
@@ -10,7 +10,6 @@ class TraceTree
         [:c_call, Module, :extend_object]
       end
 
-      include Point
     end
   end
 end

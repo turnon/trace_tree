@@ -1,16 +1,10 @@
 class TraceTree
-  module Point
-    class CcallModulePrepend
-
-      def initialize trace_point
-        super
-      end
+  class Point
+    class CcallModulePrepend < Point
 
       def self.event_class_method
         [:c_call, Module, :prepend]
       end
-
-      include Point
 
       def parameters
         callees[0].parameters

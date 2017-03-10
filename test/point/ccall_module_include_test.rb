@@ -9,9 +9,10 @@ class CcallModuleIncludeTest < Minitest::Test
   end
 
   Includes = []
+  Loader = TraceTree::Point::Loader.new
 
   tp = TracePoint.trace(:c_call, :c_return) do |t|
-    Includes << TraceTree::Point.save(t) if t.defined_class == Module
+    Includes << Loader.create(t) if t.defined_class == Module
   end
 
   C.include M

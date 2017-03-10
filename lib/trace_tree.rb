@@ -23,7 +23,7 @@ class TraceTree
   def generate *log, **opt, &to_do
     @opt = opt
     @log = dump_location *log
-    @node_class = optional_node **opt
+    enhance_point **opt
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
     @ignore = opt[:ignore] || {}
     start_trace
@@ -34,12 +34,12 @@ class TraceTree
 
   private
 
-  attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt
+  attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader
 
   def start_trace
     timer[:trace]
     @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
-      trace_points << @node_class.save(point) if wanted? point
+      trace_points << point_loader.create(point) if wanted? point
     end
   end
 
@@ -55,11 +55,11 @@ class TraceTree
     log.empty? ? STDOUT : log[0]
   end
 
-  def optional_node opt
-    mod = TraceTree::Point.clone
-    mod.include TraceTree::ShortGemPath unless opt[:gem] == false
-    mod.include TraceTree::Color unless opt[:color] == false
-    mod
+  def enhance_point opt
+    enhancement = []
+    enhancement << TraceTree::Color unless opt[:color] == false
+    enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
+    @point_loader = Point::Loader.new *enhancement
   end
 
   def dump_trace_tree
@@ -90,7 +90,7 @@ class TraceTree
         stack << point
       end
     end
-    #trace_points.each{|p| puts p.to_s}
+    #trace_points.each{|p| puts p.inspect}
     st[0].
       callees[0].
       callees[1].

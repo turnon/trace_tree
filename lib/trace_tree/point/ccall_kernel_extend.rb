@@ -1,6 +1,6 @@
 class TraceTree
-  module Point
-    class CcallKernelExtend
+  class Point
+    class CcallKernelExtend < Point
       def parameters
         callees[0].mixin
       end
@@ -9,7 +9,6 @@ class TraceTree
         [:c_call, Kernel, :extend]
       end
 
-      include Point
     end
   end
 end

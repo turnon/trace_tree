@@ -1,10 +1,10 @@
 class TraceTree
-  module Point
-    class Common
+  class Point
+    class Common < Point
       def self.event_class_method
         :common
       end
-      include Point
+
     end
   end
 end

@@ -2,29 +2,36 @@ require 'trace_tree/tree_graphable'
 require 'trace_tree/tree_htmlable'
 
 class TraceTree
-  module Point
+  class Point
 
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current, :return_value
+    attr_reader :current
     attr_accessor :terminal
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
     attr_reader *Interfaces
 
     class << self
-      def save trace_point
-        point_klass = bases[[trace_point.event, trace_point.defined_class, trace_point.method_id]] || Common
-        point_klass.new trace_point
+      def inherited base
+        bases << base
       end
 
-      def included base
-        bases[base.event_class_method] = base
+      def classes
+        @classes ||= bases.each_with_object(Hash.new{|h| h[:common]}){|c, h| h[c.event_class_method] = c}
       end
 
       def bases
-        @bases ||= {}
+        @bases ||= []
+      end
+
+      def hashify point
+        attrs = Interfaces.each_with_object({}) do |attr, hash|
+          hash[attr] = point.send attr
+        end
+        attrs.merge!({return_value: point.return_value}) if point.event =~ /return/
+        attrs
       end
     end
 
@@ -50,11 +57,7 @@ class TraceTree
     end
 
     def inspect
-      attrs = Interfaces.each_with_object({}) do |attr, hash|
-        hash[attr] = self.send attr
-      end
-      attrs.merge!({return_value: self.return_value}) if x_return?
-      attrs.inspect
+      self.class.hashify(self).inspect
     end
 
     def terminate? point
@@ -108,9 +111,27 @@ class TraceTree
       respond_to?(:parameters) ? "(#{parameters})" : nil
     end
 
+    class Loader
+
+      attr_reader :point_classes
+
+      def initialize *enhancement
+        return @point_classes = Point.classes if enhancement.empty?
+        @point_classes = Point.classes.each_with_object(Point.classes.dup) do |entry, hash|
+          hash[entry[0]] = entry[1].clone.prepend *enhancement
+        end
+      end
+
+      def create point
+        point_klass = point_classes[[point.event, point.defined_class, point.method_id]]
+        point_klass.new point
+      end
+    end
+
   end
 end
 
 Dir.glob(File.expand_path('../point/*', __FILE__)).each do |concreate_point_path|
   load concreate_point_path
+  #puts "---->#{concreate_point_path}"
 end
