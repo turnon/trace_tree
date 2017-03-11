@@ -26,10 +26,22 @@ class TraceTree
     enhance_point **opt
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
     @ignore = opt[:ignore] || {}
-    start_trace
-    bi.eval('self').instance_eval &to_do
+    here = bi.eval('self')
+
+    #start_trace
+    timer[:trace]
+    @tp = TracePoint.new(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
+      trace_points << point_loader.create(point) if wanted? point
+    end
+    @tp.enable
+
+    here.instance_eval &to_do
   ensure
-    stop_trace
+    #stop_trace
+    return unless @tp
+    @tp.disable
+    timer[:trace]
+    dump_trace_tree
   end
 
   private
@@ -93,8 +105,8 @@ class TraceTree
     #trace_points.each{|p| puts p.inspect}
     st[0].
       callees[0].
-      callees[1].
-      callees[0]
+      callees[0]#.
+      #callees[0]
   end
 
 end
