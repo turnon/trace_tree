@@ -14,6 +14,12 @@ end
 
 class TraceTree
 
+  Events = [:b_call, :b_return,
+            :c_call, :c_return,
+            :call, :return,
+            :class, :end,
+            :thread_begin, :thread_end]
+
   def initialize bi
     @bi = bi
     @trace_points = []
@@ -30,7 +36,7 @@ class TraceTree
 
     #start_trace
     timer[:trace]
-    @tp = TracePoint.new(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
+    @tp = TracePoint.new(*Events) do |point|
       trace_points << point_loader.create(point) if wanted? point
     end
     @tp.enable
@@ -47,20 +53,6 @@ class TraceTree
   private
 
   attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader
-
-  def start_trace
-    timer[:trace]
-    @tp = TracePoint.trace(:b_call, :b_return, :c_call, :c_return, :call, :class, :end, :return) do |point|
-      trace_points << point_loader.create(point) if wanted? point
-    end
-  end
-
-  def stop_trace
-    return unless @tp
-    @tp.disable
-    timer[:trace]
-    dump_trace_tree
-  end
 
   def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]

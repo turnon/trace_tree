@@ -9,12 +9,12 @@ class CommonTest < Minitest::Test
 
   def setup
     @ttp = nil
+    @loader = TraceTree::Point::Loader.new
   end
 
   def test_common
-    loader = TraceTree::Point::Loader.new
     tp = TracePoint.trace(:call) do |t|
-      @ttp = loader.create t
+      @ttp = @loader.create t
     end
     A.new.a
   ensure

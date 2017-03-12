@@ -7,7 +7,7 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current
+    attr_reader :current, :thread
     attr_accessor :terminal
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
@@ -31,6 +31,7 @@ class TraceTree
           hash[attr] = point.send attr
         end
         attrs.merge!({return_value: point.return_value}) if point.event =~ /return/
+        attrs.merge!({thread: thread})
         attrs
       end
     end
@@ -40,7 +41,10 @@ class TraceTree
         instance_variable_set "@#{i}", trace_point.send(i)
       end
       @return_value = trace_point.return_value if x_return?
-      @current = trace_point.binding.of_callers[3]
+      @current = trace_point.binding.of_callers[3] unless thread?
+      @thread = thread? ? trace_point.self : current.send(:eval, 'Thread.current')
+    rescue => e
+      puts e
     end
 
     def c_call?
@@ -49,6 +53,10 @@ class TraceTree
 
     def x_return?
       event =~ /return/
+    end
+
+    def thread?
+      event =~ /thread/
     end
 
     def return_value
