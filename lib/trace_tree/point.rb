@@ -31,8 +31,12 @@ class TraceTree
           hash[attr] = point.send attr
         end
         attrs.merge!({return_value: point.return_value}) if point.event =~ /return/
-        attrs.merge!({thread: thread})
+        attrs.merge!({thread: point.thread})
         attrs
+      end
+
+      def class_of? point
+        [point.event, point.defined_class, point.method_id] == event_class_method
       end
     end
 
@@ -80,7 +84,8 @@ class TraceTree
       (event == :b_return and point.event == :b_call) or
         (event == :c_return and point.event == :c_call) or
         (event == :return and point.event == :call) or
-        (event == :end and point.event == :class)
+        (event == :end and point.event == :class) or
+        (event == :thread_end and point.event == :thread_begin)
     end
 
     def << node
@@ -101,6 +106,8 @@ class TraceTree
 
     def class_name
       c_call? ? defined_class : current.klass
+    rescue => e
+      puts event
     end
 
     def method_name

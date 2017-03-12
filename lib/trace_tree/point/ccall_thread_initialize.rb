@@ -6,6 +6,10 @@ class TraceTree
         [:c_call, Thread, :initialize]
       end
 
+      def callees
+        [terminal.thread_begin]
+      end
+
     end
   end
 end

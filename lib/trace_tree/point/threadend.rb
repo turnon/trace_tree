@@ -6,6 +6,17 @@ class TraceTree
         [:thread_end, nil, nil]
       end
 
+      def class_name
+        ''
+      end
+
+      def method_name
+        :thread_run
+      end
+
+      def call_symbol
+        ''
+      end
     end
   end
 end

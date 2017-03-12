@@ -5,6 +5,7 @@ require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
+require 'thread'
 
 class Binding
   def trace_tree *log, **opt, &to_do
@@ -22,7 +23,7 @@ class TraceTree
 
   def initialize bi
     @bi = bi
-    @trace_points = []
+    @trace_points = Queue.new
     @timer = Timer.new
   end
 
@@ -68,7 +69,7 @@ class TraceTree
 
   def dump_trace_tree
     timer[:tree]
-    tree = sort(trace_points).send build_command
+    tree = sort(trace_points_array).send build_command
     timer[:tree]
     log.puts tree
     log.puts timer.to_s if opt[:timer]
@@ -81,7 +82,12 @@ class TraceTree
   end
 
   def sort trace_points
-    st = trace_points.each_with_object([]) do |point, stack|
+    #list trace_points
+    stacks = Hash.new{|h, thread| h[thread] = []}
+    forks = {}
+
+    trace_points.each do |point|
+      stack = stacks[point.thread]
       unless stack.empty?
         if point.terminate? stack.last
           stack.last.terminal = point
@@ -93,13 +99,25 @@ class TraceTree
       else
         stack << point
       end
+      forks[point.return_value] = point if Point::CreturnThreadInitialize.class_of? point
+      forks[point.thread].thread_begin = point if Point::Threadbegin.class_of?(point) and forks[point.thread]
     end
     #trace_points.each{|p| puts p.inspect}
-    st[0].
+    stacks[trace_points.first.thread][0].
       callees[0].
-      callees[0]#.
-      #callees[0]
+      callees[0]
   end
+
+  def trace_points_array
+    a = []
+    a << trace_points.deq until trace_points.size == 0
+    a
+  end
+
+  #def list trace_points
+  #  require 'terminal-tableofhashes'
+  #  puts Terminal::Table.from_hashes trace_points.map{|p| h = Point.hashify(p);h.merge({path: (h[:path]||'').split('/')[-1]}).merge({return_value: (h[:return_value].to_s.gsub(',', "\n"))})}
+  #end
 
 end
 

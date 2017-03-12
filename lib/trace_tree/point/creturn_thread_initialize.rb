@@ -6,6 +6,7 @@ class TraceTree
         [:c_return, Thread, :initialize]
       end
 
+      attr_accessor :thread_begin
     end
   end
 end
