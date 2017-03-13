@@ -75,6 +75,7 @@ class TraceTree
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
+    log.puts timer.to_s
     log.puts e
     log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
   end
