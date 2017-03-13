@@ -81,7 +81,11 @@ class TraceTree
     end
 
     def inspect
-      self.class.hashify(self).inspect
+      to_h.inspect
+    end
+
+    def to_h
+      self.class.hashify(self)
     end
 
     def terminate? point

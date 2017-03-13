@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tree_graph", "~> 0.2.0"
   spec.add_dependency "tree_html", "~> 0.1.0"
   spec.add_dependency "activesupport", ">= 5.0.0"
+  spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
 end
