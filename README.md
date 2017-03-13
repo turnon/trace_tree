@@ -1,6 +1,8 @@
 # TraceTree
 
-Print TracePoint(normal ruby call, block call, raise call, throw call) in tree view, to console or html.
+Print TracePoint(`:b_call`, `:b_return`, `:c_call`, `:c_return`, `:call`, `:return`, `:class`, `:end`, `:thread_begin`, `:thread_end`) in tree view, to console or html.
+
+*Notice: it does not trace `:raise`, which can be represented by Kernel#raise(`:c_call`)*
 
 ## Installation
 
@@ -284,114 +286,6 @@ Sinatra::Application#block in call sin.rb:12
     │ │       │   ├─Kernel#block_given? $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:239
     │ │       │   ├─Sinatra::Request#head? $GemPath0/gems/rack-1.6.5/lib/rack/request.rb:122
     │ │       │   │ └─Sinatra::Request#request_method $GemPath0/gems/rack-1.6.5/lib/rack/request.rb:23
-    │ │       │   ├─Object#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:39
-    │ │       │   │ ├─Monitor#mon_enter /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:185
-    │ │       │   │ │ ├─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:186
-    │ │       │   │ │ ├─Thread::Mutex#lock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:187
-    │ │       │   │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:188
-    │ │       │   │ ├─Kernel#respond_to? /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:42
-    │ │       │   │ ├─Gem.find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1136
-    │ │       │   │ │ ├─Gem.suffixes /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:901
-    │ │       │   │ │ └─Array#each /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │ │   └─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │ ├─Gem::Specification.unresolved_deps /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/specification.rb:1296
-    │ │       │   │ ├─Monitor#mon_exit /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:197
-    │ │       │   │ │ ├─Monitor#mon_check_owner /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:247
-    │ │       │   │ │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:248
-    │ │       │   │ │ └─Thread::Mutex#unlock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:202
-    │ │       │   │ └─Kernel#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   ├─IO#set_encoding /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   ├─IO#set_encoding /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   ├─Object#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:39
-    │ │       │   │   │ ├─Monitor#mon_enter /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:185
-    │ │       │   │   │ │ ├─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:186
-    │ │       │   │   │ │ ├─Thread::Mutex#lock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:187
-    │ │       │   │   │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:188
-    │ │       │   │   │ ├─Kernel#respond_to? /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:42
-    │ │       │   │   │ ├─Gem.find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1136
-    │ │       │   │   │ │ ├─Gem.suffixes /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:901
-    │ │       │   │   │ │ └─Array#each /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   └─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ ├─Gem::Specification.unresolved_deps /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/specification.rb:1296
-    │ │       │   │   │ ├─Monitor#mon_exit /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:197
-    │ │       │   │   │ │ ├─Monitor#mon_check_owner /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:247
-    │ │       │   │   │ │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:248
-    │ │       │   │   │ │ └─Thread::Mutex#unlock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:202
-    │ │       │   │   │ └─Kernel#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   ├─Object#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:39
-    │ │       │   │   │ ├─Monitor#mon_enter /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:185
-    │ │       │   │   │ │ ├─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:186
-    │ │       │   │   │ │ ├─Thread::Mutex#lock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:187
-    │ │       │   │   │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:188
-    │ │       │   │   │ ├─Kernel#respond_to? /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:42
-    │ │       │   │   │ ├─Gem.find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1136
-    │ │       │   │   │ │ ├─Gem.suffixes /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:901
-    │ │       │   │   │ │ └─Array#each /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   └─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ ├─Gem::Specification.unresolved_deps /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/specification.rb:1296
-    │ │       │   │   │ ├─Monitor#mon_exit /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:197
-    │ │       │   │   │ │ ├─Monitor#mon_check_owner /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:247
-    │ │       │   │   │ │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:248
-    │ │       │   │   │ │ └─Thread::Mutex#unlock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:202
-    │ │       │   │   │ └─Kernel#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   ├─Object#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:39
-    │ │       │   │   │ ├─Monitor#mon_enter /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:185
-    │ │       │   │   │ │ ├─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:186
-    │ │       │   │   │ │ ├─Thread::Mutex#lock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:187
-    │ │       │   │   │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:188
-    │ │       │   │   │ ├─Kernel#respond_to? /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:42
-    │ │       │   │   │ ├─Gem.find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1136
-    │ │       │   │   │ │ ├─Gem.suffixes /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:901
-    │ │       │   │   │ │ └─Array#each /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   ├─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ │   └─Gem.block in find_unresolved_default_spec /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems.rb:1137
-    │ │       │   │   │ ├─Gem::Specification.unresolved_deps /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/specification.rb:1296
-    │ │       │   │   │ ├─Monitor#mon_exit /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:197
-    │ │       │   │   │ │ ├─Monitor#mon_check_owner /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:247
-    │ │       │   │   │ │ │ └─#<Class:Thread>#current /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:248
-    │ │       │   │   │ │ └─Thread::Mutex#unlock /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/monitor.rb:202
-    │ │       │   │   │ └─Kernel#require /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   │   ├─IO#set_encoding /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   │   ├─IO#set_encoding /home/z/.rbenv/versions/2.3.3/lib/ruby/2.3.0/rubygems/core_ext/kernel_require.rb:55
-    │ │       │   │   │   └─Rack.<module:Rack> $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:1
-    │ │       │   │   │     └─Rack::Mime.<module:Mime> $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:2
-    │ │       │   │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:16
-    │ │       │   │   │       ├─Module#module_function $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:19
-    │ │       │   │   │       │ └─BasicObject#singleton_method_added $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:19
-    │ │       │   │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:28
-    │ │       │   │   │       └─Module#module_function $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:34
-    │ │       │   │   │         └─BasicObject#singleton_method_added $GemPath0/gems/rack-1.6.5/lib/rack/mime.rb:34
-    │ │       │   │   └─Rack.<module:Rack> $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:5
-    │ │       │   │     ├─Class#inherited $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:14
-    │ │       │   │     └─Rack::File.<class:File> $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:14
-    │ │       │   │       ├─Array#join $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:16
-    │ │       │   │       ├─Module#attr_accessor $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:18
-    │ │       │   │       │ ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:18
-    │ │       │   │       │ └─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:18
-    │ │       │   │       ├─Module#attr_accessor $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:19
-    │ │       │   │       │ ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:19
-    │ │       │   │       │ └─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:19
-    │ │       │   │       ├─Module#attr_accessor $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:20
-    │ │       │   │       │ ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:20
-    │ │       │   │       │ └─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:20
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:22
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:24
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:30
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:36
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:59
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:101
-    │ │       │   │       ├─Module#private $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:115
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:117
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:131
-    │ │       │   │       ├─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:135
-    │ │       │   │       └─Module#method_added $GemPath0/gems/rack-1.6.5/lib/rack/file.rb:148
     │ │       │   ├─Kernel#is_a? $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:243
     │ │       │   ├─Kernel#is_a? $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:243
     │ │       │   ├─Sinatra::Application#headers $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:298
@@ -525,7 +419,7 @@ Sinatra::Application#block in call sin.rb:12
       │   └─Sinatra::Response#block in finish $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:154
       │     └─Rack::Utils.bytesize $GemPath0/gems/rack-1.6.5/lib/rack/utils.rb:379
       │       └─String#bytesize $GemPath0/gems/rack-1.6.5/lib/rack/utils.rb:380
-      ├─Fixnum#to_s $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:154
+      ├─Integer#to_s $GemPath0/gems/sinatra-1.4.8/lib/sinatra/base.rb:154
       ├─Rack::Utils::HeaderHash#[]= $GemPath0/gems/rack-1.6.5/lib/rack/utils.rb:515
       │ ├─String#downcase $GemPath0/gems/rack-1.6.5/lib/rack/utils.rb:516
       │ └─Hash#[]= $GemPath0/gems/rack-1.6.5/lib/rack/utils.rb:519
