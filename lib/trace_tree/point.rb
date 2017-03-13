@@ -31,13 +31,25 @@ class TraceTree
           hash[attr] = point.send attr
         end
         attrs.merge!({return_value: point.return_value}) if point.event =~ /return/
-        attrs.merge!({thread: point.thread})
+        attrs.merge!({thread: point.thread}) if point.respond_to? :thread
         attrs
       end
 
       def class_of? point
         [point.event, point.defined_class, point.method_id] == event_class_method
       end
+
+      def initialize_clone proto
+        super.tap do
+          instance_variable_set :@proto, proto
+        end
+      end
+
+      attr_reader :proto
+    end
+
+    def method_missing method_id, *args, &blk
+      raise NoMethodError, "NoMethodError: undefined method `#{method_id}' for #<#{self.class.proto or self.class.name}#{inspect}>"
     end
 
     def initialize trace_point
