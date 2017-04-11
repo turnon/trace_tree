@@ -57,7 +57,7 @@ class TraceTree
         instance_variable_set "@#{i}", trace_point.send(i)
       end
       @return_value = trace_point.return_value if x_return?
-      @current = trace_point.binding.of_callers[3] unless thread?
+      @current = BindingOfCallers::Revealed.new trace_point.binding.of_caller(3) unless thread?
       @thread = thread? ? trace_point.self : current.send(:eval, 'Thread.current')
     rescue => e
       puts e
