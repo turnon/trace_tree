@@ -7,8 +7,7 @@ class TraceTree
     DefaultName = 'trace_tree.html'
 
     def initialize path
-      @tmp = Dir.tmpdir
-      path = DefaultName if path == true
+      path = recognize_dir path
       @tmp = custom path
     end
 
@@ -24,10 +23,21 @@ class TraceTree
 
     private
 
+    def recognize_dir path
+      case path
+      when true
+        DefaultName
+      when String
+        path.split '/'
+      else
+        path
+      end
+    end
+
     def custom path
       path = Array(path).map(&:to_s)
       path[-1] = time + path[-1]
-      path = [@tmp] + path
+      path = [Dir.tmpdir] + path
       ensure_parent path
       File.join *path
     end

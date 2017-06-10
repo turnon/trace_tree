@@ -22,4 +22,15 @@ class TmpFileTest < Minitest::Test
     assert_match re, f.path
   end
 
+  def test_subdir_string
+    f = TraceTree::TmpFile.new 'efg/abc.txt'
+    re = Regexp.new File.join(Dir.tmpdir,  'efg', TimePattern + 'abc.txt')
+    assert_match re, f.path
+  end
+
+  def test_subdir_string_prepended_slash
+    f = TraceTree::TmpFile.new '/efg/abc.txt'
+    re = Regexp.new File.join(Dir.tmpdir,  'efg', TimePattern + 'abc.txt')
+    assert_match re, f.path
+  end
 end

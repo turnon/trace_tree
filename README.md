@@ -44,7 +44,7 @@ end
 * `:color => true` by default. It makes method names have different color than source_location in output. When you print the output to file, you may want to set it false to discard those color ANSI escape sequences.
 * `:gem => true` by default. Replace the gem paths in source_location with $GemPathN, can make the lines shorter. To see what are replaced, inspect `TraceTree::GemPaths`.
 * `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`. (No need to set `color`).
-* `:tmp => nil` by default. Set it true or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument)
+* `:tmp => nil` by default. Set it true or a string or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument. It makes parent directories as needed)
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
 
 ### Example
