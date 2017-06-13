@@ -31,7 +31,7 @@ class TraceTree
   def generate *log, **opt, &to_do
     @opt = opt
     @log = dump_location *log
-    enhance_point **opt
+    enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
     @exclude = opt[:ex] || {}
     here = bi.eval('self')
@@ -61,7 +61,7 @@ class TraceTree
     log.empty? ? STDOUT : log[0]
   end
 
-  def enhance_point opt
+  def enhance_point
     enhancement = []
     enhancement << TraceTree::Color unless opt[:color] == false
     enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
