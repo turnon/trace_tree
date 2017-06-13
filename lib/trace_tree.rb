@@ -5,6 +5,7 @@ require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
+require 'trace_tree/matcher'
 require 'thread'
 require 'terminal-tableofhashes'
 
@@ -33,7 +34,7 @@ class TraceTree
     @log = dump_location *log
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @exclude = opt[:ex] || {}
+    @exclude, @include = Matcher::Exclude.new(opt[:ex]), Matcher::Include.new(opt[:in])
     here = bi.eval('self')
 
     #start_trace
@@ -80,8 +81,8 @@ class TraceTree
     log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
   end
 
-  def wanted? trace_point
-    @exclude.any?{ |attr, pattern| pattern =~ trace_point.send(attr) } ? false : true
+  def wanted? point
+    @include.match?(point) && !@exclude.match?(point)
   end
 
   def sort trace_points
