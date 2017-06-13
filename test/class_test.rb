@@ -4,7 +4,7 @@ class ClassTest < Minitest::Test
 
   Sio = StringIO.new
 
-  Return = binding.trace_tree(Sio, color: false, ignore: Ignore) do
+  Return = binding.trace_tree(Sio, color: false, ex: Ignore) do
     module M
       def m
       end
