@@ -89,13 +89,7 @@ class TraceTree
   def native? point
     point.path == __FILE__ ||
       [:b_call, :b_return].include?(point.event) ||
-      [Point::CcallClassthreadNew,
-       Point::CreturnClassthreadNew,
-       Point::CcallThreadInitialize,
-       Point::CreturnThreadInitialize,
-       Point::Threadbegin,
-       Point::Threadend].any?{|k| k.class_of? point} ||
-      Thread == point.defined_class
+      Point.thread_relative?(point)
   end
 
   def sort trace_points
