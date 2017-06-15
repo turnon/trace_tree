@@ -87,9 +87,10 @@ class TraceTree
   end
 
   def native? point
-    point.path == __FILE__ ||
-      [:b_call, :b_return].include?(point.event) ||
-      Point.thread_relative?(point)
+    [:b_call, :b_return].include?(point.event) ||
+      __FILE__ == point.path ||
+      Point.thread_relative?(point) ||
+      :raise == point.method_id
   end
 
   def sort trace_points

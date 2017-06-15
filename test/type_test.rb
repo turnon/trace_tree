@@ -2,6 +2,8 @@ require 'test_helper'
 
 class TypeTest < Minitest::Test
 
+  ReturnValue = '1234567'
+
   module M
   end
 
@@ -18,6 +20,7 @@ class TypeTest < Minitest::Test
       end
       threads.each{|t| t.join}
       D.new.d
+      ReturnValue
     end
   end
 
@@ -33,6 +36,8 @@ class TypeTest < Minitest::Test
     include M
     def e
       F.new.f
+    rescue => e
+      [].push 1
     end
   end
 
@@ -40,33 +45,50 @@ class TypeTest < Minitest::Test
     include M
     include N
     def f
-      ReturnValue
+      raise
+    rescue => e
+      G.new.g
+    end
+  end
+
+  class G
+    include M
+    def g
+      raise
     end
   end
 
   Tracetree = <<EOS
-TypeTest#block in setup /home/z/trace_tree/test/type_test.rb:76
-└─TypeTest::C#c /home/z/trace_tree/test/type_test.rb:13
-  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:14
-  │ └─#<Class:Thread>#new /home/z/trace_tree/test/type_test.rb:15
-  │   └─Thread#initialize /home/z/trace_tree/test/type_test.rb:15
+TypeTest#block in setup /home/z/trace_tree/test/type_test.rb:98
+└─TypeTest::C#c /home/z/trace_tree/test/type_test.rb:15
+  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:16
+  │ └─#<Class:Thread>#new /home/z/trace_tree/test/type_test.rb:17
+  │   └─Thread#initialize /home/z/trace_tree/test/type_test.rb:17
   │     └─thread_run :0
-  │       └─TypeTest::C#block (2 levels) in c /home/z/trace_tree/test/type_test.rb:15
-  │         └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:34
-  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:14
-  │ └─#<Class:Thread>#new /home/z/trace_tree/test/type_test.rb:15
-  │   └─Thread#initialize /home/z/trace_tree/test/type_test.rb:15
+  │       └─TypeTest::C#block (2 levels) in c /home/z/trace_tree/test/type_test.rb:17
+  │         └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:37
+  │           ├─Kernel#raise /home/z/trace_tree/test/type_test.rb:48
+  │           └─TypeTest::G#g /home/z/trace_tree/test/type_test.rb:56
+  │             └─Kernel#raise /home/z/trace_tree/test/type_test.rb:57
+  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:16
+  │ └─#<Class:Thread>#new /home/z/trace_tree/test/type_test.rb:17
+  │   └─Thread#initialize /home/z/trace_tree/test/type_test.rb:17
   │     └─thread_run :0
-  │       └─TypeTest::C#block (2 levels) in c /home/z/trace_tree/test/type_test.rb:15
-  │         └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:34
-  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:19
-  │ └─Thread#join /home/z/trace_tree/test/type_test.rb:19
-  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:19
-  │ └─Thread#join /home/z/trace_tree/test/type_test.rb:19
-  └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:34
+  │       └─TypeTest::C#block (2 levels) in c /home/z/trace_tree/test/type_test.rb:17
+  │         └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:37
+  │           ├─Kernel#raise /home/z/trace_tree/test/type_test.rb:48
+  │           └─TypeTest::G#g /home/z/trace_tree/test/type_test.rb:56
+  │             └─Kernel#raise /home/z/trace_tree/test/type_test.rb:57
+  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:21
+  │ └─Thread#join /home/z/trace_tree/test/type_test.rb:21
+  ├─TypeTest::C#block in c /home/z/trace_tree/test/type_test.rb:21
+  │ └─Thread#join /home/z/trace_tree/test/type_test.rb:21
+  └─TypeTest::E#e /home/z/trace_tree/test/type_test.rb:37
+    ├─Kernel#raise /home/z/trace_tree/test/type_test.rb:48
+    └─TypeTest::G#g /home/z/trace_tree/test/type_test.rb:56
+      └─Kernel#raise /home/z/trace_tree/test/type_test.rb:57
 EOS
 
-  ReturnValue = '1234567'
 
   def setup
     @test = C.new
