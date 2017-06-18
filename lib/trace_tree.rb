@@ -33,7 +33,7 @@ class TraceTree
     @log = dump_location *log
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @in, @out = opt[:in] || //, opt[:out]
+    @in, @out = Array(opt[:in] || //), Array(opt[:out])
     @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
     #start_trace
@@ -83,8 +83,8 @@ class TraceTree
   def wanted? point
     return false if end_of_trace? point
     return true if native? point
-    Array(@in).any?{ |pattern| pattern =~ point.path } &&
-      Array(@out).all?{ |pattern| pattern !~ point.path }
+    @in.any?{ |pattern| pattern =~ point.path } &&
+      @out.all?{ |pattern| pattern !~ point.path }
   end
 
   def end_of_trace? point
