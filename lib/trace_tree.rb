@@ -33,7 +33,7 @@ class TraceTree
     @log = dump_location *log
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @out = opt[:out] || {}
+    @in, @out = opt[:in] || //, opt[:out]
     here = bi.eval('self')
 
     #start_trace
@@ -80,8 +80,22 @@ class TraceTree
     log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
   end
 
-  def wanted? trace_point
-    Array(@out).any?{ |pattern| pattern =~ trace_point.path } ? false : true
+  def wanted? point
+    return true if native? point
+    Array(@in).any?{ |pattern| pattern =~ point.path } &&
+      Array(@out).all?{ |pattern| pattern !~ point.path }
+  end
+
+  def native? point
+    point.path == __FILE__ ||
+      [:b_call, :b_return].include?(point.event) ||
+      [Point::CcallClassthreadNew,
+       Point::CreturnClassthreadNew,
+       Point::CcallThreadInitialize,
+       Point::CreturnThreadInitialize,
+       Point::Threadbegin,
+       Point::Threadend].any?{|k| k.class_of? point} ||
+      Thread == point.defined_class
   end
 
   def sort trace_points
@@ -108,6 +122,8 @@ class TraceTree
     initialized_threads.each do |thread, point|
       point.thread_begin = began_threads[thread]
     end
+
+    #binding.pry
 
     stacks[trace_points.first.thread][0].
       callees[0].
