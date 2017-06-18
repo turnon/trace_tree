@@ -34,7 +34,7 @@ class TraceTree
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
     @in, @out = opt[:in] || //, opt[:out]
-    here = bi.eval('self')
+    @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
     #start_trace
     timer[:trace]
@@ -43,7 +43,7 @@ class TraceTree
     end
     @tp.enable
 
-    here.instance_eval &to_do
+    there.instance_eval &to_do
   ensure
     #stop_trace
     return unless @tp
@@ -81,14 +81,22 @@ class TraceTree
   end
 
   def wanted? point
+    return false if end_of_trace? point
     return true if native? point
     Array(@in).any?{ |pattern| pattern =~ point.path } &&
       Array(@out).all?{ |pattern| pattern !~ point.path }
   end
 
+  def end_of_trace? point
+    __FILE__ == point.path && (
+      (:c_return == point.event && :instance_eval == point.method_id) ||
+        (:c_call == point.event && :disable == point.method_id)
+    )
+  end
+
   def native? point
-    point.path == __FILE__ ||
-      [:b_call, :b_return].include?(point.event) ||
+    __FILE__ == point.path ||
+      (:b_call == point.event && @__file__ == point.path && @__line__ == point.lineno) ||
       [Point::CcallClassthreadNew,
        Point::CreturnClassthreadNew,
        Point::CcallThreadInitialize,
