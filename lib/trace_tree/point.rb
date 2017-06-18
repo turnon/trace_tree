@@ -166,3 +166,21 @@ Dir.glob(File.expand_path('../point/*', __FILE__)).each do |concreate_point_path
   load concreate_point_path
   #puts "---->#{concreate_point_path}"
 end
+
+class TraceTree
+  class Point
+
+    NativeThreadCall = [CcallClassthreadNew,
+                        CreturnClassthreadNew,
+                        CcallThreadInitialize,
+                        CreturnThreadInitialize,
+                        Threadbegin,
+                        Threadend]
+
+    def self.thread_relative? point
+      NativeThreadCall.any?{ |k| k.class_of? point } ||
+        Thread == point.defined_class
+    end
+
+  end
+end
