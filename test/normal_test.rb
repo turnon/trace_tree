@@ -42,7 +42,7 @@ EOS
   end
 
   def test_trace_tree
-    rt = binding.trace_tree(@sio, color: false, ex: Ignore) do
+    rt = binding.trace_tree(@sio, color: false, out: Ignore) do
       @test.a
     end
 
@@ -53,7 +53,7 @@ EOS
   end
 
   def test_trace_tree_html
-    rt = binding.trace_tree(html: true, tmp: 'normal.html', ex: Ignore) do
+    rt = binding.trace_tree(html: true, tmp: 'normal.html', out: Ignore) do
       @test.a
     end
     assert_equal ReturnValue, rt

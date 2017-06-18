@@ -33,7 +33,7 @@ class TraceTree
     @log = dump_location *log
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @exclude = opt[:ex] || {}
+    @out = opt[:out] || {}
     here = bi.eval('self')
 
     #start_trace
@@ -81,7 +81,7 @@ class TraceTree
   end
 
   def wanted? trace_point
-    @exclude.any?{ |attr, pattern| pattern =~ trace_point.send(attr) } ? false : true
+    Array(@out).any?{ |pattern| pattern =~ trace_point.path } ? false : true
   end
 
   def sort trace_points

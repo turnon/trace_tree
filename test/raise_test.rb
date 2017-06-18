@@ -73,7 +73,7 @@ EOS
   end
 
   def test_rescue
-    rt = binding.trace_tree(@sio, color: false, ex: Ignore) do
+    rt = binding.trace_tree(@sio, color: false, out: Ignore) do
       @test.entry
     end
 
@@ -85,7 +85,7 @@ EOS
 
   def test_no_rescue
     assert_raises(Boom) do
-      binding.trace_tree(@sio, color: false, ex: Ignore) do
+      binding.trace_tree(@sio, color: false, out: Ignore) do
         @test.entry!
       end
     end
@@ -95,7 +95,7 @@ EOS
   end
 
   def test_rescue_html
-    rt = binding.trace_tree(html: true, tmp: 'raise_rescue.html', ex: Ignore) do
+    rt = binding.trace_tree(html: true, tmp: 'raise_rescue.html', out: Ignore) do
       @test.entry
     end
     assert_equal ReturnValue, rt
@@ -103,7 +103,7 @@ EOS
 
   def test_no_rescue_html
     assert_raises(Boom) do
-      rt = binding.trace_tree(html: true, tmp: 'raise_no_rescue.html', ex: Ignore) do
+      rt = binding.trace_tree(html: true, tmp: 'raise_no_rescue.html', out: Ignore) do
         @test.entry!
       end
     end

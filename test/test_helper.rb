@@ -4,5 +4,5 @@ require 'minitest/autorun'
 require 'thread'
 
 class Minitest::Test
-  Ignore = {path: /minitest/}
+  Ignore = /minitest/
 end
