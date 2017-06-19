@@ -21,22 +21,22 @@ class BlockTest < Minitest::Test
 
 
   Tracetree = <<EOS
-BlockTest#block in test_trace_tree /home/z/trace_tree/test/block_test.rb:50
-└─BlockTest::Block#a /home/z/trace_tree/test/block_test.rb:11
-  ├─Integer#times /home/z/trace_tree/test/block_test.rb:12
-  │ ├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:12
-  │ │ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:17
-  │ ├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:12
-  │ │ └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:17
-  │ └─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:12
-  │   └─BlockTest::Block#b /home/z/trace_tree/test/block_test.rb:17
-  └─Integer#times /home/z/trace_tree/test/block_test.rb:13
-    ├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:13
-    │ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:18
-    ├─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:13
-    │ └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:18
-    └─BlockTest::Block#block in a /home/z/trace_tree/test/block_test.rb:13
-      └─BlockTest::Block#c /home/z/trace_tree/test/block_test.rb:18
+BlockTest#block in test_trace_tree #{__dir__}/block_test.rb:50
+└─BlockTest::Block#a #{__dir__}/block_test.rb:11
+  ├─Integer#times #{__dir__}/block_test.rb:12
+  │ ├─BlockTest::Block#block in a #{__dir__}/block_test.rb:12
+  │ │ └─BlockTest::Block#b #{__dir__}/block_test.rb:17
+  │ ├─BlockTest::Block#block in a #{__dir__}/block_test.rb:12
+  │ │ └─BlockTest::Block#b #{__dir__}/block_test.rb:17
+  │ └─BlockTest::Block#block in a #{__dir__}/block_test.rb:12
+  │   └─BlockTest::Block#b #{__dir__}/block_test.rb:17
+  └─Integer#times #{__dir__}/block_test.rb:13
+    ├─BlockTest::Block#block in a #{__dir__}/block_test.rb:13
+    │ └─BlockTest::Block#c #{__dir__}/block_test.rb:18
+    ├─BlockTest::Block#block in a #{__dir__}/block_test.rb:13
+    │ └─BlockTest::Block#c #{__dir__}/block_test.rb:18
+    └─BlockTest::Block#block in a #{__dir__}/block_test.rb:13
+      └─BlockTest::Block#c #{__dir__}/block_test.rb:18
 EOS
 
   ReturnValue = '1234567'

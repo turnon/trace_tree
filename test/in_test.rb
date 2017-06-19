@@ -4,45 +4,45 @@ require_relative './include_exclude_test.rb'
 class InTest < IncludeExcludeTest
 
   Tracetree = <<EOS
-InTest#block in test_trace_tree /home/z/trace_tree/test/in_test.rb:55
-├─#<Class:Thread>#new /home/z/trace_tree/test/include_exclude/o.rb:8
-│ └─Thread#initialize /home/z/trace_tree/test/include_exclude/o.rb:8
+InTest#block in test_trace_tree #{__dir__}/in_test.rb:55
+├─#<Class:Thread>#new #{__dir__}/include_exclude/o.rb:8
+│ └─Thread#initialize #{__dir__}/include_exclude/o.rb:8
 │   └─thread_run :0
-│     └─IncludeExcludeTest::P#p /home/z/trace_tree/test/include_exclude/p.rb:3
-│       ├─#<Class:Thread>#new /home/z/trace_tree/test/include_exclude/p.rb:5
-│       │ └─Thread#initialize /home/z/trace_tree/test/include_exclude/p.rb:5
+│     └─IncludeExcludeTest::P#p #{__dir__}/include_exclude/p.rb:3
+│       ├─#<Class:Thread>#new #{__dir__}/include_exclude/p.rb:5
+│       │ └─Thread#initialize #{__dir__}/include_exclude/p.rb:5
 │       │   └─thread_run :0
-│       │     └─IncludeExcludeTest::P#block in p /home/z/trace_tree/test/include_exclude/p.rb:5
-│       │       ├─Class#new /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       │ └─BasicObject#initialize /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       ├─IncludeExcludeTest::P#block (2 levels) in p /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       └─IncludeExcludeTest::R#r /home/z/trace_tree/test/include_exclude/r.rb:3
-│       └─Thread#join /home/z/trace_tree/test/include_exclude/p.rb:7
-├─#<Class:Thread>#new /home/z/trace_tree/test/include_exclude/o.rb:8
-│ └─Thread#initialize /home/z/trace_tree/test/include_exclude/o.rb:8
+│       │     └─IncludeExcludeTest::P#block in p #{__dir__}/include_exclude/p.rb:5
+│       │       ├─Class#new #{__dir__}/include_exclude/p.rb:6
+│       │       │ └─BasicObject#initialize #{__dir__}/include_exclude/p.rb:6
+│       │       ├─IncludeExcludeTest::P#block (2 levels) in p #{__dir__}/include_exclude/p.rb:6
+│       │       └─IncludeExcludeTest::R#r #{__dir__}/include_exclude/r.rb:3
+│       └─Thread#join #{__dir__}/include_exclude/p.rb:7
+├─#<Class:Thread>#new #{__dir__}/include_exclude/o.rb:8
+│ └─Thread#initialize #{__dir__}/include_exclude/o.rb:8
 │   └─thread_run :0
-│     └─IncludeExcludeTest::P#p /home/z/trace_tree/test/include_exclude/p.rb:3
-│       ├─#<Class:Thread>#new /home/z/trace_tree/test/include_exclude/p.rb:5
-│       │ └─Thread#initialize /home/z/trace_tree/test/include_exclude/p.rb:5
+│     └─IncludeExcludeTest::P#p #{__dir__}/include_exclude/p.rb:3
+│       ├─#<Class:Thread>#new #{__dir__}/include_exclude/p.rb:5
+│       │ └─Thread#initialize #{__dir__}/include_exclude/p.rb:5
 │       │   └─thread_run :0
-│       │     └─IncludeExcludeTest::P#block in p /home/z/trace_tree/test/include_exclude/p.rb:5
-│       │       ├─Class#new /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       │ └─BasicObject#initialize /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       ├─IncludeExcludeTest::P#block (2 levels) in p /home/z/trace_tree/test/include_exclude/p.rb:6
-│       │       └─IncludeExcludeTest::R#r /home/z/trace_tree/test/include_exclude/r.rb:3
-│       └─Thread#join /home/z/trace_tree/test/include_exclude/p.rb:7
-├─Thread#join /home/z/trace_tree/test/include_exclude/o.rb:12
-├─Thread#join /home/z/trace_tree/test/include_exclude/o.rb:12
-└─IncludeExcludeTest::P#p /home/z/trace_tree/test/include_exclude/p.rb:3
-  ├─#<Class:Thread>#new /home/z/trace_tree/test/include_exclude/p.rb:5
-  │ └─Thread#initialize /home/z/trace_tree/test/include_exclude/p.rb:5
+│       │     └─IncludeExcludeTest::P#block in p #{__dir__}/include_exclude/p.rb:5
+│       │       ├─Class#new #{__dir__}/include_exclude/p.rb:6
+│       │       │ └─BasicObject#initialize #{__dir__}/include_exclude/p.rb:6
+│       │       ├─IncludeExcludeTest::P#block (2 levels) in p #{__dir__}/include_exclude/p.rb:6
+│       │       └─IncludeExcludeTest::R#r #{__dir__}/include_exclude/r.rb:3
+│       └─Thread#join #{__dir__}/include_exclude/p.rb:7
+├─Thread#join #{__dir__}/include_exclude/o.rb:12
+├─Thread#join #{__dir__}/include_exclude/o.rb:12
+└─IncludeExcludeTest::P#p #{__dir__}/include_exclude/p.rb:3
+  ├─#<Class:Thread>#new #{__dir__}/include_exclude/p.rb:5
+  │ └─Thread#initialize #{__dir__}/include_exclude/p.rb:5
   │   └─thread_run :0
-  │     └─IncludeExcludeTest::P#block in p /home/z/trace_tree/test/include_exclude/p.rb:5
-  │       ├─Class#new /home/z/trace_tree/test/include_exclude/p.rb:6
-  │       │ └─BasicObject#initialize /home/z/trace_tree/test/include_exclude/p.rb:6
-  │       ├─IncludeExcludeTest::P#block (2 levels) in p /home/z/trace_tree/test/include_exclude/p.rb:6
-  │       └─IncludeExcludeTest::R#r /home/z/trace_tree/test/include_exclude/r.rb:3
-  └─Thread#join /home/z/trace_tree/test/include_exclude/p.rb:7
+  │     └─IncludeExcludeTest::P#block in p #{__dir__}/include_exclude/p.rb:5
+  │       ├─Class#new #{__dir__}/include_exclude/p.rb:6
+  │       │ └─BasicObject#initialize #{__dir__}/include_exclude/p.rb:6
+  │       ├─IncludeExcludeTest::P#block (2 levels) in p #{__dir__}/include_exclude/p.rb:6
+  │       └─IncludeExcludeTest::R#r #{__dir__}/include_exclude/r.rb:3
+  └─Thread#join #{__dir__}/include_exclude/p.rb:7
 EOS
 
   def setup

@@ -41,28 +41,28 @@ class RaiseTest < Minitest::Test
   class Boom < StandardError;end
 
   Rescue = <<EOS
-RaiseTest#block in test_rescue /home/z/trace_tree/test/raise_test.rb:76
-└─RaiseTest::Raise#entry /home/z/trace_tree/test/raise_test.rb:7
-  ├─RaiseTest::Raise#exe /home/z/trace_tree/test/raise_test.rb:17
-  │ ├─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:27
-  │ │ ├─Kernel#raise /home/z/trace_tree/test/raise_test.rb:28
-  │ │ │ └─#<Class:Exception>#exception /home/z/trace_tree/test/raise_test.rb:28
-  │ │ │   └─Exception#initialize /home/z/trace_tree/test/raise_test.rb:28
-  │ │ └─Exception#backtrace /home/z/trace_tree/test/raise_test.rb:28
-  │ ├─Module#=== /home/z/trace_tree/test/raise_test.rb:19
-  │ └─RaiseTest::Raise#save /home/z/trace_tree/test/raise_test.rb:31
-  └─RaiseTest::Raise#out /home/z/trace_tree/test/raise_test.rb:35
+RaiseTest#block in test_rescue #{__dir__}/raise_test.rb:76
+└─RaiseTest::Raise#entry #{__dir__}/raise_test.rb:7
+  ├─RaiseTest::Raise#exe #{__dir__}/raise_test.rb:17
+  │ ├─RaiseTest::Raise#boom #{__dir__}/raise_test.rb:27
+  │ │ ├─Kernel#raise #{__dir__}/raise_test.rb:28
+  │ │ │ └─#<Class:Exception>#exception #{__dir__}/raise_test.rb:28
+  │ │ │   └─Exception#initialize #{__dir__}/raise_test.rb:28
+  │ │ └─Exception#backtrace #{__dir__}/raise_test.rb:28
+  │ ├─Module#=== #{__dir__}/raise_test.rb:19
+  │ └─RaiseTest::Raise#save #{__dir__}/raise_test.rb:31
+  └─RaiseTest::Raise#out #{__dir__}/raise_test.rb:35
 EOS
 
   NoRescue = <<EOS
-RaiseTest#block (2 levels) in test_no_rescue /home/z/trace_tree/test/raise_test.rb:88
-└─RaiseTest::Raise#entry! /home/z/trace_tree/test/raise_test.rb:12
-  └─RaiseTest::Raise#exe! /home/z/trace_tree/test/raise_test.rb:23
-    └─RaiseTest::Raise#boom /home/z/trace_tree/test/raise_test.rb:27
-      ├─Kernel#raise /home/z/trace_tree/test/raise_test.rb:28
-      │ └─#<Class:Exception>#exception /home/z/trace_tree/test/raise_test.rb:28
-      │   └─Exception#initialize /home/z/trace_tree/test/raise_test.rb:28
-      └─Exception#backtrace /home/z/trace_tree/test/raise_test.rb:28
+RaiseTest#block (2 levels) in test_no_rescue #{__dir__}/raise_test.rb:88
+└─RaiseTest::Raise#entry! #{__dir__}/raise_test.rb:12
+  └─RaiseTest::Raise#exe! #{__dir__}/raise_test.rb:23
+    └─RaiseTest::Raise#boom #{__dir__}/raise_test.rb:27
+      ├─Kernel#raise #{__dir__}/raise_test.rb:28
+      │ └─#<Class:Exception>#exception #{__dir__}/raise_test.rb:28
+      │   └─Exception#initialize #{__dir__}/raise_test.rb:28
+      └─Exception#backtrace #{__dir__}/raise_test.rb:28
 EOS
 
   ReturnValue = false

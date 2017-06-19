@@ -23,12 +23,12 @@ class RecurseTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-RecurseTest#block in test_trace_tree /home/z/trace_tree/test/recurse_test.rb:42
-└─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  ├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  │ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  │   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  └─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:19
+RecurseTest#block in test_trace_tree #{__dir__}/recurse_test.rb:42
+└─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  ├─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  │ └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  │   └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  └─RecurseTest::Recurse#b #{__dir__}/recurse_test.rb:19
 EOS
 
   ReturnValue = 'asdfg'

@@ -15,25 +15,25 @@ class ThreadTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-ThreadTest#block in test_trace_tree /home/z/trace_tree/test/thread_test.rb:45
-└─ThreadTest::MultiThreads#a /home/z/trace_tree/test/thread_test.rb:7
-  ├─Integer#times /home/z/trace_tree/test/thread_test.rb:8
-  ├─Enumerable#map /home/z/trace_tree/test/thread_test.rb:8
-  │ └─Enumerator#each /home/z/trace_tree/test/thread_test.rb:8
-  │   └─Integer#times /home/z/trace_tree/test/thread_test.rb:8
-  │     ├─ThreadTest::MultiThreads#block in a /home/z/trace_tree/test/thread_test.rb:8
-  │     │ └─#<Class:Thread>#new /home/z/trace_tree/test/thread_test.rb:9
-  │     │   └─Thread#initialize /home/z/trace_tree/test/thread_test.rb:9
+ThreadTest#block in test_trace_tree #{__dir__}/thread_test.rb:45
+└─ThreadTest::MultiThreads#a #{__dir__}/thread_test.rb:7
+  ├─Integer#times #{__dir__}/thread_test.rb:8
+  ├─Enumerable#map #{__dir__}/thread_test.rb:8
+  │ └─Enumerator#each #{__dir__}/thread_test.rb:8
+  │   └─Integer#times #{__dir__}/thread_test.rb:8
+  │     ├─ThreadTest::MultiThreads#block in a #{__dir__}/thread_test.rb:8
+  │     │ └─#<Class:Thread>#new #{__dir__}/thread_test.rb:9
+  │     │   └─Thread#initialize #{__dir__}/thread_test.rb:9
   │     │     └─thread_run :0
-  │     │       └─ThreadTest::MultiThreads#block (2 levels) in a /home/z/trace_tree/test/thread_test.rb:9
-  │     └─ThreadTest::MultiThreads#block in a /home/z/trace_tree/test/thread_test.rb:8
-  │       └─#<Class:Thread>#new /home/z/trace_tree/test/thread_test.rb:9
-  │         └─Thread#initialize /home/z/trace_tree/test/thread_test.rb:9
+  │     │       └─ThreadTest::MultiThreads#block (2 levels) in a #{__dir__}/thread_test.rb:9
+  │     └─ThreadTest::MultiThreads#block in a #{__dir__}/thread_test.rb:8
+  │       └─#<Class:Thread>#new #{__dir__}/thread_test.rb:9
+  │         └─Thread#initialize #{__dir__}/thread_test.rb:9
   │           └─thread_run :0
-  │             └─ThreadTest::MultiThreads#block (2 levels) in a /home/z/trace_tree/test/thread_test.rb:9
-  └─Array#each /home/z/trace_tree/test/thread_test.rb:12
-    ├─Thread#join /home/z/trace_tree/test/thread_test.rb:12
-    └─Thread#join /home/z/trace_tree/test/thread_test.rb:12
+  │             └─ThreadTest::MultiThreads#block (2 levels) in a #{__dir__}/thread_test.rb:9
+  └─Array#each #{__dir__}/thread_test.rb:12
+    ├─Thread#join #{__dir__}/thread_test.rb:12
+    └─Thread#join #{__dir__}/thread_test.rb:12
 EOS
 
   def setup
