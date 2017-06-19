@@ -63,7 +63,7 @@ EOS
   end
 
   def test_trace_tree_html
-    rt = binding.trace_tree(html: true, tmp: 'include.html', in: @in, out: @out) do
+    rt = binding.trace_tree(html: true, tmp: 'in.html', in: @in, out: @out) do
       O.new.o
     end
     assert_equal ReturnValue, rt
