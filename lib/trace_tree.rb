@@ -33,14 +33,12 @@ class TraceTree
     @log = dump_location *log
     enhance_point
     @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @in, @out = Array(opt[:in] || //), Array(opt[:out])
+    make_filter
     @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
     #start_trace
     timer[:trace]
-    @tp = TracePoint.new(*Events) do |point|
-      trace_points << point_loader.create(point) if wanted? point
-    end
+    @tp = TracePoint.new *Events, &@deal
     @tp.enable
 
     there.instance_eval &to_do
@@ -78,6 +76,14 @@ class TraceTree
     log.puts timer.to_s
     log.puts e
     log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+  end
+
+  def make_filter
+    if !opt.key?(:in) && !opt.key?(:out)
+      return @deal = -> point { trace_points << point_loader.create(point) }
+    end
+    @in, @out = Array(opt[:in] || //), Array(opt[:out])
+    @deal = -> point { trace_points << point_loader.create(point) if wanted? point }
   end
 
   def wanted? point
