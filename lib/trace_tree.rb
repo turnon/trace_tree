@@ -31,6 +31,7 @@ class TraceTree
   def generate *log, **opt, &to_do
     @opt = opt
     @log = dump_location *log
+    @debug = TmpFile.new opt[:debug] if opt[:debug]
     enhance_point
     @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
     make_filter
@@ -71,12 +72,17 @@ class TraceTree
     timer[:tree]
     tree = sort(trace_points_array).send build_command
     timer[:tree]
+    @debug.puts table_of_points if @debug
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
     log.puts timer.to_s
     log.puts e
-    log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+    log.puts table_of_points
+  end
+
+  def table_of_points
+    Terminal::Table.from_hashes trace_points_array.map(&:to_h)
   end
 
   def make_filter
