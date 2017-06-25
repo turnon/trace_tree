@@ -32,7 +32,7 @@ class TraceTree
     @opt = opt
     @log = dump_location *log
     enhance_point
-    @build_command = opt[:html] ? :tree_html_full : :tree_graph
+    @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
     make_filter
     @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
@@ -56,6 +56,7 @@ class TraceTree
 
   def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]
+    return TmpFile.new(opt[:htmp] + '.html') if opt[:htmp]
     log.empty? ? STDOUT : log[0]
   end
 
