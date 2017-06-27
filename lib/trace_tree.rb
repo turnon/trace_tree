@@ -72,7 +72,7 @@ class TraceTree
     timer[:tree]
     tree = sort(trace_points_array).send build_command
     timer[:tree]
-    @debug.puts table_of_points if @debug
+    @debug.puts table_of_points if defined? @debug
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
