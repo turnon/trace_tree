@@ -63,8 +63,16 @@ class TraceTree
       puts e
     end
 
+    def b_call?
+      event == :b_call
+    end
+
     def c_call?
       event == :c_call
+    end
+
+    def class?
+      event == :class
     end
 
     def x_return?
@@ -127,7 +135,9 @@ class TraceTree
     end
 
     def method_name
-      c_call? ? method_id : current.frame_env
+      return method_id if c_call?
+      return current.frame_env if b_call? || class?
+      (method_id == current.frame_env.to_sym) ? method_id : "#{method_id} -> #{current.frame_env}"
     end
 
     def call_symbol
