@@ -83,6 +83,13 @@ class TraceTree
       event =~ /thread/
     end
 
+    def end_of_trace?
+      MainFile == path && (
+        (:c_return == event && :instance_eval == method_id) ||
+          (:c_call == event && :disable == method_id)
+      )
+    end
+
     def return_value
       raise RuntimeError.new('RuntimeError: not supported by this event') unless x_return?
       @return_value
@@ -187,9 +194,9 @@ class TraceTree
                         Threadbegin,
                         Threadend]
 
-    def self.thread_relative? point
-      NativeThreadCall.any?{ |k| k.class_of? point } ||
-        Thread == point.defined_class
+    def thread_relative?
+      NativeThreadCall.any?{ |k| k.class_of? self } ||
+        Thread == defined_class
     end
 
   end

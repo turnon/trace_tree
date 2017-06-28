@@ -16,6 +16,8 @@ end
 
 class TraceTree
 
+  MainFile = __FILE__
+
   Events = [:b_call, :b_return,
             :c_call, :c_return,
             :call, :return,
@@ -90,27 +92,22 @@ class TraceTree
       return @deal = -> point { trace_points << point_loader.create(point) }
     end
     @in, @out = Array(opt[:in] || //), Array(opt[:out])
-    @deal = -> point { trace_points << point_loader.create(point) if wanted? point }
+    @deal = -> point do
+      po = point_loader.create(point)
+      trace_points << po if wanted? po
+    end
   end
 
   def wanted? point
-    return false if end_of_trace? point
-    return true if native? point
+    return false if point.end_of_trace?
+    return true if native?(point) || point.thread_relative?
     @in.any?{ |pattern| pattern =~ point.path } &&
       @out.all?{ |pattern| pattern !~ point.path }
   end
 
-  def end_of_trace? point
-    __FILE__ == point.path && (
-      (:c_return == point.event && :instance_eval == point.method_id) ||
-        (:c_call == point.event && :disable == point.method_id)
-    )
-  end
-
   def native? point
-    __FILE__ == point.path ||
-      (:b_call == point.event && @__file__ == point.path && @__line__ == point.lineno) ||
-      Point.thread_relative?(point)
+    MainFile == point.path ||
+      (:b_call == point.event && @__file__ == point.path && @__line__ == point.lineno)
   end
 
   def sort trace_points
