@@ -179,9 +179,9 @@ class TraceTree
   end
 end
 
-Dir.glob(File.expand_path('../point/*', __FILE__)).each do |concreate_point_path|
-  load concreate_point_path
-  #puts "---->#{concreate_point_path}"
+Dir.glob(File.expand_path('../point/*', __FILE__)).each do |concrete_point_path|
+  load concrete_point_path
+  #puts "---->#{concrete_point_path}"
 end
 
 class TraceTree
