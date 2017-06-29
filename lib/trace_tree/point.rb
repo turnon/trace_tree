@@ -7,7 +7,7 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current, :thread
+    attr_reader :current, :thread, :frame_env, :callee
     attr_accessor :terminal
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
@@ -27,12 +27,17 @@ class TraceTree
       end
 
       def hashify point
-        attrs = Interfaces.each_with_object({}) do |attr, hash|
-          hash[attr] = point.send attr
-        end
-        attrs.merge!({return_value: point.return_value}) if point.event =~ /return/
-        attrs.merge!({thread: point.thread}) if point.respond_to? :thread
-        attrs
+        h = {}
+        h[:event] = point.event
+        h[:defined_class] = point.defined_class
+        h[:method_id] = point.method_id
+        h[:frame_env] = point.frame_env unless point.thread?
+        h[:callee] = point.callee
+        h[:path] = point.path
+        h[:lineno] = point.lineno
+        h[:thread] = point.thread
+        h[:return_value] = point.return_value if point.event =~ /return/
+        h
       end
 
       def class_of? point
@@ -56,9 +61,18 @@ class TraceTree
       Interfaces.each do |i|
         instance_variable_set "@#{i}", trace_point.send(i)
       end
+
       @return_value = trace_point.return_value if x_return?
-      @current = BindingOfCallers::Revealed.new trace_point.binding.of_caller(3) unless thread?
-      @thread = thread? ? trace_point.self : current.send(:eval, 'Thread.current')
+
+      if thread?
+        @thread = trace_point.self
+      else
+        there = trace_point.binding.of_caller(3)
+        @current = BindingOfCallers::Revealed.new there
+        @callee = there.eval('__callee__')
+        @frame_env = current.frame_env.to_sym
+        @thread = current.send(:eval, 'Thread.current')
+      end
     rescue => e
       puts e
     end
@@ -143,8 +157,8 @@ class TraceTree
 
     def method_name
       return method_id if c_call?
-      return current.frame_env if b_call? || class?
-      (method_id == current.frame_env.to_sym) ? method_id : "#{method_id} -> #{current.frame_env}"
+      return frame_env if b_call? || class?
+      (method_id == frame_env) ? method_id : "#{method_id} -> #{frame_env}"
     end
 
     def call_symbol
@@ -197,6 +211,17 @@ class TraceTree
     def thread_relative?
       NativeThreadCall.any?{ |k| k.class_of? self } ||
         Thread == defined_class
+    end
+
+    def method_defined_by_define_method?
+      case event
+      when :call
+        method_id != frame_env
+      when :return
+        method_id != callee && frame_env == callee
+      else
+        false
+      end
     end
 
   end

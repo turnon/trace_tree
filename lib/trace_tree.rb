@@ -100,7 +100,7 @@ class TraceTree
 
   def wanted? point
     return false if point.end_of_trace?
-    return true if native?(point) || point.thread_relative?
+    return true if native?(point) || point.thread_relative? || point.method_defined_by_define_method?
     @in.any?{ |pattern| pattern =~ point.path } &&
       @out.all?{ |pattern| pattern !~ point.path }
   end
