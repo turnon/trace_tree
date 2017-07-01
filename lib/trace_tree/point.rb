@@ -7,7 +7,7 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current, :thread, :frame_env, :callee
+    attr_reader :current, :thread, :frame_env
     attr_accessor :terminal
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
@@ -32,7 +32,6 @@ class TraceTree
         h[:defined_class] = point.defined_class
         h[:method_id] = point.method_id
         h[:frame_env] = point.frame_env unless point.thread?
-        h[:callee] = point.callee
         h[:path] = point.path
         h[:lineno] = point.lineno
         h[:thread] = point.thread
@@ -69,7 +68,6 @@ class TraceTree
       else
         there = trace_point.binding.of_caller(3)
         @current = BindingOfCallers::Revealed.new there
-        @callee = there.eval('__callee__')
         @frame_env = current.frame_env.to_sym
         @thread = current.send(:eval, 'Thread.current')
       end
@@ -214,14 +212,8 @@ class TraceTree
     end
 
     def method_defined_by_define_method?
-      case event
-      when :call
+      (event == :call || event == :return) &&
         method_id != frame_env
-      when :return
-        method_id != callee && frame_env == callee
-      else
-        false
-      end
     end
 
   end
