@@ -40,7 +40,8 @@ class TraceTree
       end
 
       def class_of? point
-        [point.event, point.defined_class, point.method_id] == event_class_method
+        e, c, m = event_class_method
+        point.method_id == m && point.event == e && point.defined_class == c
       end
 
       def initialize_clone proto
@@ -50,6 +51,19 @@ class TraceTree
       end
 
       attr_reader :proto
+
+      def cache_event_class_method!
+        bases.each do |base|
+          base.class_eval <<-EOM
+            class << self
+              alias_method :_event_class_method, :event_class_method
+              def self.event_class_method
+                @ecm ||= _event_class_method.freeze
+              end
+            end
+EOM
+        end
+      end
     end
 
     def method_missing method_id, *args, &blk
@@ -198,6 +212,8 @@ end
 
 class TraceTree
   class Point
+
+    cache_event_class_method!
 
     NativeThreadCall = [CcallClassthreadNew,
                         CreturnClassthreadNew,
