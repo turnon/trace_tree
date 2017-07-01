@@ -23,12 +23,12 @@ class RecurseTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-RecurseTest#block in test_trace_tree /home/z/trace_tree/test/recurse_test.rb:42
-└─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  ├─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  │ └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  │   └─RecurseTest::Recurse#a /home/z/trace_tree/test/recurse_test.rb:14
-  └─RecurseTest::Recurse#b /home/z/trace_tree/test/recurse_test.rb:19
+RecurseTest#block in test_trace_tree #{__dir__}/recurse_test.rb:42
+└─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  ├─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  │ └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  │   └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
+  └─RecurseTest::Recurse#b #{__dir__}/recurse_test.rb:19
 EOS
 
   ReturnValue = 'asdfg'
@@ -39,7 +39,7 @@ EOS
   end
 
   def test_trace_tree
-    rt = binding.trace_tree(@sio, color: false, ignore: Ignore) do
+    rt = binding.trace_tree(@sio, color: false, out: Ignore) do
       @test.a
     end
 
@@ -50,7 +50,7 @@ EOS
   end
 
   def test_trace_tree_html
-    rt = binding.trace_tree(html: true, tmp: 'recurse.html', ignore: Ignore) do
+    rt = binding.trace_tree(html: true, tmp: 'recurse.html', out: Ignore) do
       @test.a
     end
     assert_equal ReturnValue, rt

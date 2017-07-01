@@ -28,14 +28,14 @@ class ThrowTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-ThrowTest#block in test_trace_tree /home/z/trace_tree/test/throw_test.rb:49
-└─ThrowTest::Throw#a /home/z/trace_tree/test/throw_test.rb:6
-  ├─Kernel#catch /home/z/trace_tree/test/throw_test.rb:7
-  │ └─ThrowTest::Throw#block in a /home/z/trace_tree/test/throw_test.rb:7
-  │   └─ThrowTest::Throw#b /home/z/trace_tree/test/throw_test.rb:14
-  │     └─ThrowTest::Throw#d /home/z/trace_tree/test/throw_test.rb:21
-  │       └─Kernel#throw /home/z/trace_tree/test/throw_test.rb:22
-  └─ThrowTest::Throw#e /home/z/trace_tree/test/throw_test.rb:25
+ThrowTest#block in test_trace_tree #{__dir__}/throw_test.rb:49
+└─ThrowTest::Throw#a #{__dir__}/throw_test.rb:6
+  ├─Kernel#catch #{__dir__}/throw_test.rb:7
+  │ └─ThrowTest::Throw#block in a #{__dir__}/throw_test.rb:7
+  │   └─ThrowTest::Throw#b #{__dir__}/throw_test.rb:14
+  │     └─ThrowTest::Throw#d #{__dir__}/throw_test.rb:21
+  │       └─Kernel#throw #{__dir__}/throw_test.rb:22
+  └─ThrowTest::Throw#e #{__dir__}/throw_test.rb:25
 EOS
 
   ReturnValue = '1234567'
@@ -46,7 +46,7 @@ EOS
   end
 
   def test_trace_tree
-    rt = binding.trace_tree(@sio, color: false, ignore: Ignore) do
+    rt = binding.trace_tree(@sio, color: false, out: Ignore) do
       @test.a
     end
 

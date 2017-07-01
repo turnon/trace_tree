@@ -16,6 +16,8 @@ end
 
 class TraceTree
 
+  MainFile = __FILE__
+
   Events = [:b_call, :b_return,
             :c_call, :c_return,
             :call, :return,
@@ -31,19 +33,18 @@ class TraceTree
   def generate *log, **opt, &to_do
     @opt = opt
     @log = dump_location *log
-    enhance_point **opt
-    @build_command = opt[:html] ? :tree_html_full : :tree_graph
-    @ignore = opt[:ignore] || {}
-    here = bi.eval('self')
+    @debug = TmpFile.new opt[:debug] if opt[:debug]
+    enhance_point
+    @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
+    make_filter
+    @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
     #start_trace
     timer[:trace]
-    @tp = TracePoint.new(*Events) do |point|
-      trace_points << point_loader.create(point) if wanted? point
-    end
+    @tp = TracePoint.new *Events, &@deal
     @tp.enable
 
-    here.instance_eval &to_do
+    there.instance_eval &to_do
   ensure
     #stop_trace
     return unless @tp
@@ -58,10 +59,11 @@ class TraceTree
 
   def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]
+    return TmpFile.new(opt[:htmp] + '.html') if opt[:htmp]
     log.empty? ? STDOUT : log[0]
   end
 
-  def enhance_point opt
+  def enhance_point
     enhancement = []
     enhancement << TraceTree::Color unless opt[:color] == false
     enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
@@ -72,18 +74,40 @@ class TraceTree
     timer[:tree]
     tree = sort(trace_points_array).send build_command
     timer[:tree]
+    @debug.puts table_of_points if defined? @debug
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
     log.puts timer.to_s
     log.puts e
-    log.puts Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+    log.puts table_of_points
   end
 
-  def wanted? trace_point
-    @ignore.any? do |attr, pattern|
-      pattern =~ trace_point.send(attr)
-    end ? false : true
+  def table_of_points
+    Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+  end
+
+  def make_filter
+    if !opt.key?(:in) && !opt.key?(:out)
+      return @deal = -> point { trace_points << point_loader.create(point) }
+    end
+    @in, @out = Array(opt[:in] || //), Array(opt[:out])
+    @deal = -> point do
+      po = point_loader.create(point)
+      trace_points << po if wanted? po
+    end
+  end
+
+  def wanted? point
+    return false if point.end_of_trace?
+    return true if native?(point) || point.thread_relative? || point.method_defined_by_define_method?
+    @in.any?{ |pattern| pattern =~ point.path } &&
+      @out.all?{ |pattern| pattern !~ point.path }
+  end
+
+  def native? point
+    MainFile == point.path ||
+      (:b_call == point.event && @__file__ == point.path && @__line__ == point.lineno)
   end
 
   def sort trace_points
@@ -110,6 +134,8 @@ class TraceTree
     initialized_threads.each do |thread, point|
       point.thread_begin = began_threads[thread]
     end
+
+    #binding.pry
 
     stacks[trace_points.first.thread][0].
       callees[0].
