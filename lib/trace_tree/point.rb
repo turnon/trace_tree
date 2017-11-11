@@ -67,7 +67,8 @@ EOM
     end
 
     def method_missing method_id, *args, &blk
-      raise NoMethodError, "NoMethodError: undefined method `#{method_id}' for #<#{self.class.proto or self.class.name}#{inspect}>"
+      raise NoMethodError, "NoMethodError: undefined method `#{method_id}' "\
+        "for #<#{self.class.proto or self.class.name}#{inspect}>"
     end
 
     def initialize trace_point
