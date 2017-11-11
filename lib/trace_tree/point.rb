@@ -118,8 +118,7 @@ EOM
     end
 
     def return_value
-      raise RuntimeError.new('RuntimeError: not supported by this event') unless x_return?
-      @return_value
+      x_return? ? @return_value : (terminal.nil? ? nil : terminal.return_value)
     end
 
     def inspect

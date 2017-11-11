@@ -1,5 +1,6 @@
 require 'tree_html'
 require 'cgi'
+require 'json'
 
 class TraceTree
   module TreeHtmlable
@@ -7,7 +8,12 @@ class TraceTree
     include TreeHtml
 
     def label_for_tree_html
-      "<span class='highlight'>#{CGI::escapeHTML class_and_method}</span> #{CGI::escapeHTML source_location}"
+      "<span class='highlight'>#{CGI::escapeHTML class_and_method}</span> "\
+        "#{CGI::escapeHTML source_location}"
+    end
+
+    def data_for_tree_html
+      {arg_ret: ::JSON.generate({return: return_value})}
     end
 
     def children_for_tree_html
