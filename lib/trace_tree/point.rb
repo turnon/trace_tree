@@ -117,6 +117,15 @@ EOM
       )
     end
 
+    def arguments
+      {}.tap do |args|
+        if event == :call
+          defined_class.instance_method(method_id).parameters.
+            each{ |role, name| args[name] = current.lv(name) unless name.nil? && role == :rest }
+        end
+      end
+    end
+
     def return_value
       x_return? ? @return_value : (terminal.nil? ? nil : terminal.return_value)
     end
