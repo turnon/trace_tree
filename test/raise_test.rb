@@ -45,7 +45,7 @@ RaiseTest#block in test_rescue #{__dir__}/raise_test.rb:76
 └─RaiseTest::Raise#entry #{__dir__}/raise_test.rb:7
   ├─RaiseTest::Raise#exe #{__dir__}/raise_test.rb:17
   │ ├─RaiseTest::Raise#boom #{__dir__}/raise_test.rb:27
-  │ │ ├─Kernel#raise #{__dir__}/raise_test.rb:28
+  │ │ ├─Kernel#raise(#<RaiseTest::Boom>) #{__dir__}/raise_test.rb:28
   │ │ │ └─#<Class:Exception>#exception #{__dir__}/raise_test.rb:28
   │ │ │   └─Exception#initialize #{__dir__}/raise_test.rb:28
   │ │ └─Exception#backtrace #{__dir__}/raise_test.rb:28
@@ -59,7 +59,7 @@ RaiseTest#block (2 levels) in test_no_rescue #{__dir__}/raise_test.rb:88
 └─RaiseTest::Raise#entry! #{__dir__}/raise_test.rb:12
   └─RaiseTest::Raise#exe! #{__dir__}/raise_test.rb:23
     └─RaiseTest::Raise#boom #{__dir__}/raise_test.rb:27
-      ├─Kernel#raise #{__dir__}/raise_test.rb:28
+      ├─Kernel#raise(#<RaiseTest::Boom>) #{__dir__}/raise_test.rb:28
       │ └─#<Class:Exception>#exception #{__dir__}/raise_test.rb:28
       │   └─Exception#initialize #{__dir__}/raise_test.rb:28
       └─Exception#backtrace #{__dir__}/raise_test.rb:28
