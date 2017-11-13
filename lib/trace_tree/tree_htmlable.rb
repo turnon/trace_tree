@@ -13,7 +13,7 @@ class TraceTree
     end
 
     def data_for_tree_html
-      {arg_ret: ::JSON.generate({arguments: arguments,return: return_value})}
+      {}
     end
 
     def children_for_tree_html

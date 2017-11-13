@@ -3,6 +3,8 @@ require 'binding_of_callers/pry'
 require 'trace_tree/point'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
+require 'trace_tree/return_value'
+require 'trace_tree/args'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
 require 'thread'
@@ -67,6 +69,8 @@ class TraceTree
     enhancement = []
     enhancement << TraceTree::Color unless opt[:color] == false
     enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
+    enhancement << TraceTree::ReturnValue unless opt[:return] == false
+    enhancement << TraceTree::Args if opt[:args] == true
     @point_loader = Point::Loader.new *enhancement
   end
 
