@@ -16,6 +16,10 @@ class TraceTree
       {}
     end
 
+    def body_js_for_tree_html
+      []
+    end
+
     def children_for_tree_html
       callees
     end
