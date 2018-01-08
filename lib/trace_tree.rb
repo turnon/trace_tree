@@ -7,6 +7,7 @@ require 'trace_tree/return_value'
 require 'trace_tree/args'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
+require 'trace_tree/config'
 require 'thread'
 require 'terminal-tableofhashes'
 
@@ -30,6 +31,7 @@ class TraceTree
     @bi = bi
     @trace_points = Queue.new
     @timer = Timer.new
+    @config = Config.load
   end
 
   def generate *log, **opt, &to_do
@@ -57,7 +59,7 @@ class TraceTree
 
   private
 
-  attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader
+  attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader, :config
 
   def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]
@@ -71,7 +73,7 @@ class TraceTree
     enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
     enhancement << TraceTree::ReturnValue unless opt[:return] == false
     enhancement << TraceTree::Args if opt[:args] == true
-    @point_loader = Point::Loader.new *enhancement
+    @point_loader = Point::Loader.new *enhancement, config
   end
 
   def dump_trace_tree

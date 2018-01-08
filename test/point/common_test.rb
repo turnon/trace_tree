@@ -9,7 +9,7 @@ class CommonTest < Minitest::Test
 
   def setup
     @ttp = nil
-    @loader = TraceTree::Point::Loader.new
+    @loader = TraceTree::Point::Loader.new TraceTree::Config::DEFAULT
   end
 
   def test_common
