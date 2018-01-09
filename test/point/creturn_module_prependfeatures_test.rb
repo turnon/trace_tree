@@ -12,7 +12,7 @@ class CreturnModulePrependfeaturesTest < Minitest::Test
   end
 
   Prepends = []
-  Loader = TraceTree::Point::Loader.new
+  Loader = TraceTree::Point::Loader.new TraceTree::Config::DEFAULT
 
   tp = TracePoint.trace(:c_return) do |t|
     Prepends << Loader.create(t) if t.method_id == :prepend_features

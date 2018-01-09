@@ -8,7 +8,7 @@ class TraceTree
     include TreeHtmlable
 
     attr_reader :current, :thread, :frame_env
-    attr_accessor :terminal
+    attr_accessor :terminal, :config
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
     attr_reader *Interfaces
@@ -196,9 +196,10 @@ EOM
 
     class Loader
 
-      attr_reader :point_classes
+      attr_reader :point_classes, :config
 
-      def initialize *enhancement
+      def initialize *enhancement, config
+        @config = config
         return @point_classes = Point.classes if enhancement.empty?
         @point_classes = Point.classes.each_with_object(Point.classes.dup) do |entry, hash|
           hash[entry[0]] = entry[1].clone.prepend *enhancement
@@ -207,7 +208,9 @@ EOM
 
       def create point
         point_klass = point_classes[[point.event, point.defined_class, point.method_id]]
-        point_klass.new point
+        poi = point_klass.new point
+        poi.config = config
+        poi
       end
     end
 
