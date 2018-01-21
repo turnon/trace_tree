@@ -4,12 +4,9 @@ require 'pp'
 class TraceTree
   module ReturnValue
 
-    SHOW_RT = <<-JS
-TreeHtml.hover_press('r', function(n){
-  var a = n.querySelector('a');
-  console.log('>', a.querySelector('span').innerText + "\\n" + a.getAttribute('data-return'));
-});
-JS
+    CONSOLE_JS = File.read File.expand_path('../console.js', __FILE__)
+
+    CONSOLE_CSS = File.read File.expand_path('../console.css', __FILE__)
 
     BLANK = ''.freeze
 
@@ -26,8 +23,12 @@ JS
       super.merge!({return: attr_value})
     end
 
+    def css_for_tree_html
+      super + CONSOLE_CSS
+    end
+
     def body_js_for_tree_html
-      super.push({text: SHOW_RT})
+      super.push({text: CONSOLE_JS})
     end
 
     def self.formatted klass, &block
