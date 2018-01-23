@@ -1,23 +1,33 @@
 #consl-border {
-  background-color: #00bcd4;
-  position: fixed;
-  left: 0;
-  right: 0;
-  height: 5px;
-}
-
-#consl-border:hover {
-  cursor: s-resize;
-}
-
-#consl {
+  -webkit-transform: rotate(-180deg);
   background-color: black;
-  color: white;
+  resize: vertical;
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 0px 8px;
   word-wrap: break-word;
+  overflow-x: scroll;
+}
+
+#consl-border::-webkit-scrollbar {
+  width: 5px;
+}
+
+#consl-border::-webkit-scrollbar-track {
+  background: #00bcd4;
+}
+
+#consl {
+  -webkit-transform: rotate(-180deg);
+  color: white;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  left: 0;
+  word-wrap: break-word;
   overflow-y: scroll;
+  height: inherit;
 }
