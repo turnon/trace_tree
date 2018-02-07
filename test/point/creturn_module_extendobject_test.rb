@@ -12,7 +12,7 @@ class CreturnModuleExtendobjectTest < Minitest::Test
   end
 
   Extends = []
-  Loader = TraceTree::Point::Loader.new
+  Loader = TraceTree::Point::Loader.new TraceTree::Config::DEFAULT
 
   tp = TracePoint.trace(:c_return) do |t|
     Extends << Loader.create(t) if t.method_id == :extend_object

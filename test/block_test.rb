@@ -9,12 +9,12 @@ class BlockTest < Minitest::Test
     end
 
     def a
-      @n.times{b}
+      @n.times{|t| b(t)}
       @n.times{c}
       ReturnValue
     end
 
-    def b;end
+    def b(t);t end
     def c;end
 
   end

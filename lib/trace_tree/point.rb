@@ -8,7 +8,7 @@ class TraceTree
     include TreeHtmlable
 
     attr_reader :current, :thread, :frame_env
-    attr_accessor :terminal
+    attr_accessor :terminal, :config
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
     attr_reader *Interfaces
@@ -67,7 +67,8 @@ EOM
     end
 
     def method_missing method_id, *args, &blk
-      raise NoMethodError, "NoMethodError: undefined method `#{method_id}' for #<#{self.class.proto or self.class.name}#{inspect}>"
+      raise NoMethodError, "NoMethodError: undefined method `#{method_id}' "\
+        "for #<#{self.class.proto or self.class.name}#{inspect}>"
     end
 
     def initialize trace_point
@@ -116,9 +117,17 @@ EOM
       )
     end
 
+    def arguments
+      {}.tap do |args|
+        if event == :call
+          defined_class.instance_method(method_id).parameters.
+            each{ |role, name| args[name] = current.lv(name) unless name.nil? && role == :rest }
+        end
+      end
+    end
+
     def return_value
-      raise RuntimeError.new('RuntimeError: not supported by this event') unless x_return?
-      @return_value
+      x_return? ? @return_value : (terminal.nil? ? nil : terminal.return_value)
     end
 
     def inspect
@@ -187,9 +196,10 @@ EOM
 
     class Loader
 
-      attr_reader :point_classes
+      attr_reader :point_classes, :config
 
-      def initialize *enhancement
+      def initialize *enhancement, config
+        @config = config
         return @point_classes = Point.classes if enhancement.empty?
         @point_classes = Point.classes.each_with_object(Point.classes.dup) do |entry, hash|
           hash[entry[0]] = entry[1].clone.prepend *enhancement
@@ -198,7 +208,9 @@ EOM
 
       def create point
         point_klass = point_classes[[point.event, point.defined_class, point.method_id]]
-        point_klass.new point
+        poi = point_klass.new point
+        poi.config = config
+        poi
       end
     end
 

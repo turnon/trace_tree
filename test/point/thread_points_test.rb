@@ -5,7 +5,7 @@ class ThreadPointsTest < Minitest::Test
   attr_reader :thread_count, :points
 
   def setup
-    @loader = TraceTree::Point::Loader.new
+    @loader = TraceTree::Point::Loader.new TraceTree::Config::DEFAULT
     @q = Queue.new
     @thread_count = 3
   end
