@@ -52,7 +52,21 @@ end
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
 * `:debug => nil` by default. Give it somthing like what for `:tmp` to output a whole list of TracePoints in file for debug.
 
-### Example
+### HTML Example
+
+Try to remove a non-existing index:
+
+```ruby
+[4] pry(main)> binding.trace_tree(htmp: 'migrate_rm_index'){ ActiveRecord::Migration.new.remove_index "cars", [:online_at] }
+-- remove_index("cars", [:online_at])
+ArgumentError: Index name 'index_cars_on_online_at' on table 'cars' does not exist
+```
+
+Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in scalable footer.
+
+![image](https://user-images.githubusercontent.com/6105214/35904349-bf264ae4-0c1d-11e8-8ab4-0c256e4b014a.png)
+
+### Console Example
 
 Want to know what `Sinatra::Base#call` does? Wrap it with `binding.trace_tree`:
 
