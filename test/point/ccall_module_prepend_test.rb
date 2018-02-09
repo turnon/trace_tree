@@ -29,7 +29,7 @@ class CcallModulePrependTest < Minitest::Test
   end
 
   def test_mixin
-    Prepends[0] << Prepends[1]
+    Prepends[0].has_callee Prepends[1]
     Prepends[1].terminal = Prepends[2]
     assert_equal M, Prepends[0].parameters
     assert_equal M, Prepends[1].parameters

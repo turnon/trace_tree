@@ -125,7 +125,7 @@ class TraceTree
           stack.last.terminal = point
           stack.pop
         else
-          stack.last << point
+          last_call.has_callee point
           stack << point
         end
       else

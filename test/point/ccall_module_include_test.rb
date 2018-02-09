@@ -29,7 +29,7 @@ class CcallModuleIncludeTest < Minitest::Test
   end
 
   def test_mixin
-    Includes[0] << Includes[1]
+    Includes[0].has_callee Includes[1]
     Includes[1].terminal = Includes[2]
     assert_equal M, Includes[0].parameters
     assert_equal M, Includes[1].parameters

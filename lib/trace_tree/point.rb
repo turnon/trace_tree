@@ -154,7 +154,7 @@ EOM
         (event == :thread_end and point.event == :thread_begin)
     end
 
-    def << node
+    def has_callee node
       callees << node
     end
 

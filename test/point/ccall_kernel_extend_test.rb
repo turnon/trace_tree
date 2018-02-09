@@ -36,13 +36,13 @@ class CcallKernelExtendTest < Minitest::Test
   end
 
   def test_mixin
-    Extends[0] << Extends[1]
+    Extends[0].has_callee Extends[1]
     Extends[1].terminal = Extends[2]
     assert_equal M, Extends[0].parameters
     assert_equal M, Extends[1].mixin
     assert_equal M, Extends[2].mixin
 
-    Extends[6] << Extends[7]
+    Extends[6].has_callee Extends[7]
     Extends[7].terminal = Extends[8]
     assert_equal N, Extends[6].parameters
     assert_equal N, Extends[7].mixin
