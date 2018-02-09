@@ -29,8 +29,8 @@ class NormalTest < Minitest::Test
 NormalTest#block in test_trace_tree #{__dir__}/normal_test.rb:46
 └─NormalTest::Normal#a #{__dir__}/normal_test.rb:7
   ├─NormalTest::Normal#b #{__dir__}/normal_test.rb:12
-  │ ├─NormalTest::Normal#c -> block in <class:Normal> /home/z/trace_tree/test/normal_test.rb:17
-  │ │ └─NormalTest::Normal#block in <class:Normal> /home/z/trace_tree/test/normal_test.rb:17
+  │ ├─NormalTest::Normal#c -> block in <class:Normal> #{__dir__}/normal_test.rb:17
+  │ │ └─NormalTest::Normal#block in <class:Normal> #{__dir__}/normal_test.rb:17
   │ └─NormalTest::Normal#d #{__dir__}/normal_test.rb:20
   └─NormalTest::Normal#e #{__dir__}/normal_test.rb:23
 EOS
