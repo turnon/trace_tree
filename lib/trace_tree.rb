@@ -121,8 +121,9 @@ class TraceTree
     trace_points.each do |point|
       stack = stacks[point.thread]
       unless stack.empty?
-        if point.terminate? stack.last
-          stack.last.terminal = point
+        last_call = stack.last
+        if point.terminate?(last_call) || point.fiber_suspend?(last_call) || point.fiber_terminate?(last_call)
+          last_call.terminal = point
           stack.pop
         else
           last_call.has_callee point

@@ -154,6 +154,18 @@ EOM
         (event == :thread_end and point.event == :thread_begin)
     end
 
+    def fiber_terminate? point
+      event == :b_return && (point.fiber_yield? && point.event == :c_return)
+    end
+
+    def fiber_suspend? point
+      fiber_yield? && c_call? && (point.b_call? || (point.fiber_yield? && point.event == :c_return))
+    end
+
+    def fiber_yield?
+      defined_class == Fiber.singleton_class && method_id == :yield
+    end
+
     def has_callee node
       callees << node
     end
