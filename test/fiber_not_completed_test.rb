@@ -26,7 +26,7 @@ class FiberNotCompletedTest < Minitest::Test
   end
 
   Tracetree = <<EOS
-FiberNotCompletedTest#block in test_trace_tree #{__dir__}/fiber_not_completed_test.rb:61
+FiberNotCompletedTest#block in test_trace_tree #{__dir__}/fiber_not_completed_test.rb:67
 └─FiberNotCompletedTest::Fibonacci#result #{__dir__}/fiber_not_completed_test.rb:21
   ├─Integer#times #{__dir__}/fiber_not_completed_test.rb:22
   └─Enumerable#map #{__dir__}/fiber_not_completed_test.rb:22
@@ -34,22 +34,28 @@ FiberNotCompletedTest#block in test_trace_tree #{__dir__}/fiber_not_completed_te
       └─Integer#times #{__dir__}/fiber_not_completed_test.rb:22
         ├─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
         │ └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-        │   └─FiberNotCompletedTest::Fibonacci#block in initialize #{__dir__}/fiber_not_completed_test.rb:9
+        │   └─FiberNotCompletedTest::Fibonacci#block in initialize ~ #{__dir__}/fiber_not_completed_test.rb:9
+        │     └─#<Class:Fiber>#yield #{__dir__}/fiber_not_completed_test.rb:11
         ├─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
         │ └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-        │   └─FiberNotCompletedTest::Fibonacci#yield -> block in initialize #{__dir__}/fiber_not_completed_test.rb:11
+        │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_not_completed_test.rb:11
+        │   └─#<Class:Fiber>#yield #{__dir__}/fiber_not_completed_test.rb:12
         ├─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
         │ └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-        │   └─FiberNotCompletedTest::Fibonacci#yield -> block in initialize #{__dir__}/fiber_not_completed_test.rb:12
+        │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_not_completed_test.rb:12
+        │   └─#<Class:Fiber>#yield #{__dir__}/fiber_not_completed_test.rb:15
         ├─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
         │ └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-        │   └─FiberNotCompletedTest::Fibonacci#yield -> block in initialize #{__dir__}/fiber_not_completed_test.rb:15
+        │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_not_completed_test.rb:15
+        │   └─#<Class:Fiber>#yield #{__dir__}/fiber_not_completed_test.rb:15
         ├─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
         │ └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-        │   └─FiberNotCompletedTest::Fibonacci#yield -> block in initialize #{__dir__}/fiber_not_completed_test.rb:15
+        │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_not_completed_test.rb:15
+        │   └─#<Class:Fiber>#yield #{__dir__}/fiber_not_completed_test.rb:15
         └─FiberNotCompletedTest::Fibonacci#block in result #{__dir__}/fiber_not_completed_test.rb:22
           └─Fiber#resume #{__dir__}/fiber_not_completed_test.rb:23
-            └─FiberNotCompletedTest::Fibonacci#yield -> block in initialize #{__dir__}/fiber_not_completed_test.rb:15
+            ├─#<Class:Fiber>#yield; #{__dir__}/fiber_not_completed_test.rb:15
+            └─#<Class:Fiber>#yield ~ #{__dir__}/fiber_not_completed_test.rb:15
 EOS
 
   def setup

@@ -116,18 +116,36 @@ class TraceTree
 
   def sort trace_points
     stacks = Hash.new{|h, thread| h[thread] = []}
+    fiber_stacks = Hash.new{|h, fiber| h[fiber] = []}
     initialized_threads, began_threads = {}, {}
 
     trace_points.each do |point|
       stack = stacks[point.thread]
       unless stack.empty?
         last_call = stack.last
-        if point.terminate?(last_call) || point.fiber_suspend?(last_call) || point.fiber_terminate?(last_call)
-          last_call.terminal = point
-          stack.pop
+        if point.return_or_end?
+          if point.terminate?(last_call)# || point.fiber_suspend?(last_call) || point.fiber_terminate?(last_call)
+            last_call.terminal = point
+            stack.pop
+          elsif (point.method_id == :yield && point.event == :c_return) ||
+            (last_call.method_id == :resume && last_call.event == :c_call)
+            fiber_stack = fiber_stacks[last_call.self]
+            if point.terminate?(fiber_stack.last)
+              fiber_stack.pop.terminal = point
+              last_call.has_callee point
+            end
+          end
         else
           last_call.has_callee point
-          stack << point
+          if point.method_id == :yield && point.event == :c_call
+            fiber_stack = [point]
+            until stack.last.method_id == :resume
+              fiber_stack << stack.pop
+            end
+            fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
+          else
+            stack << point
+          end
         end
       else
         stack << point

@@ -8,9 +8,9 @@ class TraceTree
     include TreeHtmlable
 
     attr_reader :current, :thread, :frame_env
-    attr_accessor :terminal, :config
+    attr_accessor :terminal, :config, :yielding_fiber
 
-    Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
+    Interfaces = [:event, :defined_class, :method_id, :path, :lineno, :self]
     attr_reader *Interfaces
 
     class << self
@@ -34,6 +34,7 @@ class TraceTree
         h[:frame_env] = point.frame_env unless point.thread?
         h[:path] = point.path
         h[:lineno] = point.lineno
+        h[:self] = point.self
         h[:thread] = point.thread
         h[:return_value] = point.return_value if point.event =~ /return/
         h
@@ -104,6 +105,10 @@ EOM
 
     def x_return?
       event =~ /return/
+    end
+
+    def return_or_end?
+      x_return? || event =~ /end/
     end
 
     def thread?
@@ -179,23 +184,27 @@ EOM
     end
 
     def _class_and_method
-      @km ||= "#{class_name}#{call_symbol}#{method_name}"
+      @km ||= "#{class_name}#{call_symbol}#{method_name}#{complete_symbol}"
     end
 
     def class_name
-      c_call? ? defined_class : current.klass
+      event =~ /^c_/ ? defined_class : current.klass
     rescue => e
       puts event
     end
 
     def method_name
-      return method_id if c_call?
-      return frame_env if b_call? || class?
+      return method_id if event =~ /^c_/
+      return frame_env if event =~ /^b/ || event == :class || event == :end
       (method_id == frame_env) ? method_id : "#{method_id} -> #{frame_env}"
     end
 
     def call_symbol
       c_call? ? '#' : current.call_symbol
+    end
+
+    def complete_symbol
+      return_or_end? ? ';' : (!terminal ? ' ~' : '')
     end
 
     def source_location
