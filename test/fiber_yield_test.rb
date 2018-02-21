@@ -24,9 +24,9 @@ FiberYieldTest#block in test_trace_tree #{__dir__}/fiber_yield_test.rb:43
 └─FiberYieldTest::Test#test #{__dir__}/fiber_yield_test.rb:13
   ├─Array#shuffle #{__dir__}/fiber_yield_test.rb:14
   ├─Fiber#resume #{__dir__}/fiber_yield_test.rb:14
-  │ └─FiberYieldTest::Test#block in initialize #{__dir__}/fiber_yield_test.rb:7
+  │ └─FiberYieldTest::Test#block in initialize ... #{__dir__}/fiber_yield_test.rb:7
   │   ├─Array#min #{__dir__}/fiber_yield_test.rb:8
-  │   └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_test.rb:8
+  │   └─#<Class:Fiber>#yield ... #{__dir__}/fiber_yield_test.rb:8
   ├─Array#shuffle #{__dir__}/fiber_yield_test.rb:15
   └─Fiber#resume #{__dir__}/fiber_yield_test.rb:15
     ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_test.rb:8

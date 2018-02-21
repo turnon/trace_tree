@@ -141,7 +141,9 @@ class TraceTree
           if point.method_id == :yield && point.event == :c_call
             fiber_stack = []
             until stack.last.method_id == :resume
-              fiber_stack << stack.pop
+              yielded_point = stack.pop
+              yielded_point.suspended = true
+              fiber_stack << yielded_point
             end
             fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
           end

@@ -39,14 +39,14 @@ FiberYieldRetInDiffMethodTest#block in test_trace_tree #{__dir__}/fiber_yield_re
   ├─FiberYieldRetInDiffMethodTest::Test#a #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:17
   │ └─Fiber#resume #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:18
   │   └─FiberYieldRetInDiffMethodTest::Test#block in initialize ~ #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:8
-  │     └─FiberYieldRetInDiffMethodTest::Test#fiber_yield #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:13
-  │       └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14
+  │     └─FiberYieldRetInDiffMethodTest::Test#fiber_yield ... #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:13
+  │       └─#<Class:Fiber>#yield ... #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14
   ├─FiberYieldRetInDiffMethodTest::Test#b #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:21
   │ └─Fiber#resume #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:22
   │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14
   │   ├─FiberYieldRetInDiffMethodTest::Test#fiber_yield; #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:15
-  │   └─FiberYieldRetInDiffMethodTest::Test#fiber_yield #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:13
-  │     └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14
+  │   └─FiberYieldRetInDiffMethodTest::Test#fiber_yield ... #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:13
+  │     └─#<Class:Fiber>#yield ... #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14
   └─FiberYieldRetInDiffMethodTest::Test#c #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:25
     └─Fiber#resume #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:26
       ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_ret_in_diff_method_test.rb:14

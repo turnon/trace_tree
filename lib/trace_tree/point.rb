@@ -8,7 +8,7 @@ class TraceTree
     include TreeHtmlable
 
     attr_reader :current, :thread, :frame_env
-    attr_accessor :terminal, :config, :yielding_fiber
+    attr_accessor :terminal, :config, :suspended
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno, :self]
     attr_reader *Interfaces
@@ -204,7 +204,10 @@ EOM
     end
 
     def complete_symbol
-      return_or_end? ? ';' : (!terminal ? ' ~' : '')
+      return ';' if return_or_end?
+      return ' ~' if !terminal
+      return ' ...' if suspended
+      ''
     end
 
     def source_location

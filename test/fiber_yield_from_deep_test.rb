@@ -41,18 +41,18 @@ class FiberYieldFromDeepTest < Minitest::Test
 FiberYieldFromDeepTest#block in test_trace_tree #{__dir__}/fiber_yield_from_deep_test.rb:71
 ├─FiberYieldFromDeepTest::Min#of #{__dir__}/fiber_yield_from_deep_test.rb:12
 │ └─Fiber#resume #{__dir__}/fiber_yield_from_deep_test.rb:13
-│   └─FiberYieldFromDeepTest::Min#block in initialize #{__dir__}/fiber_yield_from_deep_test.rb:7
-│     └─FiberYieldFromDeepTest::Min#compare #{__dir__}/fiber_yield_from_deep_test.rb:18
+│   └─FiberYieldFromDeepTest::Min#block in initialize ... #{__dir__}/fiber_yield_from_deep_test.rb:7
+│     └─FiberYieldFromDeepTest::Min#compare ... #{__dir__}/fiber_yield_from_deep_test.rb:18
 │       ├─Kernel#Array #{__dir__}/fiber_yield_from_deep_test.rb:20
-│       └─FiberYieldFromDeepTest::Min#return_a #{__dir__}/fiber_yield_from_deep_test.rb:35
-│         └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_from_deep_test.rb:36
+│       └─FiberYieldFromDeepTest::Min#return_a ... #{__dir__}/fiber_yield_from_deep_test.rb:35
+│         └─#<Class:Fiber>#yield ... #{__dir__}/fiber_yield_from_deep_test.rb:36
 ├─FiberYieldFromDeepTest::Min#of #{__dir__}/fiber_yield_from_deep_test.rb:12
 │ └─Fiber#resume #{__dir__}/fiber_yield_from_deep_test.rb:13
 │   ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_from_deep_test.rb:36
 │   ├─FiberYieldFromDeepTest::Min#return_a; #{__dir__}/fiber_yield_from_deep_test.rb:37
 │   ├─Kernel#Array #{__dir__}/fiber_yield_from_deep_test.rb:20
-│   └─FiberYieldFromDeepTest::Min#return_b #{__dir__}/fiber_yield_from_deep_test.rb:31
-│     └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_from_deep_test.rb:32
+│   └─FiberYieldFromDeepTest::Min#return_b ... #{__dir__}/fiber_yield_from_deep_test.rb:31
+│     └─#<Class:Fiber>#yield ... #{__dir__}/fiber_yield_from_deep_test.rb:32
 └─FiberYieldFromDeepTest::Min#of #{__dir__}/fiber_yield_from_deep_test.rb:12
   └─Fiber#resume #{__dir__}/fiber_yield_from_deep_test.rb:13
     ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_from_deep_test.rb:32
