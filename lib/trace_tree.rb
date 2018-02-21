@@ -129,10 +129,10 @@ class TraceTree
             stack.pop
           elsif last_call.method_id == :resume && last_call.event == :c_call
             fiber_stack = fiber_stacks[last_call.self]
-            if point.terminate?(fiber_stack.last)
+            if !fiber_stack.empty? && point.terminate?(fiber_stack.last)
               fiber_stack.pop.terminal = point
-              last_call.has_callee point
             end
+            last_call.has_callee point
           end
         else
           last_call.has_callee point
