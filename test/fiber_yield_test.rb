@@ -20,23 +20,17 @@ class FiberYieldTest < Minitest::Test
   Samples = [1, 2, 3]
 
   Tracetree = <<EOS
-FiberYieldTest#block in test_trace_tree #{__dir__}/fiber_yield_test.rb:49
+FiberYieldTest#block in test_trace_tree #{__dir__}/fiber_yield_test.rb:43
 └─FiberYieldTest::Test#test #{__dir__}/fiber_yield_test.rb:13
   ├─Array#shuffle #{__dir__}/fiber_yield_test.rb:14
   ├─Fiber#resume #{__dir__}/fiber_yield_test.rb:14
   │ └─FiberYieldTest::Test#block in initialize #{__dir__}/fiber_yield_test.rb:7
-  │   ├─Enumerable#min #{__dir__}/fiber_yield_test.rb:8
-  │   │ └─Array#each #{__dir__}/fiber_yield_test.rb:8
-  │   │   ├─Fixnum#<=> #{__dir__}/fiber_yield_test.rb:8
-  │   │   └─Fixnum#<=> #{__dir__}/fiber_yield_test.rb:8
+  │   ├─Array#min #{__dir__}/fiber_yield_test.rb:8
   │   └─#<Class:Fiber>#yield #{__dir__}/fiber_yield_test.rb:8
   ├─Array#shuffle #{__dir__}/fiber_yield_test.rb:15
   └─Fiber#resume #{__dir__}/fiber_yield_test.rb:15
     ├─#<Class:Fiber>#yield; #{__dir__}/fiber_yield_test.rb:8
-    ├─Enumerable#max #{__dir__}/fiber_yield_test.rb:9
-    │ └─Array#each #{__dir__}/fiber_yield_test.rb:9
-    │   ├─Fixnum#<=> #{__dir__}/fiber_yield_test.rb:9
-    │   └─Fixnum#<=> #{__dir__}/fiber_yield_test.rb:9
+    ├─Array#max #{__dir__}/fiber_yield_test.rb:9
     └─FiberYieldTest::Test#block in initialize; #{__dir__}/fiber_yield_test.rb:10
 EOS
 
