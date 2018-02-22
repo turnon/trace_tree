@@ -9,6 +9,7 @@ require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
 require 'trace_tree/config'
 require 'thread'
+require 'fiber'
 require 'terminal-tableofhashes'
 
 class Binding
@@ -139,11 +140,21 @@ class TraceTree
           stack << point
           if point.method_id == :yield && point.event == :c_call
             fiber_stack = []
-            until stack.last.method_id == :resume
+            until stack.last.method_id == :resume# || stack.last.method_id == :transfer
               yielded_point = stack.pop
               yielded_point.suspended = true
               fiber_stack << yielded_point
             end
+            fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
+          elsif point.method_id == :transfer && point.event == :c_call &&
+            stack.any?{|p| p.method_id == :resume || (p.method_id == :transfer && p != point)}
+            fiber_stack = []
+            until stack.last.method_id == :resume || (stack.last.method_id == :transfer && stack.last != point)
+              yielded_point = stack.pop
+              yielded_point.suspended = true
+              fiber_stack << yielded_point
+            end
+            stack << fiber_stack.shift
             fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
           end
         end
