@@ -70,6 +70,7 @@ EOS
   end
 
   def test_trace_tree_html
+    skip
     rt = binding.trace_tree(html: true, tmp: 'fiber_resume_from_yield.html', out: Ignore) do
       @test.jump_one
       @test.jump_two

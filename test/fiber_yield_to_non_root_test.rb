@@ -83,7 +83,7 @@ EOS
   end
 
   def test_trace_tree_html
-    binding.trace_tree(html: true, tmp: 'fiber_yield_to_non_root.html', out: Ignore) do
+    binding.trace_tree(html: true, tmp: 'fiber_yield_to_non_root.html', out: Ignore, debug: 'fiber_yield_to_non_root.txt') do
       @test.test
     end
     assert_equal Result, @test.result

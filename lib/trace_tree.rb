@@ -117,41 +117,68 @@ class TraceTree
   def sort trace_points
     stacks = Hash.new{|h, thread| h[thread] = []}
     fiber_stacks = Hash.new{|h, fiber| h[fiber] = []}
+    fiber_yields = {}
     initialized_threads, began_threads = {}, {}
 
-    trace_points.each do |point|
+    trace_points.each_with_index do |point, i|
       stack = stacks[point.thread]
+      #puts "------- #{point.event} -- #{point.class_and_method} -- #{point.lineno}"
+      #puts Terminal::Table.from_hashes stack.map(&:to_h)
+      #puts
       unless stack.empty?
         last_call = stack.last
         if point.return_or_end?
           if point.terminate? last_call
             last_call.terminal = point
             stack.pop
-          elsif last_call.method_id == :resume && last_call.event == :c_call
-            fiber_stack = fiber_stacks[last_call.self]
-            if !fiber_stack.empty? && point.terminate?(fiber_stack.last)
-              fiber_stack.pop.terminal = point
+            if point.method_id == :resume
+              #stack << point
+              (stacks[point.thread] = fiber_yields[point.self]).pop
             end
+          elsif point.method_id == :resume# && last_call.method_id == :yield && last_call.event == :c_call
+            (stacks[point.thread] = fiber_yields[point.self]).pop.terminal = point
+          elsif last_call.method_id == :resume && last_call.event == :c_call
             last_call.has_callee point
           end
+          #elsif last_call.method_id == :resume && last_call.event == :c_call
+          #  fiber_stack = fiber_stacks[last_call.self]
+          #  if !fiber_stack.empty? && point.terminate?(fiber_stack.last)
+          #    fiber_stack.pop.terminal = point
+          #  end
+          #  last_call.has_callee point
+          #end
         else
+          #binding.pry if trace_points[i + 1] && trace_points[i + 1].method_id == :three
           last_call.has_callee point
           stack << point
-          if point.method_id == :yield && point.event == :c_call
-            fiber_stack = []
-            until stack.last.method_id == :resume
-              yielded_point = stack.pop
-              yielded_point.suspended = true
-              fiber_stack << yielded_point
+          if point.method_id == :resume
+            binding.pry
+            fiber_yields[point.self] = stack
+            fiber_stack = stacks[point.thread] = fiber_stacks[point.self]
+            unless fiber_stack.last && fiber_stack.last.method_id == :yield
+              fiber_stack << point
             end
-            fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
+          #elsif point.method_id == :yield
+          #  #stack.pop
+          #  stacks[point.thread] = fiber_yields[stack[0].self]
           end
+          #if point.method_id == :yield && point.event == :c_call
+          #  fiber_stack = []
+          #  until stack.last.method_id == :resume
+          #    yielded_point = stack.pop
+          #    yielded_point.suspended = true
+          #    fiber_stack << yielded_point
+          #  end
+          #  fiber_stacks[stack.last.self].concat(fiber_stack.reverse!)
+          #end
         end
       else
         stack << point
       end
       initialized_threads[point.return_value] = point if Point::CreturnThreadInitialize.class_of? point
       began_threads[point.thread] = point if Point::Threadbegin.class_of? point
+      #puts Terminal::Table.from_hashes stacks[point.thread].map(&:to_h)
+      #puts
     end
 
     initialized_threads.each do |thread, point|
@@ -160,9 +187,10 @@ class TraceTree
 
     #binding.pry
 
-    stacks[trace_points.first.thread][0].
-      callees[0].
-      callees[0]
+    trace_points.first.callees[0].callees[0]
+    #stacks[trace_points.first.thread][0].
+    #  callees[0].
+    #  callees[0]
   end
 
   def trace_points_array
