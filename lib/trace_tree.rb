@@ -71,7 +71,11 @@ class TraceTree
     enhancement = []
     enhancement << TraceTree::Color unless opt[:color] == false
     enhancement << TraceTree::ShortGemPath unless opt[:gem] == false
-    enhancement << TraceTree::ReturnValue unless opt[:return] == false
+    if opt[:return].nil? || opt[:return] == true
+      enhancement << TraceTree::ConsoleReturnValue
+    elsif opt[:return] == :lux
+      enhancement << TraceTree::LuxuryReturnValue
+    end
     enhancement << TraceTree::Args if opt[:args] == true
     @point_loader = Point::Loader.new *enhancement, config
   end

@@ -3,11 +3,6 @@ require 'pp'
 
 class TraceTree
   module ReturnValue
-
-    CONSOLE_JS = File.read File.expand_path('../console.js', __FILE__)
-
-    CONSOLE_CSS = File.read File.expand_path('../console.css', __FILE__)
-
     BLANK = ''.freeze
 
     NEED_PP = (
@@ -21,14 +16,6 @@ class TraceTree
     def data_for_tree_html
       attr_value = ::CGI.escapeHTML return_value._trace_tree_pp(config)
       super.merge!({return: attr_value})
-    end
-
-    def css_for_tree_html
-      super + CONSOLE_CSS
-    end
-
-    def body_js_for_tree_html
-      super.push({text: CONSOLE_JS})
     end
 
     def self.formatted klass, &block
@@ -63,5 +50,30 @@ class TraceTree
       end
     end
 
+  end
+
+  module ConsoleReturnValue
+    include ReturnValue
+
+    JS = File.read File.expand_path('../native_console.js', __FILE__)
+
+    def body_js_for_tree_html
+      super.push({text: JS})
+    end
+  end
+
+  module LuxuryReturnValue
+    include ReturnValue
+
+    JS = File.read File.expand_path('../console.js', __FILE__)
+    CSS = File.read File.expand_path('../console.css', __FILE__)
+
+    def css_for_tree_html
+      super + CSS
+    end
+
+    def body_js_for_tree_html
+      super.push({text: JS})
+    end
   end
 end

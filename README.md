@@ -52,7 +52,7 @@ end
 * `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`. (No need to set `color`).
 * `:tmp => nil` by default. Set it true or a string or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument. It makes parent directories as needed)
 * `:htmp => nil` by default. It is combination of `:html` and `:tmp`.
-* `:return => true` by default. It puts return values of functions into html.
+* `:return => true` by default. It stores return values of functions in generated html. Hover function call and press `r` to print return value in console.
 * `:args => false` by default. Set it true to puts arguments of `:call` functions into html. Since arguments are always return values of other functions, so this option is not necessary.
 * `:in => //, :out => nil` by default. Give them regexp(s) to include/exclude methods defined in files match that regexp(s). Notice thread-calls and methods defined by `define_method` are always included. Also, once you set any of these two options, the code to trace should not be in same line with `binding.trace_tree() do`.
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
@@ -68,7 +68,7 @@ Try to remove a non-existing index:
 ArgumentError: Index name 'index_cars_on_online_at' on table 'cars' does not exist
 ```
 
-Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in scalable footer.
+Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in console.
 
 ![image](https://user-images.githubusercontent.com/6105214/35904349-bf264ae4-0c1d-11e8-8ab4-0c256e4b014a.png)
 
