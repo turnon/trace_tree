@@ -27,6 +27,12 @@ class TraceTree
             :class, :end,
             :thread_begin, :thread_end]
 
+  class << self
+    def except
+      yield
+    end
+  end
+
   def initialize bi
     @bi = bi
     @trace_points = Queue.new
@@ -96,14 +102,45 @@ class TraceTree
   end
 
   def make_filter
-    if !opt.key?(:in) && !opt.key?(:out)
-      return @deal = -> point { trace_points << point_loader.create(point) }
+    @excepting = 0 if opt[:except]
+    @in, @out = Array(opt[:in] || //), Array(opt[:out]) if opt.key?(:in) || opt.key?(:out)
+
+    return deal_with_except_and_in_out if @in && @excepting
+    return deal_with_except if @excepting
+    return deal_with_in_out if @in
+    @deal = -> point { trace_points << point_loader.create(point) }
+  end
+
+  def deal_with_except_and_in_out
+    @deal = -> point do
+      next if excepting?(point)
+      po = point_loader.create(point)
+      trace_points << po if wanted? po
     end
-    @in, @out = Array(opt[:in] || //), Array(opt[:out])
+  end
+
+  def deal_with_except
+    @deal = -> point do
+      next if excepting?(point)
+      trace_points << point_loader.create(point)
+    end
+  end
+
+  def deal_with_in_out
     @deal = -> point do
       po = point_loader.create(point)
       trace_points << po if wanted? po
     end
+  end
+
+  def excepting? point
+    if Point::CallClasstracetreeExcept.class_of? point
+      @excepting += 1
+      return @excepting > 1
+    end
+
+    @excepting -= 1 if Point::ReturnClasstracetreeExcept.class_of? point
+    @excepting > 0
   end
 
   def wanted? point
