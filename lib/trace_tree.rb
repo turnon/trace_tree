@@ -17,6 +17,34 @@ class Binding
   end
 end
 
+class TracePoint
+  def thread_for_trace_tree
+    @thread_for_trace_tree ||=
+      if (event == :thread_begin || event == :thread_end)
+        self.self
+      else
+        binding.of_caller(3).eval('Thread.current')
+      end
+  end
+
+  def excepting_trace_tree?
+    t = thread_for_trace_tree
+    x = t[:aaa] || 0
+
+    if ::TraceTree::Point::CallClasstracetreeExcept.class_of? self
+      x += 1
+      return (t[:aaa] = x) > 1
+    end
+
+    if ::TraceTree::Point::ReturnClasstracetreeExcept.class_of? self
+      x -= 1
+      return (t[:aaa] = x) > 0
+    end
+
+    x > 0
+  end
+end
+
 class TraceTree
 
   MainFile = __FILE__
@@ -102,18 +130,18 @@ class TraceTree
   end
 
   def make_filter
-    @excepting = 0 if opt[:except]
+    excepting = 0 if opt[:except]
     @in, @out = Array(opt[:in] || //), Array(opt[:out]) if opt.key?(:in) || opt.key?(:out)
 
-    return deal_with_except_and_in_out if @in && @excepting
-    return deal_with_except if @excepting
+    return deal_with_except_and_in_out if @in && excepting
+    return deal_with_except if excepting
     return deal_with_in_out if @in
     @deal = -> point { trace_points << point_loader.create(point) }
   end
 
   def deal_with_except_and_in_out
     @deal = -> point do
-      next if excepting?(point)
+      next if point.excepting_trace_tree?
       po = point_loader.create(point)
       trace_points << po if wanted? po
     end
@@ -121,7 +149,7 @@ class TraceTree
 
   def deal_with_except
     @deal = -> point do
-      next if excepting?(point)
+      next if point.excepting_trace_tree?
       trace_points << point_loader.create(point)
     end
   end
@@ -131,16 +159,6 @@ class TraceTree
       po = point_loader.create(point)
       trace_points << po if wanted? po
     end
-  end
-
-  def excepting? point
-    if Point::CallClasstracetreeExcept.class_of? point
-      @excepting += 1
-      return @excepting > 1
-    end
-
-    @excepting -= 1 if Point::ReturnClasstracetreeExcept.class_of? point
-    @excepting > 0
   end
 
   def wanted? point

@@ -84,7 +84,7 @@ EOM
         there = trace_point.binding.of_caller(3)
         @current = BindingOfCallers::Revealed.new there
         @frame_env = current.frame_env.to_sym
-        @thread = current.send(:eval, 'Thread.current')
+        @thread = there.eval('Thread.current')
       end
     rescue => e
       puts e
@@ -107,7 +107,7 @@ EOM
     end
 
     def thread?
-      event =~ /thread/
+      event == :thread_begin || event == :thread_end
     end
 
     def end_of_trace?

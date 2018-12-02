@@ -24,16 +24,16 @@ class ExceptTest < Minitest::Test
 ExceptTest#block in test_trace_tree #{__dir__}/except_test.rb:48
 └─ExceptTest::Normal#a #{__dir__}/except_test.rb:6
   ├─ExceptTest::Normal#b #{__dir__}/except_test.rb:12
-  ├─TraceTree.except #{Lib}/trace_tree.rb:31
+  ├─#{Except}
   └─ExceptTest::Normal#a #{__dir__}/except_test.rb:6
     ├─ExceptTest::Normal#b #{__dir__}/except_test.rb:12
-    ├─TraceTree.except #{Lib}/trace_tree.rb:31
+    ├─#{Except}
     └─ExceptTest::Normal#a #{__dir__}/except_test.rb:6
       ├─ExceptTest::Normal#b #{__dir__}/except_test.rb:12
-      ├─TraceTree.except #{Lib}/trace_tree.rb:31
+      ├─#{Except}
       └─ExceptTest::Normal#a #{__dir__}/except_test.rb:6
         ├─ExceptTest::Normal#b #{__dir__}/except_test.rb:12
-        ├─TraceTree.except #{Lib}/trace_tree.rb:31
+        ├─#{Except}
         └─ExceptTest::Normal#d #{__dir__}/except_test.rb:18
 EOS
 
