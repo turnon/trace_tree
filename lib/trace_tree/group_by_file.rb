@@ -30,8 +30,6 @@ class TraceTree
       end
     end
 
-    attr_reader :tree_in_same_file
-
     def group_by_file!
       stack = [self]
       popped = nil
