@@ -139,19 +139,13 @@ EOM
     end
 
     def terminate? point
-      same_method?(point) and ending?(point)
-    end
-
-    def same_method? point
-      point.defined_class == defined_class and point.method_id == method_id
-    end
-
-    def ending? point
-      (event == :b_return and point.event == :b_call) or
-        (event == :c_return and point.event == :c_call) or
-        (event == :return and point.event == :call) or
-        (event == :end and point.event == :class) or
-        (event == :thread_end and point.event == :thread_begin)
+      (point.defined_class == defined_class && point.method_id == method_id) && (
+        (event == :return && point.event == :call) ||
+        (event == :b_return && point.event == :b_call) ||
+        (event == :c_return && point.event == :c_call) ||
+        (event == :end && point.event == :class) ||
+        (event == :thread_end && point.event == :thread_begin)
+      )
     end
 
     def << node
