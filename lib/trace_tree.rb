@@ -4,7 +4,6 @@ require 'trace_tree/point'
 require 'trace_tree/short_gem_path'
 require 'trace_tree/color'
 require 'trace_tree/return_value'
-require 'trace_tree/group_by_file'
 require 'trace_tree/args'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
@@ -78,7 +77,6 @@ class TraceTree
       enhancement << TraceTree::LuxuryReturnValue
     end
     enhancement << TraceTree::Args if opt[:args] == true
-    enhancement << TraceTree::GroupByFile
     @point_loader = Point::Loader.new *enhancement, config
   end
 
@@ -147,12 +145,9 @@ class TraceTree
 
     #binding.pry
 
-    root = stacks[trace_points.first.thread][0].
+    stacks[trace_points.first.thread][0].
       callees[0].
       callees[0]
-
-    root.group_by_file! if TraceTree::GroupByFile === root
-    root
   end
 
   def trace_points_array

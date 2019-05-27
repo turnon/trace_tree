@@ -7,7 +7,7 @@ class TraceTree
       end
 
       def callees
-        @callees || [terminal.thread_begin]
+        [terminal.thread_begin]
       end
 
     end

@@ -18,9 +18,6 @@ class TraceTree
         ''
       end
 
-      def path
-        (callee = callees[0]) ? callee.path : ''
-      end
     end
   end
 end
