@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "binding_of_callers", "~> 0.1.5"
   spec.add_dependency "tree_graph", "~> 0.2.0"
-  spec.add_dependency "tree_html", "~> 0.1.6"
+  spec.add_dependency "tree_html", "~> 0.1.7"
   spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
 
   spec.extensions << "ext/mkrf_conf.rb"

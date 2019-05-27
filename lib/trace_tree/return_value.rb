@@ -58,7 +58,7 @@ class TraceTree
     JS = File.read File.expand_path('../native_console.js', __FILE__)
 
     def body_js_for_tree_html
-      super.push({text: JS})
+      super + [{text: JS}]
     end
   end
 
@@ -73,7 +73,7 @@ class TraceTree
     end
 
     def body_js_for_tree_html
-      super.push({text: JS})
+      super + [{text: JS}]
     end
   end
 end

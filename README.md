@@ -48,7 +48,7 @@ end
 
 * `file == STDOUT` by default. You can give it a File object or anything responds to `puts`.
 * `:color => true` by default. It makes method names have different color than source_location in output. When you print the output to file, you may want to set it false to discard those color ANSI escape sequences.
-* `:gem => true` by default. Replace the gem paths in source_location with $GemPathN, can make the lines shorter. To see what are replaced, inspect `TraceTree::GemPaths`.
+* `:gem => true` by default. Replace the gem paths in source_location with $GemPathN, which shorten lines. To see what are replaced, inspect `TraceTree::GemPaths`.
 * `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`. (No need to set `color`).
 * `:tmp => nil` by default. Set it true or a string or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument. It makes parent directories as needed)
 * `:htmp => nil` by default. It is combination of `:html` and `:tmp`.
@@ -69,6 +69,8 @@ ArgumentError: Index name 'index_cars_on_online_at' on table 'cars' does not exi
 ```
 
 Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in console.
+
+You may type `group_by_file()` in console, to group callees defined in same file, under additional `li` tag. Type `group_by_file()` once again to switch  back.
 
 ![image](https://user-images.githubusercontent.com/6105214/35904349-bf264ae4-0c1d-11e8-8ab4-0c256e4b014a.png)
 
