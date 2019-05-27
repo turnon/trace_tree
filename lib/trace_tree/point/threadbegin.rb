@@ -19,11 +19,7 @@ class TraceTree
       end
 
       def path
-        (callee = callees[0]) ? callee.path : nil
-      end
-
-      def source_location
-        ":#{lineno}"
+        (callee = callees[0]) ? callee.path : ''
       end
     end
   end

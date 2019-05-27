@@ -78,7 +78,7 @@ class TraceTree
       enhancement << TraceTree::LuxuryReturnValue
     end
     enhancement << TraceTree::Args if opt[:args] == true
-    enhancement << TraceTree::GroupByFile if opt[:group_by_file] == true
+    enhancement << TraceTree::GroupByFile
     @point_loader = Point::Loader.new *enhancement, config
   end
 

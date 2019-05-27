@@ -3,8 +3,9 @@ require 'trace_tree/gem_paths'
 class TraceTree
   module ShortGemPath
 
-    def path
-      shorten_gem_path super
+    def source_location
+      #"#{shorten_gem_path current.file}:#{current.line}"
+      "#{shorten_gem_path path}:#{lineno}"
     end
 
     private
