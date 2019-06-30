@@ -2,6 +2,12 @@ require 'tmpdir'
 require 'fileutils'
 
 class TraceTree
+  class << self
+    def tmp
+      Dir.tmpdir
+    end
+  end
+
   class TmpFile
 
     DefaultName = 'trace_tree.html'

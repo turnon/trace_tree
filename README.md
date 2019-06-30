@@ -50,7 +50,7 @@ end
 * `:color => true` by default. It makes method names have different color than source_location in output. When you print the output to file, you may want to set it false to discard those color ANSI escape sequences.
 * `:gem => true` by default. Replace the gem paths in source_location with $GemPathN, which shorten lines. To see what are replaced, inspect `TraceTree::GemPaths`.
 * `:html => nil` by default. Set it true to generate a html in which a tree constructed with `<ul>`, `<li>`. (No need to set `color`).
-* `:tmp => nil` by default. Set it true or a string or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument. It makes parent directories as needed)
+* `:tmp => nil` by default. Set it true or a string or an array of string to specify a tmp file under the default tmp dir of your system. (No need to provide `file` argument. It makes parent directories as needed). The tmp dir location can be found with `TraceTree.tmp`.
 * `:htmp => nil` by default. It is combination of `:html` and `:tmp`.
 * `:return => true` by default. It stores return values of functions in generated html. Hover function call and press `r` to print return value in console.
 * `:args => false` by default. Set it true to puts arguments of `:call` functions into html. Since arguments are always return values of other functions, so this option is not necessary.
