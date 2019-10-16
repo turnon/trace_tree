@@ -96,21 +96,34 @@ class TraceTree
   end
 
   def make_filter
-    if !opt.key?(:in) && !opt.key?(:out)
+    filters = []
+
+    if opt.key?(:in)
+      @in = Array(opt[:in] || //)
+      filters << '@in.any?{ |pattern| pattern =~ point.path }'
+    end
+
+    if opt.key?(:out)
+      @out = Array(opt[:out])
+      filters << '@out.all?{ |pattern| pattern !~ point.path }'
+    end
+
+    if filters.empty?
       return @deal = -> point { trace_points << point_loader.create(point) }
     end
-    @in, @out = Array(opt[:in] || //), Array(opt[:out])
+
+    self.singleton_class.class_eval <<-EOM
+      def wanted? point
+        return false if point.end_of_trace?
+        return true if native?(point) || point.thread_relative? || point.method_defined_by_define_method?
+        #{filters.join(' && ')}
+      end
+    EOM
+
     @deal = -> point do
       po = point_loader.create(point)
       trace_points << po if wanted? po
     end
-  end
-
-  def wanted? point
-    return false if point.end_of_trace?
-    return true if native?(point) || point.thread_relative? || point.method_defined_by_define_method?
-    @in.any?{ |pattern| pattern =~ point.path } &&
-      @out.all?{ |pattern| pattern !~ point.path }
   end
 
   def native? point
