@@ -55,6 +55,7 @@ end
 * `:return => true` by default. It stores return values of functions in generated html. Hover function call and press `r` to print return value in console.
 * `:args => false` by default. Set it true to puts arguments of `:call` functions into html. Since arguments are always return values of other functions, so this option is not necessary.
 * `:in => //, :out => nil` by default. Give them regexp(s) to include/exclude methods defined in files match that regexp(s). Notice thread-calls and methods defined by `define_method` are always included. Also, once you set any of these two options, the code to trace should not be in same line with `binding.trace_tree() do`.
+* `:no_methods => nil` by defalut. Give it regexp(s) to hide stack under matching methods. Useful when you want to dump stack of a rack middleware but lower middlewares.
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
 * `:debug => nil` by default. Give it somthing like what for `:tmp` to output a whole list of TracePoints in file for debug.
 
