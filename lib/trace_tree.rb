@@ -96,34 +96,38 @@ class TraceTree
   end
 
   def make_filter
-    filters = []
+    stack_filter =
+      if (@no_methods = Array(opt[:no_methods])).empty?
+        nil
+      else
+        stack_filter = 'return false unless outside_hidden_stack?(point)'
+      end
 
-    if opt.key?(:in)
-      @in = Array(opt[:in] || //)
-      filters << '@in.any?{ |pattern| pattern =~ point.path }'
-    end
+    path_filter =
+      if opt.key?(:in) || opt.key?(:out)
+        @in = Array(opt[:in] || //)
+        @out = Array(opt[:out])
+        'return false unless @in.any?{ |pattern| pattern =~ point.path } && @out.all?{ |pattern| pattern !~ point.path }'
+      else
+        nil
+      end
 
-    if opt.key?(:out)
-      @out = Array(opt[:out])
-      filters << '@out.all?{ |pattern| pattern !~ point.path }'
-    end
-
-    if opt.key?(:no_methods)
-      @no_methods = Array(opt[:no_methods])
-      filters << 'outside_hidden_stack?(point)'
-    end
-
-    if filters.empty?
+    if stack_filter.nil? && path_filter.nil?
       return @deal = -> point { trace_points << point_loader.create(point) }
     end
 
-    self.singleton_class.class_eval <<-EOM
+    filter_method = <<-EOM
       def wanted? point
         return false if point.end_of_trace?
-        return true if native?(point) || point.thread_relative? || point.method_defined_by_define_method?
-        #{filters.join(' && ')}
+        return true if native?(point) || point.thread_relative?
+        #{stack_filter}
+        return true if point.method_defined_by_define_method?
+        #{path_filter}
+        true
       end
     EOM
+
+    self.singleton_class.class_eval filter_method
 
     @deal = -> point do
       po = point_loader.create(point)
