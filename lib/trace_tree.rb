@@ -8,11 +8,16 @@ require 'trace_tree/args'
 require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
 require 'trace_tree/config'
+require 'trace_tree/warm'
 require 'thread'
 require 'terminal-tableofhashes'
 
 class Binding
   def trace_tree *log, **opt, &to_do
+    if (key = opt[:warm]) && !TraceTree::Warm.check_and_warm(key)
+      return yield
+    end
+
     TraceTree.new(self).generate *log, **opt, &to_do
   end
 end
