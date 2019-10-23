@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tree_graph", "~> 0.2.0"
   spec.add_dependency "tree_html", "~> 0.1.7"
   spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
-  spec.add_dependency "activesupport", (RUBY_VERSION < "2.2.2" ? "< 5.0" : nil)
 
   spec.extensions << "ext/mkrf_conf.rb"
 end

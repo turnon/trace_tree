@@ -11,14 +11,17 @@ installer = Gem::DependencyInstaller.new
 
 begin
   if RUBY_VERSION < "2.2.2"
-    installer.install "activesupport", "< 5.0"
+    installer.install "activesupport", "< 5.0.0"
+  elsif RUBY_VERSION < "2.5.0"
+    installer.install "activesupport", "< 6.0.0"
   else
     installer.install "activesupport"
   end
 
-rescue
-    #Exit with a non-zero value to let rubygems something went wrong
-    exit(1)
+rescue => e
+  puts e.message, e.backtrace
+  #Exit with a non-zero value to let rubygems something went wrong
+  exit(1)
 end
 
 #If this was C, rubygems would attempt to run make
