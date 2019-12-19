@@ -196,31 +196,30 @@ EOM
       end
 
       def sort_bases
-        @event_methods = {}
+        @methods = {}
 
         @bases.each do |b|
-          event_class_method = b.event_class_method
-          if Array === event_class_method
-            event_method = [event_class_method[0], event_class_method[2]]
-            klass = event_class_method[1]
-          else
-            event_method, klass = event_class_method, event_class_method
-          end
-
-          (@event_methods[event_method] ||= {})[klass] = b
+          event, klass, method = b.event_class_method
+          events = (@methods[method] ||= {})
+          klasses = (events[event] ||= {})
+          klasses[klass] = b
         end
 
-        @common = @event_methods[:common][:common]
+        @common = @methods[nil][:common][nil]
       end
 
       def create point
         point_klass =
-          if klasses = @event_methods[[point.event, point.method_id]]
-            klasses[point.defined_class] || klasses[:anyclass] || @common
+          if events = @methods[point.method_id]
+            if klasses = events[point.event]
+              klasses[point.defined_class] || @common
+            else
+              @common
+            end
           else
             @common
           end
-        #point_klass = point_classes[[point.event, point.defined_class, point.method_id]]
+
         poi = point_klass.new point
         poi.config = config
         poi
