@@ -12,8 +12,8 @@ class WarmUpTest < Minitest::Test
   end
 
   Tracetree = <<-EOS
-WarmUpTest#block in test_warm_up /home/z/trace_tree/test/warm_up_test.rb:36
-└─WarmUpTest::A#a /home/z/trace_tree/test/warm_up_test.rb:9
+WarmUpTest#block in test_warm_up #{__dir__}/warm_up_test.rb:36
+└─WarmUpTest::A#a #{__dir__}/warm_up_test.rb:9
 EOS
 
   def setup
