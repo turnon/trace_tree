@@ -6,7 +6,7 @@ begin
       class CallActivesupportconcernAppendfeatures < Point
 
         def self.event_class_method
-          [:call, ActiveSupport::Concern, :append_features]
+          [:_call, ActiveSupport::Concern, :append_features]
         end
 
         def parameters
