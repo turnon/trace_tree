@@ -42,7 +42,7 @@ class TraceTree
   def generate *log, **opt, &to_do
     @opt = opt
     @log = dump_location *log
-    @debug = TmpFile.new opt[:debug] if opt[:debug]
+    @debug = debug_location
     enhance_point
     @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
     make_filter
@@ -65,6 +65,13 @@ class TraceTree
   private
 
   attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader, :config
+
+  def debug_location
+    loc = opt[:debug]
+    return nil unless loc
+    return loc if loc.respond_to? :puts
+    TmpFile.new loc
+  end
 
   def dump_location *log
     return TmpFile.new opt[:tmp] if opt[:tmp]
@@ -89,7 +96,7 @@ class TraceTree
     timer[:tree]
     tree = sort(trace_points_array).send build_command
     timer[:tree]
-    @debug.puts table_of_points if defined? @debug
+    @debug.puts table_of_points if @debug
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
