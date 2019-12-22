@@ -95,22 +95,22 @@ ClassTest.block in <class:ClassTest> #{__dir__}/class_test.rb:7
 ├─Class#inherited #{__dir__}/class_test.rb:46
 └─ClassTest::A.<class:A> #{__dir__}/class_test.rb:46
   ├─Module#include(ClassTest::M) #{__dir__}/class_test.rb:47
-  │ ├─Module#append_features(ClassTest::M) #{__dir__}/class_test.rb:47
+  │ ├─Module#append_features #{__dir__}/class_test.rb:47
   │ └─Module#included #{__dir__}/class_test.rb:47
   ├─Kernel#extend(ClassTest::N) #{__dir__}/class_test.rb:48
   │ ├─Module#extend_object #{__dir__}/class_test.rb:48
   │ └─Module#extended #{__dir__}/class_test.rb:48
   ├─Module#prepend(ClassTest::O) #{__dir__}/class_test.rb:49
-  │ ├─Module#prepend_features(ClassTest::O) #{__dir__}/class_test.rb:49
+  │ ├─Module#prepend_features #{__dir__}/class_test.rb:49
   │ └─Module#prepended #{__dir__}/class_test.rb:49
   ├─Module#include(ClassTest::P) #{__dir__}/class_test.rb:50
-  │ ├─Module#append_features(ClassTest::P) #{__dir__}/class_test.rb:50
+  │ ├─Module#append_features #{__dir__}/class_test.rb:50
   │ └─ClassTest::P.included #{__dir__}/class_test.rb:20
   ├─Kernel#extend(ClassTest::Q) #{__dir__}/class_test.rb:51
   │ ├─Module#extend_object #{__dir__}/class_test.rb:51
   │ └─ClassTest::Q.extended #{__dir__}/class_test.rb:26
   ├─Module#prepend(ClassTest::R) #{__dir__}/class_test.rb:52
-  │ ├─Module#prepend_features(ClassTest::R) #{__dir__}/class_test.rb:52
+  │ ├─Module#prepend_features #{__dir__}/class_test.rb:52
   │ └─ClassTest::R.prepended #{__dir__}/class_test.rb:32
   ├─Class#inherited #{__dir__}/class_test.rb:54
   ├─ClassTest::A::B.<class:B> #{__dir__}/class_test.rb:54
