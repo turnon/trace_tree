@@ -30,5 +30,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tree_html", "~> 0.1.7"
   spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
 
-  spec.extensions << "ext/mkrf_conf.rb"
 end

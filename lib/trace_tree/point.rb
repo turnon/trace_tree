@@ -18,10 +18,6 @@ class TraceTree
         bases << base
       end
 
-      def classes
-        @classes ||= bases.each_with_object(Hash.new{|h| h[:common]}){|c, h| h[c.event_class_method] = c}
-      end
-
       def bases
         @bases ||= []
       end
@@ -194,14 +190,36 @@ EOM
 
       def initialize *enhancement, config
         @config = config
-        return @point_classes = Point.classes if enhancement.empty?
-        @point_classes = Point.classes.each_with_object(Point.classes.dup) do |entry, hash|
-          hash[entry[0]] = entry[1].clone.prepend *enhancement
+        @bases = Point.bases
+        @bases = @bases.map{ |b| b = b.clone; b.prepend *enhancement; b } unless enhancement.empty?
+        sort_bases
+      end
+
+      def sort_bases
+        @methods = {}
+
+        @bases.each do |b|
+          event, klass, method = b.event_class_method
+          events = (@methods[method] ||= {})
+          klasses = (events[event] ||= {})
+          klasses[klass] = b
         end
+
+        @common = @methods[nil][:common][nil]
       end
 
       def create point
-        point_klass = point_classes[[point.event, point.defined_class, point.method_id]]
+        point_klass =
+          if events = @methods[point.method_id]
+            if klasses = events[point.event]
+              klasses[point.defined_class] || @common
+            else
+              @common
+            end
+          else
+            @common
+          end
+
         poi = point_klass.new point
         poi.config = config
         poi
