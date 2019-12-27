@@ -112,7 +112,7 @@ class TraceTree
       if (@no_methods = Array(opt[:no_methods])).empty?
         nil
       else
-        stack_filter = 'return false unless outside_hidden_stack?(point)'
+        'return false unless outside_hidden_stack?(point)'
       end
 
     path_filter =
@@ -131,8 +131,8 @@ class TraceTree
     filter_method = <<-EOM
       def wanted? point
         return false if point.end_of_trace?
-        return true if native?(point) || point.thread_relative?
         #{stack_filter}
+        return true if native?(point) || point.thread_relative?
         return true if point.method_defined_by_define_method?
         #{path_filter}
         true
@@ -151,7 +151,17 @@ class TraceTree
     stack = (point.thread[:trace_tree_no_methods_stack] ||= [])
     empty = stack.empty?
 
-    if @no_methods.any?{ |pattern| pattern =~ point.method_name }
+    if point.event == :b_call || point.event == :b_return
+      return true if empty
+      if point.terminate?(stack.last)
+        stack.pop
+      else
+        stack << point
+      end
+      return false
+    end
+
+    if @no_methods.any?{ |pattern| pattern =~ point.method_id }
       if !empty && point.terminate?(stack.last)
         stack.pop
       else
