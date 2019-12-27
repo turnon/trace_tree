@@ -205,6 +205,8 @@ class TraceTree
       point.thread_begin = began_threads[thread]
     end
 
+    stacks.keys.each{ |thread| thread[:trace_tree_no_methods_stack] = nil }
+
     #binding.pry
 
     stacks[trace_points.first.thread][0].
