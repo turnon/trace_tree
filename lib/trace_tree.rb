@@ -164,11 +164,12 @@ class TraceTree
     if @no_methods.any?{ |pattern| pattern =~ point.method_id }
       if !empty && point.terminate?(stack.last)
         stack.pop
+        return stack.empty?
       else
         stack << point
         point << Point::Omitted.new
+        return empty
       end
-      return true
     end
 
     empty
@@ -203,6 +204,8 @@ class TraceTree
     initialized_threads.each do |thread, point|
       point.thread_begin = began_threads[thread]
     end
+
+    stacks.keys.each{ |thread| thread[:trace_tree_no_methods_stack] = nil }
 
     #binding.pry
 
