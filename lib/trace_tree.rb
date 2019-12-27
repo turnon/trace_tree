@@ -164,11 +164,12 @@ class TraceTree
     if @no_methods.any?{ |pattern| pattern =~ point.method_id }
       if !empty && point.terminate?(stack.last)
         stack.pop
+        return stack.empty?
       else
         stack << point
         point << Point::Omitted.new
+        return empty
       end
-      return true
     end
 
     empty
