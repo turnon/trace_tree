@@ -12,12 +12,15 @@ class TraceTree
 
     DefaultName = 'trace_tree.html'
 
-    def initialize path
+    def initialize path, transcode: false
       path = recognize_dir path
       @tmp = custom path
+      @transcode = transcode
     end
 
     def puts *content
+      content = content.map{ |c| c.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?') } if @transcode
+
       File.open @tmp, 'a' do |f|
         f.puts *content
       end

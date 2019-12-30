@@ -70,12 +70,12 @@ class TraceTree
     loc = opt[:debug]
     return nil unless loc
     return loc if loc.respond_to? :puts
-    TmpFile.new loc
+    TmpFile.new loc, transcode: opt[:transcode]
   end
 
   def dump_location *log
-    return TmpFile.new opt[:tmp] if opt[:tmp]
-    return TmpFile.new(opt[:htmp] + '.html') if opt[:htmp]
+    return TmpFile.new(opt[:tmp], transcode: opt[:transcode]) if opt[:tmp]
+    return TmpFile.new((opt[:htmp] + '.html'), transcode: opt[:transcode]) if opt[:htmp]
     log.empty? ? STDOUT : log[0]
   end
 
