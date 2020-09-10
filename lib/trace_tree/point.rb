@@ -73,14 +73,12 @@ EOM
       end
 
       @return_value = trace_point.return_value if x_return?
+      @thread = Thread.current
 
-      if thread?
-        @thread = trace_point.self
-      else
+      unless thread?
         there = trace_point.binding.of_caller(3)
         @current = BindingOfCallers::Revealed.new there
         @frame_env = current.frame_env.to_sym
-        @thread = current.send(:eval, 'Thread.current')
       end
     rescue => e
       puts e
