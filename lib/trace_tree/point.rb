@@ -12,6 +12,7 @@ class TraceTree
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
     attr_reader(*Interfaces)
+    class_eval 'def assign_trace_point_values(tp);' + Interfaces.map{ |i| "@#{i} = tp.#{i}" }.join(';') + ';end'
 
     class << self
       def inherited base
@@ -68,9 +69,7 @@ EOM
     end
 
     def initialize trace_point
-      Interfaces.each do |i|
-        instance_variable_set "@#{i}", trace_point.send(i)
-      end
+      assign_trace_point_values(trace_point)
 
       @return_value = trace_point.return_value if x_return?
       @thread = Thread.current
