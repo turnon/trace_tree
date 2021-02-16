@@ -48,6 +48,8 @@ class TraceTree
     make_filter
     @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
+    dry_run
+
     #start_trace
     timer[:trace]
     @tp = TracePoint.new(*Events, &@deal)
@@ -65,6 +67,13 @@ class TraceTree
   private
 
   attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader, :config
+
+  def dry_run
+    tp = TracePoint.new{}
+    tp.enable
+  ensure
+    tp.disable
+  end
 
   def debug_location
     loc = opt[:debug]
