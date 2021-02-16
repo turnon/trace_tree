@@ -18,7 +18,7 @@ class Binding
       return yield
     end
 
-    TraceTree.new(self).generate *log, **opt, &to_do
+    TraceTree.new(self).generate(*log, **opt, &to_do)
   end
 end
 
@@ -41,19 +41,21 @@ class TraceTree
 
   def generate *log, **opt, &to_do
     @opt = opt
-    @log = dump_location *log
+    @log = dump_location(*log)
     @debug = debug_location
     enhance_point
     @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
     make_filter
     @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
 
+    dry_run
+
     #start_trace
     timer[:trace]
-    @tp = TracePoint.new *Events, &@deal
+    @tp = TracePoint.new(*Events, &@deal)
     @tp.enable
 
-    there.instance_eval &to_do
+    there.instance_eval(&to_do)
   ensure
     #stop_trace
     return unless @tp
@@ -65,6 +67,13 @@ class TraceTree
   private
 
   attr_reader :bi, :trace_points, :log, :build_command, :timer, :opt, :point_loader, :config
+
+  def dry_run
+    tp = TracePoint.new{}
+    tp.enable
+  ensure
+    tp.disable
+  end
 
   def debug_location
     loc = opt[:debug]
@@ -89,7 +98,7 @@ class TraceTree
       enhancement << TraceTree::LuxuryReturnValue
     end
     enhancement << TraceTree::Args if opt[:args] == true
-    @point_loader = Point::Loader.new *enhancement, config
+    @point_loader = Point::Loader.new(*enhancement, config)
   end
 
   def dump_trace_tree
@@ -115,14 +124,7 @@ class TraceTree
         'return false unless outside_hidden_stack?(point)'
       end
 
-    path_filter =
-      if opt.key?(:in) || opt.key?(:out)
-        @in = Array(opt[:in] || //)
-        @out = Array(opt[:out])
-        'return false unless @in.any?{ |pattern| pattern =~ point.path } && @out.all?{ |pattern| pattern !~ point.path }'
-      else
-        nil
-      end
+    path_filter = nil
 
     if stack_filter.nil? && path_filter.nil?
       return @deal = -> point { trace_points << point_loader.create(point) }
@@ -207,7 +209,7 @@ class TraceTree
 
     stacks.keys.each{ |thread| thread[:trace_tree_no_methods_stack] = nil }
 
-    #binding.pry
+    # binding.pry
 
     stacks[trace_points.first.thread][0].
       callees[0].

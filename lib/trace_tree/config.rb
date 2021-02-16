@@ -11,7 +11,7 @@ class TraceTree
     def self.load
       config = DEFAULT
       custom = File.join ENV['HOME'], '.trace_tree_config'
-      if File.exists?(custom) && (hash = YAML.load File.read custom)
+      if File.exist?(custom) && (hash = YAML.load File.read custom)
         hash.select!{ |k, v| config.include? k }
         config = config.merge hash
       end
