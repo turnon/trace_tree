@@ -22,7 +22,7 @@ class TraceTree
       content = content.map{ |c| c.to_s.encode('UTF-8', invalid: :replace, undef: :replace, replace: '?') } if @transcode
 
       File.open @tmp, 'a' do |f|
-        f.puts *content
+        f.puts(*content)
       end
     end
 
@@ -48,7 +48,7 @@ class TraceTree
       path[-1] = time + path[-1]
       path = [Dir.tmpdir] + path
       ensure_parent path
-      File.join *path
+      File.join(*path)
     end
 
     def time
@@ -57,7 +57,7 @@ class TraceTree
 
     def ensure_parent path_arr
       dir = path_arr[0..-2]
-      FileUtils.mkdir_p File.join *dir
+      FileUtils.mkdir_p File.join(*dir)
     end
   end
 end

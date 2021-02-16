@@ -6,7 +6,7 @@ class TraceTree
     BLANK = ''.freeze
 
     NEED_PP = (
-      if File.exists? (pp_config = File.join(ENV['HOME'], '.trace_tree_pp'))
+      if File.exist? (pp_config = File.join(ENV['HOME'], '.trace_tree_pp'))
         IO.readlines(pp_config).map &:strip
       else
         []

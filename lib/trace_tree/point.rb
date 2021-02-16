@@ -11,7 +11,7 @@ class TraceTree
     attr_accessor :terminal, :config
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
-    attr_reader *Interfaces
+    attr_reader(*Interfaces)
 
     class << self
       def inherited base
@@ -160,7 +160,7 @@ EOM
 
     def class_name
       c_call? ? defined_class : current.klass
-    rescue => e
+    rescue
       puts event
     end
 
@@ -189,7 +189,7 @@ EOM
       def initialize *enhancement, config
         @config = config
         @bases = Point.bases
-        @bases = @bases.map{ |b| b = b.clone; b.prepend *enhancement; b } unless enhancement.empty?
+        @bases = @bases.map{ |b| b = b.clone; b.prepend(*enhancement); b } unless enhancement.empty?
         sort_bases
       end
 

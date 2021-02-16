@@ -18,7 +18,7 @@ class Binding
       return yield
     end
 
-    TraceTree.new(self).generate *log, **opt, &to_do
+    TraceTree.new(self).generate(*log, **opt, &to_do)
   end
 end
 
@@ -41,7 +41,7 @@ class TraceTree
 
   def generate *log, **opt, &to_do
     @opt = opt
-    @log = dump_location *log
+    @log = dump_location(*log)
     @debug = debug_location
     enhance_point
     @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
@@ -50,10 +50,10 @@ class TraceTree
 
     #start_trace
     timer[:trace]
-    @tp = TracePoint.new *Events, &@deal
+    @tp = TracePoint.new(*Events, &@deal)
     @tp.enable
 
-    there.instance_eval &to_do
+    there.instance_eval(&to_do)
   ensure
     #stop_trace
     return unless @tp
@@ -89,7 +89,7 @@ class TraceTree
       enhancement << TraceTree::LuxuryReturnValue
     end
     enhancement << TraceTree::Args if opt[:args] == true
-    @point_loader = Point::Loader.new *enhancement, config
+    @point_loader = Point::Loader.new(*enhancement, config)
   end
 
   def dump_trace_tree
@@ -207,7 +207,7 @@ class TraceTree
 
     stacks.keys.each{ |thread| thread[:trace_tree_no_methods_stack] = nil }
 
-    #binding.pry
+    # binding.pry
 
     stacks[trace_points.first.thread][0].
       callees[0].
