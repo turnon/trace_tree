@@ -54,7 +54,6 @@ end
 * `:htmp => nil` by default. It is combination of `:html` and `:tmp`.
 * `:return => true` by default. It stores return values of functions in generated html. Hover function call and press `r` to print return value in console.
 * `:args => false` by default. Set it true to puts arguments of `:call` functions into html. Since arguments are always return values of other functions, so this option is not necessary.
-* `:in => //, :out => nil` by default. Give them regexp(s) to include/exclude methods defined in files match that regexp(s). Notice thread-calls and methods defined by `define_method` are always included. Also, once you set any of these two options, the code to trace should not be in same line with `binding.trace_tree() do`.
 * `:no_methods => nil` by default. Give it regexp(s) to hide stack under matching methods. Useful when you want to dump stack of a rack middleware but lower middlewares.
 * `:warm => nil` by default. Set it something unique to the code block so that the code block will be traced only when it's called second time, in case we dump lots of code loading and initialization.
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.

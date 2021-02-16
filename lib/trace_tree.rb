@@ -115,14 +115,7 @@ class TraceTree
         'return false unless outside_hidden_stack?(point)'
       end
 
-    path_filter =
-      if opt.key?(:in) || opt.key?(:out)
-        @in = Array(opt[:in] || //)
-        @out = Array(opt[:out])
-        'return false unless @in.any?{ |pattern| pattern =~ point.path } && @out.all?{ |pattern| pattern !~ point.path }'
-      else
-        nil
-      end
+    path_filter = nil
 
     if stack_filter.nil? && path_filter.nil?
       return @deal = -> point { trace_points << point_loader.create(point) }

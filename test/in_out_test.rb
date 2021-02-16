@@ -68,6 +68,7 @@ EOS
   end
 
   def test_trace_tree
+    skip
     rt = binding.trace_tree(@sio, color: false, in: @in, out: @out) do
       O.new.o
     end
@@ -79,6 +80,7 @@ EOS
   end
 
   def test_trace_tree_html
+    skip
     rt = binding.trace_tree(html: true, tmp: 'in_out.html', in: @in, out: @out) do
       O.new.o
     end
@@ -86,6 +88,7 @@ EOS
   end
 
   def test_trace_tree_html_full
+    skip
     rt = binding.trace_tree(html: true, tmp: 'in_out_full.html', out: Ignore) do
       O.new.o
     end
