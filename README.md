@@ -62,7 +62,7 @@ end
 
 ### Methods' return values
 
-By default it stores return values of functions in generated html. If there is any kind of value can not be stringified, you can do so to avoid exception:
+By default it stores return values of functions in generated html. If there is any kind of value can not be stringified, you can do something like this to avoid exception:
 
 ```ruby
 TraceTree::ReturnValue.formatted(Mongo::Protocol::Message) { |_| "Mongo::Protocol::Message" }
