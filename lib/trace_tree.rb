@@ -109,11 +109,14 @@ class TraceTree
     log.puts tree
     log.puts timer.to_s if opt[:timer]
   rescue => e
-    log.puts timer.to_s, e.inspect, e.backtrace, table_of_points
+    log.puts timer.to_s, e.inspect, e.backtrace
+    log.puts table_of_points
   end
 
   def table_of_points
     Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+  rescue => e
+    log.puts "#{__method__}", e.inspect, e.backtrace
   end
 
   def make_filter

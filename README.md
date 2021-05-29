@@ -60,6 +60,14 @@ end
 * `:debug => nil` by default. Give it `STDOUT`/`STDERR` or anything responds to `:puts` to output a whole list of TracePoints. Or give it a file name in the default tmp dir of your system.
 * `transcode => false` by default. Set it true to convert unknown character into `"?"` when you see `Encoding::UndefinedConversionError`.
 
+### Methods' return values
+
+By default it stores return values of functions in generated html. If there is any kind of value can not be stringified, you can do so to avoid exception:
+
+```ruby
+TraceTree::ReturnValue.formatted(Mongo::Protocol::Message) { |_| "Mongo::Protocol::Message" }
+```
+
 ### Example 1: Output to HTML
 
 Try to remove a non-existing index:
