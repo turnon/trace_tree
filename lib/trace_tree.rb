@@ -46,7 +46,8 @@ class TraceTree
     enhance_point
     @build_command = (opt[:html] || opt[:htmp]) ? :tree_html_full : :tree_graph
     make_filter
-    @__file__, @__line__, there = bi.eval('[__FILE__, __LINE__, self]')
+    @__file__, @__line__ = bi.source_location
+    there = bi.eval('self')
 
     dry_run
 
