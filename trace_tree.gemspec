@@ -25,9 +25,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "pry"
 
-  spec.add_dependency "binding_of_callers", "~> 0.2.0"
-  spec.add_dependency "tree_graph", "~> 0.2.0"
-  spec.add_dependency "tree_html", "~> 0.1.7"
+  spec.add_dependency "binding_of_callers", "~> 0.2.3"
+  spec.add_dependency "tree_graph", "~> 0.2.4"
+  spec.add_dependency "tree_html", "~> 0.1.9"
   spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
 
 end
