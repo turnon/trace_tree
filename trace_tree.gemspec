@@ -28,6 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "binding_of_callers", "~> 0.2.3"
   spec.add_dependency "tree_graph", "~> 0.2.4"
   spec.add_dependency "tree_html", "~> 0.1.9"
-  spec.add_dependency "terminal-tableofhashes", "~> 0.1.0"
 
 end

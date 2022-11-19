@@ -9,8 +9,8 @@ require 'trace_tree/tmp_file'
 require 'trace_tree/timer'
 require 'trace_tree/config'
 require 'trace_tree/warm'
+require 'trace_tree/points_markdown_table'
 require 'thread'
-require 'terminal-tableofhashes'
 
 class Binding
   def trace_tree *log, **opt, &to_do
@@ -115,7 +115,7 @@ class TraceTree
   end
 
   def table_of_points
-    Terminal::Table.from_hashes trace_points_array.map(&:to_h)
+    PointsMarkdownTable.new(trace_points_array)
   rescue => e
     log.puts "#{__method__}", e.inspect, e.backtrace
   end
