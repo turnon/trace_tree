@@ -78,7 +78,12 @@ Try to remove a non-existing index:
 ArgumentError: Index name 'index_cars_on_online_at' on table 'cars' does not exist
 ```
 
-Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in console.
+Then find the result HTML in tmp dir. Move your mouse on any method name, and:
+
+- press `f`/`u` to fold/unfold it's callee
+- press `p`/`n` to jump to it's previous/next sibling call
+- press `r` to print return value in console
+- press `a` to print ascii tree in console
 
 You may type `group_by_file()` in console, to group callees defined in same file, under additional `li` tag. Type `group_by_file()` once again to switch  back.
 
