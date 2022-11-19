@@ -58,7 +58,7 @@ end
 * `:warm => nil` by default. Set it something unique to the code block so that the code block will be traced only when it's called second time, in case we dump lots of code loading and initialization.
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
 * `:debug => nil` by default. Give it `STDOUT`/`STDERR` or anything responds to `:puts` to output a whole list of TracePoints. Or give it a file name in the default tmp dir of your system.
-* `transcode => false` by default. Set it true to convert unknown character into `"?"` when you see `Encoding::UndefinedConversionError`.
+* `:transcode => false` by default. Set it true to convert unknown character into `"?"` when you see `Encoding::UndefinedConversionError`.
 
 ### Methods' return values
 
@@ -78,7 +78,12 @@ Try to remove a non-existing index:
 ArgumentError: Index name 'index_cars_on_online_at' on table 'cars' does not exist
 ```
 
-Then find the result HTML in tmp dir. Move your mouse on any method name, and press `f`/`u` to fold/unfold it's callee, press `p`/`n` to jump to it's previous/next sibling call, press `r` to print return value in console.
+Then find the result HTML in tmp dir. Move your mouse on any method name, and:
+
+- press `f`/`u` to fold/unfold it's callee
+- press `p`/`n` to jump to it's previous/next sibling call
+- press `r` to print return value in console
+- press `a` to print ascii tree in console
 
 You may type `group_by_file()` in console, to group callees defined in same file, under additional `li` tag. Type `group_by_file()` once again to switch  back.
 
