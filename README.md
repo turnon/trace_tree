@@ -58,7 +58,7 @@ end
 * `:warm => nil` by default. Set it something unique to the code block so that the code block will be traced only when it's called second time, in case we dump lots of code loading and initialization.
 * `:timer => nil` by default. Set it true if you want to know how much time spent in tracing and drawing tree. Notice the `file` should be appendable, otherwise the time will overwrite the tree.
 * `:debug => nil` by default. Give it `STDOUT`/`STDERR` or anything responds to `:puts` to output a whole list of TracePoints. Or give it a file name in the default tmp dir of your system.
-* `transcode => false` by default. Set it true to convert unknown character into `"?"` when you see `Encoding::UndefinedConversionError`.
+* `:transcode => false` by default. Set it true to convert unknown character into `"?"` when you see `Encoding::UndefinedConversionError`.
 
 ### Methods' return values
 
