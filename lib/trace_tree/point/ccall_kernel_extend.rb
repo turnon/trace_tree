@@ -3,7 +3,7 @@ class TraceTree
     class CcallKernelExtend < Point
       def parameters
         first_callee = callees[0]
-        first_callee.respond_to?(:mixin) ? first_callee.mixin : first_callee.current.klass
+        first_callee.respond_to?(:mixin) ? first_callee.mixin : first_callee.class_name
       end
 
       def self.event_class_method
