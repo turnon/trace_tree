@@ -22,15 +22,6 @@ class RecurseTest < Minitest::Test
 
   end
 
-  Tracetree = <<EOS
-RecurseTest#block in test_trace_tree #{__dir__}/recurse_test.rb:42
-└─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
-  ├─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
-  │ └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
-  │   └─RecurseTest::Recurse#a #{__dir__}/recurse_test.rb:14
-  └─RecurseTest::Recurse#b #{__dir__}/recurse_test.rb:19
-EOS
-
   ReturnValue = 'asdfg'
 
   def setup
@@ -46,7 +37,7 @@ EOS
     assert_equal ReturnValue, rt
 
     @sio.rewind
-    assert_equal Tracetree, @sio.read
+    assert_equal tree_graph, @sio.read
   end
 
   def test_trace_tree_html
@@ -54,5 +45,40 @@ EOS
       @test.a
     end
     assert_equal ReturnValue, rt
+  end
+
+  private
+
+  def tree_graph
+    if RB_VER < 3.1
+<<EOS
+RecurseTest#block in test_trace_tree #{__FILE__}:33
+└─RecurseTest::Recurse#a #{__FILE__}:14
+  ├─RecurseTest::Recurse#a #{__FILE__}:14
+  │ └─RecurseTest::Recurse#a #{__FILE__}:14
+  │   └─RecurseTest::Recurse#a #{__FILE__}:14
+  └─RecurseTest::Recurse#b #{__FILE__}:19
+EOS
+    else
+<<EOS
+RecurseTest#block in test_trace_tree #{__FILE__}:33
+└─RecurseTest::Recurse#a #{__FILE__}:14
+  ├─Integer#< #{__FILE__}:15
+  ├─Integer#+ #{__FILE__}:15
+  ├─RecurseTest::Recurse#a #{__FILE__}:14
+  │ ├─Integer#< #{__FILE__}:15
+  │ ├─Integer#+ #{__FILE__}:15
+  │ ├─RecurseTest::Recurse#a #{__FILE__}:14
+  │ │ ├─Integer#< #{__FILE__}:15
+  │ │ ├─Integer#+ #{__FILE__}:15
+  │ │ ├─RecurseTest::Recurse#a #{__FILE__}:14
+  │ │ │ ├─Integer#< #{__FILE__}:15
+  │ │ │ └─Integer#== #{__FILE__}:16
+  │ │ └─Integer#== #{__FILE__}:16
+  │ └─Integer#== #{__FILE__}:16
+  ├─Integer#== #{__FILE__}:16
+  └─RecurseTest::Recurse#b #{__FILE__}:19
+EOS
+    end
   end
 end

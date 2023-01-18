@@ -11,11 +11,6 @@ class WarmUpTest < Minitest::Test
     end
   end
 
-  Tracetree = <<-EOS
-WarmUpTest#block in test_warm_up #{__dir__}/warm_up_test.rb:36
-└─WarmUpTest::A#a #{__dir__}/warm_up_test.rb:9
-EOS
-
   def setup
     @a = A.new
     @first = StringIO.new
@@ -40,6 +35,21 @@ EOS
     assert_equal 2, rt
 
     @second.rewind
-    assert_equal Tracetree, @second.read
+    assert_equal tree_graph, @second.read
+  end
+
+  def tree_graph
+    if RB_VER < 3.1
+<<-EOS
+WarmUpTest#block in test_warm_up #{__FILE__}:31
+└─WarmUpTest::A#a #{__FILE__}:9
+EOS
+    else
+<<-EOS
+WarmUpTest#block in test_warm_up #{__FILE__}:31
+└─WarmUpTest::A#a #{__FILE__}:9
+  └─Integer#+ #{__FILE__}:10
+EOS
+    end
   end
 end
