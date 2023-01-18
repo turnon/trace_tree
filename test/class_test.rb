@@ -75,61 +75,123 @@ class ClassTest < Minitest::Test
     end
   end
 
-  Tracetree = <<EOS
-ClassTest.block in <class:ClassTest> #{__dir__}/class_test.rb:7
-├─ClassTest::M.<module:M> #{__dir__}/class_test.rb:8
-│ └─Module#method_added #{__dir__}/class_test.rb:9
-├─ClassTest::N.<module:N> #{__dir__}/class_test.rb:13
-├─ClassTest::O.<module:O> #{__dir__}/class_test.rb:16
-├─ClassTest::P.<module:P> #{__dir__}/class_test.rb:19
-│ └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:20
-├─ClassTest::Q.<module:Q> #{__dir__}/class_test.rb:25
-│ └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:26
-├─ClassTest::R.<module:R> #{__dir__}/class_test.rb:31
-│ └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:32
-├─Class#inherited #{__dir__}/class_test.rb:37
-├─ClassTest::Y.<class:Y> #{__dir__}/class_test.rb:37
-├─Class#inherited #{__dir__}/class_test.rb:40
-├─ClassTest::Z.<class:Z> #{__dir__}/class_test.rb:40
-│ └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:41
-├─Class#inherited #{__dir__}/class_test.rb:46
-└─ClassTest::A.<class:A> #{__dir__}/class_test.rb:46
-  ├─Module#include(ClassTest::M) #{__dir__}/class_test.rb:47
-  │ ├─Module#append_features #{__dir__}/class_test.rb:47
-  │ └─Module#included #{__dir__}/class_test.rb:47
-  ├─Kernel#extend(ClassTest::N) #{__dir__}/class_test.rb:48
-  │ ├─Module#extend_object #{__dir__}/class_test.rb:48
-  │ └─Module#extended #{__dir__}/class_test.rb:48
-  ├─Module#prepend(ClassTest::O) #{__dir__}/class_test.rb:49
-  │ ├─Module#prepend_features #{__dir__}/class_test.rb:49
-  │ └─Module#prepended #{__dir__}/class_test.rb:49
-  ├─Module#include(ClassTest::P) #{__dir__}/class_test.rb:50
-  │ ├─Module#append_features #{__dir__}/class_test.rb:50
-  │ └─ClassTest::P.included #{__dir__}/class_test.rb:20
-  ├─Kernel#extend(ClassTest::Q) #{__dir__}/class_test.rb:51
-  │ ├─Module#extend_object #{__dir__}/class_test.rb:51
-  │ └─ClassTest::Q.extended #{__dir__}/class_test.rb:26
-  ├─Module#prepend(ClassTest::R) #{__dir__}/class_test.rb:52
-  │ ├─Module#prepend_features #{__dir__}/class_test.rb:52
-  │ └─ClassTest::R.prepended #{__dir__}/class_test.rb:32
-  ├─Class#inherited #{__dir__}/class_test.rb:54
-  ├─ClassTest::A::B.<class:B> #{__dir__}/class_test.rb:54
-  ├─ClassTest::Z.inherited #{__dir__}/class_test.rb:41
-  ├─ClassTest::A::C.<class:C> #{__dir__}/class_test.rb:57
-  ├─#<Class:ClassTest::A>.singleton class #{__dir__}/class_test.rb:60
-  │ └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:61
-  ├─Module#method_added #{__dir__}/class_test.rb:65
-  ├─BasicObject#singleton_method_added #{__dir__}/class_test.rb:68
-  └─#<Class:ClassTest::A>.singleton class #{__dir__}/class_test.rb:71
-    └─BasicObject#singleton_method_added #{__dir__}/class_test.rb:72
-EOS
-
   def test_trace_tree
     assert_equal :d, Return
 
     Sio.rewind
-    assert_equal Tracetree, Sio.read
-
+    assert_equal tree_graph, Sio.read
   end
 
+  def tree_graph
+    if RB_VER < 3.2
+<<-EOS
+ClassTest.block in <class:ClassTest> #{__FILE__}:7
+├─ClassTest::M.<module:M> #{__FILE__}:8
+│ └─Module#method_added #{__FILE__}:9
+├─ClassTest::N.<module:N> #{__FILE__}:13
+├─ClassTest::O.<module:O> #{__FILE__}:16
+├─ClassTest::P.<module:P> #{__FILE__}:19
+│ └─BasicObject#singleton_method_added #{__FILE__}:20
+├─ClassTest::Q.<module:Q> #{__FILE__}:25
+│ └─BasicObject#singleton_method_added #{__FILE__}:26
+├─ClassTest::R.<module:R> #{__FILE__}:31
+│ └─BasicObject#singleton_method_added #{__FILE__}:32
+├─Class#inherited #{__FILE__}:37
+├─ClassTest::Y.<class:Y> #{__FILE__}:37
+├─Class#inherited #{__FILE__}:40
+├─ClassTest::Z.<class:Z> #{__FILE__}:40
+│ └─BasicObject#singleton_method_added #{__FILE__}:41
+├─Class#inherited #{__FILE__}:46
+└─ClassTest::A.<class:A> #{__FILE__}:46
+  ├─Module#include(ClassTest::M) #{__FILE__}:47
+  │ ├─Module#append_features #{__FILE__}:47
+  │ └─Module#included #{__FILE__}:47
+  ├─Kernel#extend(ClassTest::N) #{__FILE__}:48
+  │ ├─Module#extend_object #{__FILE__}:48
+  │ └─Module#extended #{__FILE__}:48
+  ├─Module#prepend(ClassTest::O) #{__FILE__}:49
+  │ ├─Module#prepend_features #{__FILE__}:49
+  │ └─Module#prepended #{__FILE__}:49
+  ├─Module#include(ClassTest::P) #{__FILE__}:50
+  │ ├─Module#append_features #{__FILE__}:50
+  │ └─ClassTest::P.included #{__FILE__}:20
+  ├─Kernel#extend(ClassTest::Q) #{__FILE__}:51
+  │ ├─Module#extend_object #{__FILE__}:51
+  │ └─ClassTest::Q.extended #{__FILE__}:26
+  ├─Module#prepend(ClassTest::R) #{__FILE__}:52
+  │ ├─Module#prepend_features #{__FILE__}:52
+  │ └─ClassTest::R.prepended #{__FILE__}:32
+  ├─Class#inherited #{__FILE__}:54
+  ├─ClassTest::A::B.<class:B> #{__FILE__}:54
+  ├─ClassTest::Z.inherited #{__FILE__}:41
+  ├─ClassTest::A::C.<class:C> #{__FILE__}:57
+  ├─#<Class:ClassTest::A>.singleton class #{__FILE__}:60
+  │ └─BasicObject#singleton_method_added #{__FILE__}:61
+  ├─Module#method_added #{__FILE__}:65
+  ├─BasicObject#singleton_method_added #{__FILE__}:68
+  └─#<Class:ClassTest::A>.singleton class #{__FILE__}:71
+    └─BasicObject#singleton_method_added #{__FILE__}:72
+EOS
+    else
+<<-EOS
+ClassTest.block in <class:ClassTest> #{__FILE__}:7
+├─Module#const_added #{__FILE__}:8
+├─ClassTest::M.<module:M> #{__FILE__}:8
+│ └─Module#method_added #{__FILE__}:9
+├─Module#const_added #{__FILE__}:13
+├─ClassTest::N.<module:N> #{__FILE__}:13
+├─Module#const_added #{__FILE__}:16
+├─ClassTest::O.<module:O> #{__FILE__}:16
+├─Module#const_added #{__FILE__}:19
+├─ClassTest::P.<module:P> #{__FILE__}:19
+│ └─BasicObject#singleton_method_added #{__FILE__}:20
+├─Module#const_added #{__FILE__}:25
+├─ClassTest::Q.<module:Q> #{__FILE__}:25
+│ └─BasicObject#singleton_method_added #{__FILE__}:26
+├─Module#const_added #{__FILE__}:31
+├─ClassTest::R.<module:R> #{__FILE__}:31
+│ └─BasicObject#singleton_method_added #{__FILE__}:32
+├─Module#const_added #{__FILE__}:37
+├─Class#inherited #{__FILE__}:37
+├─ClassTest::Y.<class:Y> #{__FILE__}:37
+├─Module#const_added #{__FILE__}:40
+├─Class#inherited #{__FILE__}:40
+├─ClassTest::Z.<class:Z> #{__FILE__}:40
+│ └─BasicObject#singleton_method_added #{__FILE__}:41
+├─Module#const_added #{__FILE__}:46
+├─Class#inherited #{__FILE__}:46
+└─ClassTest::A.<class:A> #{__FILE__}:46
+  ├─Module#include(ClassTest::M) #{__FILE__}:47
+  │ ├─Module#append_features #{__FILE__}:47
+  │ └─Module#included #{__FILE__}:47
+  ├─Kernel#extend(ClassTest::N) #{__FILE__}:48
+  │ ├─Module#extend_object #{__FILE__}:48
+  │ └─Module#extended #{__FILE__}:48
+  ├─Module#prepend(ClassTest::O) #{__FILE__}:49
+  │ ├─Module#prepend_features #{__FILE__}:49
+  │ └─Module#prepended #{__FILE__}:49
+  ├─Module#include(ClassTest::P) #{__FILE__}:50
+  │ ├─Module#append_features #{__FILE__}:50
+  │ └─ClassTest::P.included #{__FILE__}:20
+  ├─Kernel#extend(ClassTest::Q) #{__FILE__}:51
+  │ ├─Module#extend_object #{__FILE__}:51
+  │ └─ClassTest::Q.extended #{__FILE__}:26
+  ├─Module#prepend(ClassTest::R) #{__FILE__}:52
+  │ ├─Module#prepend_features #{__FILE__}:52
+  │ └─ClassTest::R.prepended #{__FILE__}:32
+  ├─Module#const_added #{__FILE__}:54
+  ├─Class#inherited #{__FILE__}:54
+  ├─ClassTest::A::B.<class:B> #{__FILE__}:54
+  ├─Module#const_added #{__FILE__}:57
+  ├─ClassTest::Z.inherited #{__FILE__}:41
+  ├─ClassTest::A::C.<class:C> #{__FILE__}:57
+  ├─#<Class:ClassTest::A>.singleton class #{__FILE__}:60
+  │ └─BasicObject#singleton_method_added #{__FILE__}:61
+  ├─Module#method_added #{__FILE__}:65
+  ├─BasicObject#singleton_method_added #{__FILE__}:68
+  └─#<Class:ClassTest::A>.singleton class #{__FILE__}:71
+    └─BasicObject#singleton_method_added #{__FILE__}:72
+EOS
+    end
+  end
 end

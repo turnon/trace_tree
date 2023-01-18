@@ -7,7 +7,8 @@ class TraceTree
     include TreeGraphable
     include TreeHtmlable
 
-    attr_reader :current, :thread, :frame_env
+    attr_reader :thread, :frame_env
+    attr_reader :call_symbol, :class_name
     attr_accessor :terminal, :config
 
     Interfaces = [:event, :defined_class, :method_id, :path, :lineno]
@@ -73,22 +74,29 @@ EOM
 
       @return_value = trace_point.return_value if x_return?
       @thread = Thread.current
+      return if thread?
 
-      unless thread?
-        there = trace_point.binding.of_caller(3)
-        @current = BindingOfCallers::Revealed.new there
-        @frame_env = current.frame_env.to_sym
+      if event == :c_call || event == :c_return
+        @call_symbol = '#'
+        @frame_env = method_id
+        @class_name = defined_class
+        return
       end
+
+      there = trace_point.binding.of_caller(3)
+      current = BindingOfCallers::Revealed.new there
+      @call_symbol = current.call_symbol
+      @frame_env = current.frame_env.to_sym
+      @class_name = current.klass
     rescue => e
-      puts e
+      puts e.message
+      puts(Interfaces.each_with_object({}){|attr, h| h[attr] = send(attr)})
+      puts e.backtrace
+      raise e
     end
 
     def b_call?
       event == :b_call
-    end
-
-    def c_call?
-      event == :c_call
     end
 
     def class?
@@ -157,20 +165,10 @@ EOM
       @km ||= "#{class_name}#{call_symbol}#{method_name}"
     end
 
-    def class_name
-      c_call? ? defined_class : current.klass
-    rescue
-      puts event
-    end
-
     def method_name
-      return method_id if c_call?
+      return method_id if event == :c_call
       return frame_env if b_call? || class?
       (method_id == frame_env) ? method_id : "#{method_id} -> #{frame_env}"
-    end
-
-    def call_symbol
-      c_call? ? '#' : current.call_symbol
     end
 
     def source_location
@@ -182,7 +180,6 @@ EOM
     end
 
     class Loader
-
       attr_reader :point_classes, :config
 
       def initialize *enhancement, config
