@@ -23,6 +23,7 @@ class Binding
 end
 
 class TraceTree
+  RB_VER = RUBY_VERSION.split('.')[0..1].join('.').to_f
 
   MainFile = __FILE__
 
@@ -215,9 +216,9 @@ class TraceTree
 
     # binding.pry
 
-    stacks[trace_points.first.thread][0].
-      callees[0].
-      callees[0]
+    thread_stack = stacks[trace_points.first.thread]
+    frame = thread_stack[0].callees[0].callees[0]
+    RB_VER >= 2.7 ? frame : frame.callees[0]
   end
 
   def trace_points_array

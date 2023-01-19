@@ -39,7 +39,7 @@ class WarmUpTest < Minitest::Test
   end
 
   def tree_graph
-    if RB_VER < 3.1
+    if TraceTree::RB_VER < 3.1
 <<-EOS
 WarmUpTest#block in test_warm_up #{__FILE__}:31
 └─WarmUpTest::A#a #{__FILE__}:9
