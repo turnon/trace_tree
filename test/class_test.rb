@@ -30,7 +30,7 @@ class ClassTest < Minitest::Test
 
     module R
       def self.prepended base
-        note_base = 3
+        not_base = 3
       end
     end
 

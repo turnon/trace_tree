@@ -1,6 +1,5 @@
 /.bundle/
 /.yardoc
-/Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
@@ -9,4 +8,5 @@
 /tmp/
 *.swp
 *.gem
+.ruby-version
 .tool-versions
