@@ -1,0 +1,39 @@
+PATH
+  remote: .
+  specs:
+    trace_tree (0.3.5)
+      binding_of_callers (~> 0.2.3)
+      tree_graph (~> 0.2.4)
+      tree_html (~> 0.1.10)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    binding_of_caller (1.0.0)
+      debug_inspector (>= 0.0.1)
+    binding_of_callers (0.2.3)
+      binding_of_caller (~> 1.0)
+      pry (>= 0.10.0)
+    coderay (1.1.3)
+    debug_inspector (1.1.0)
+    method_source (1.0.0)
+    minitest (5.17.0)
+    pry (0.14.2)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    rake (13.0.6)
+    tree_graph (0.2.4)
+    tree_html (0.1.10)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 2.4.0)
+  minitest (~> 5.0)
+  pry
+  rake (>= 12.3.3)
+  trace_tree!
+
+BUNDLED WITH
+   2.4.1

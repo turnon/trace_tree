@@ -30,7 +30,7 @@ class ClassTest < Minitest::Test
 
     module R
       def self.prepended base
-        note_base = 3
+        not_base = 3
       end
     end
 
@@ -83,7 +83,7 @@ class ClassTest < Minitest::Test
   end
 
   def tree_graph
-    if RB_VER < 3.2
+    if TraceTree::RB_VER < 3.2
 <<-EOS
 ClassTest.block in <class:ClassTest> #{__FILE__}:7
 ├─ClassTest::M.<module:M> #{__FILE__}:8

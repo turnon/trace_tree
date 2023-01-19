@@ -50,7 +50,7 @@ class RecurseTest < Minitest::Test
   private
 
   def tree_graph
-    if RB_VER < 3.1
+    if TraceTree::RB_VER < 3.1
 <<EOS
 RecurseTest#block in test_trace_tree #{__FILE__}:33
 └─RecurseTest::Recurse#a #{__FILE__}:14
